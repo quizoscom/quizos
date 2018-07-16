@@ -5,6 +5,7 @@ import classes from './App.css';
 
 import Layout from './hoc/Layout/Layout';
 import Home from './containers/Home/Home';
+import Dashboard from './containers/Dashboard/Dashboard';
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         <Layout>
           <Switch>
             <Route path="/" exact component={Home} />
+            <Route path="/dashboard" component={Dashboard} />
             <Redirect to="/" />
           </Switch>
         </Layout>

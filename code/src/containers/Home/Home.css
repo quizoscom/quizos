@@ -1,0 +1,22 @@
+.Home {
+    padding: 4em 0em;
+}
+
+.Home img {
+    width: 170px;
+}
+
+.Home p {
+    color: #fff;
+    font-size: 2.5rem;
+    margin: 21px 0;
+}
+
+.ButtonGroup button {
+    display: inline-block;
+    margin: 0 1.5em;
+}
+
+.Home p.Subtitle {
+    margin-bottom: 2em;
+}

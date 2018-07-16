@@ -1,0 +1,18 @@
+.Table {
+    background-color: #fff;
+    text-transform: capitalize;
+}
+
+.Table tbody tr:last-child td {
+    padding-bottom: 19px;
+}
+
+.Table thead th,
+.Table tbody td {
+    padding: 6px 3em;
+    font-size: 1.3rem;
+}
+
+.Table thead th {
+    font-weight: 700;
+}

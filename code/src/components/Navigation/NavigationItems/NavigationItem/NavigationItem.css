@@ -2,7 +2,7 @@
     list-style: none;
     display: inline-block;
     position: relative;
-    top: -9px;
+    top: -13px;
     margin-right: 1em;
 }
 
@@ -11,6 +11,15 @@
     position: relative;
     text-decoration: none;
     font-size: 1.1rem;
+    padding: 11px 12px;
+}
+
+.NavigationItem a:hover,
+.NavigationItem a:active,
+.NavigationItem a.selected {
+    background-color: #eee;
+    border-bottom: 5px solid #40A4C8;
+    color: #000;
 }
 
 .gitLink {

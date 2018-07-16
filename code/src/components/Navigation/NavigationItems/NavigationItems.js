@@ -8,6 +8,7 @@ import NavigationItem from './NavigationItem/NavigationItem';
 const navigationItems = () => (
     <ul className={classes.NavigationItems}>
         <NavigationItem link="/login">Login</NavigationItem>
+        <NavigationItem link="/dashboard">Dashboard</NavigationItem>
         <NavigationItem git link="https://github.com/entrepaman/quiz-creator" className="gitLink"><img className={classes.Img} src={githubIcon} alt="Git Link"/></NavigationItem>
     </ul>
 );

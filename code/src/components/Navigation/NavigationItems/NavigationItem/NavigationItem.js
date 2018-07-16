@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './NavigationItem.css';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const navigationItem = (props) => {
     const classNames = [classes.NavigationItem, classes[props.className]].join(' ');
@@ -9,7 +9,7 @@ const navigationItem = (props) => {
             {
                 props.git 
                 ? <a href={props.link}> {props.children} </a>
-                : <Link to={props.link} > {props.children} </Link>
+                : <NavLink to={props.link} activeClassName={classes.selected}> {props.children} </NavLink>
             }
         </li>
     );

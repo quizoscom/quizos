@@ -1,0 +1,30 @@
+.Dashboard {
+    margin: 0 auto;
+    width: 60%;
+    position: relative;
+    top: 5em;
+    margin-bottom: 5em;
+}
+
+.Dashboard.qc p {
+    background-color: #ffd241 !important;
+}
+
+.Dashboard p.Title {
+    background-color: #fff;
+    margin-bottom: 2px;
+    width: fit-content;
+    padding: 14px 4em 14px 2em;
+    font-size: 1.3rem;
+}
+
+.ButtonGroup {
+    display: inline-block;
+    right: 3em;
+    position: fixed;
+    bottom: 2em;
+}
+
+.ButtonGroup button {
+    margin-right: 2em;
+}

@@ -7,7 +7,7 @@
 |------------ | ----------------------------------------| ----------------------------------------------------------------------- |
 | App         |  /src/App.js                            | Starting Component which redirects to Home using Route                  |
 | ToolBar     |  /src/components/Navigation/Toolbar.js  | Component for Menubar (logo and Navigationitems)                        |
-| Home        |  home.js                                | Starting Page for both Users and Non-Users using conditional rendering  |
+| Home        |  /src/containers/Home/home.js           | Starting Page for both Users and Non-Users using conditional rendering  |
 
 
 ## tree
