@@ -51,6 +51,7 @@ class CreateQuiz extends Component {
                 // clear the complete form for new question and choices
             }
         } else {
+            // show better designed error alert
             alert('Please Select the language and no of questions to start creating quiz');
         }
     }

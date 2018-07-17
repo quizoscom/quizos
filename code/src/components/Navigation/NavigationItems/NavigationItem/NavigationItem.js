@@ -8,8 +8,8 @@ const navigationItem = (props) => {
         <li className={classNames} >
             {
                 props.git 
-                ? <a href={props.link}> {props.children} </a>
-                : <NavLink to={props.link} activeClassName={classes.selected}> {props.children} </NavLink>
+                ? <a className={classes.git} href={props.link}> {props.children} </a>
+                : <NavLink exact={props.exact} to={props.link} activeClassName={classes.selected}> {props.children} </NavLink>
             }
         </li>
     );
