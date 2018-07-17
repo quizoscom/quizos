@@ -4,3 +4,11 @@
     width: 85%;
     height: 1.5em;
 }
+
+.hidden {
+    display: none;
+}
+
+.questionViewer {
+    font-size: 2.5rem;
+}

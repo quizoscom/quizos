@@ -10,6 +10,7 @@ const navigationItems = () => (
         <NavigationItem link="/login">Login</NavigationItem>
         <NavigationItem link="/dashboard">Dashboard</NavigationItem>
         <NavigationItem link="/create-quiz">Create Quiz</NavigationItem>
+        <NavigationItem link="/quiz">Quiz</NavigationItem>
         <NavigationItem git link="https://github.com/entrepaman/quiz-creator" className="gitLink"><img className={classes.Img} src={githubIcon} alt="Git Link"/></NavigationItem>
     </ul>
 );

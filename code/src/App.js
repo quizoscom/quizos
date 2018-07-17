@@ -7,6 +7,7 @@ import Layout from './hoc/Layout/Layout';
 import Home from './containers/Home/Home';
 import Dashboard from './containers/Dashboard/Dashboard';
 import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
+import Quiz from './containers/Quiz/Quiz.js';
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/create-quiz" component={CreateQuiz} />
+            <Route path="/quiz" component={Quiz} />
             <Redirect to="/" />
           </Switch>
         </Layout>

@@ -1,0 +1,29 @@
+.Quiz {
+    position: relative;
+    top: 2em;
+    color: #fff;
+    text-align: left;
+}
+
+.Language {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.questionSNo {
+    float: left;
+}
+
+.Timer {
+    float: right;
+}
+
+.ButtonGroup {
+    position: fixed;
+    bottom: 3em;
+    right: 3em;
+}
+
+.ButtonGroup > button {
+    margin-right: 1em;
+}
