@@ -1,0 +1,30 @@
+.Choices > div {
+    margin-bottom: 11px;
+}
+
+.Choices > div > input {
+    font-size: 1.5rem;
+    padding: 10px 11px;
+    height: 1.5em;
+    display: inline-block;
+    width: 57%;
+    margin-right: 18px;
+}
+
+.Choices > div > p {
+    display: inline-block;
+    margin-bottom: 0;
+    color: #fff;
+    cursor: pointer;
+}
+
+.Choices > div > p:hover,
+.Choices > div > p.active {
+    color: #ffd241;
+    text-decoration: underline;
+}
+
+.Choices > div > p.answer {
+    color: #ffd241;
+    text-decoration: underline;
+}

@@ -16,3 +16,9 @@
 .cta {
     background-color: #ffd241;
 }
+
+.quiz-continue-btn {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+}

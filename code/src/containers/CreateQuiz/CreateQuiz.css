@@ -1,0 +1,37 @@
+.CreateQuiz {
+    margin: 0 auto;
+    width: 70%;
+    position: relative;
+    top: 5em;
+}
+
+.CreateQuiz > div {
+    display: block;
+    position: relative;
+    text-align: left;
+    margin-bottom: 6em;
+}
+
+.CreateQuiz > div label {
+    display: block;
+    font-size: 1.6rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.CreateQuiz .selectCont select {
+    height: 2.3em;
+    font-size: 1.4rem;
+    width: 34%;
+    outline: none;
+    font-family: 'Righteous', cursive;
+    padding: 0px 10px;
+}
+
+.CreateQuiz .questionSNo {
+    text-align: left;
+    margin-left: -4em;
+    font-size: 1.8rem;
+    margin-bottom: 1em;
+    color: #fff;
+}

@@ -1,9 +1,10 @@
 .Dashboard {
     margin: 0 auto;
-    width: 60%;
+    width: auto;
     position: relative;
     top: 5em;
     margin-bottom: 5em;
+    margin-left: 3em;
 }
 
 .Dashboard.qc p {
