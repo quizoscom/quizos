@@ -87,7 +87,6 @@ class CreateQuiz extends Component {
         this.setState(prevState => ({
             questions: newQuestions
         }));
-        console.log(this.state.questions);
     }
 
     continueButtonClickHandler = (event) => {
