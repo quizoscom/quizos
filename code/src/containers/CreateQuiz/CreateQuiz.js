@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './CreateQuiz.css';
 
@@ -11,14 +12,16 @@ import Choices from '../../components/Choices/Choices';
 class CreateQuiz extends Component {
     state = {
         selectedLanguage: '',
-        noOfQuestions: 10,
-        questions: [
-            {question: 'In React, What method is used to update the state?', choices: ['updateState()', 'changeState()', 'setState()', 'stateChange()'], answer: 3},
-            {question: 'What function allows you to render React content in an HTML page?', choices: ['ReactDOM.start()', 'React.render()', 'ReactDOM.render()', 'React.mount()'], answer: 3}
-        ],
-        currentQuestionNo: 1,
-        creatingQuiz: true,
-        answer: 0
+        noOfQuestions: 0,
+        questions: [],
+        // questions: [
+        //     {question: 'In React, What method is used to update the state?', choices: ['updateState()', 'changeState()', 'setState()', 'stateChange()'], answer: 3},
+        //     {question: 'What function allows you to render React content in an HTML page?', choices: ['ReactDOM.start()', 'React.render()', 'ReactDOM.render()', 'React.mount()'], answer: 3}
+        // ],
+        currentQuestionNo: 0,
+        creatingQuiz: false,
+        currentAnswer: 0,
+        nextQuestion: 0,
     }
 
     selectChangeHandler = (event) => {
@@ -28,11 +31,63 @@ class CreateQuiz extends Component {
         });
     }
 
-    inputChangedHandler = (event) => {
+    noOfQuestionInputChangedHandler = (event) => {
         this.setState({
             ...this.state,
             noOfQuestions: parseInt(event.target.value, 10)
         })
+    }
+
+    onQuestionInputChangedHandler = (event) => {
+        var newQuestions = this.state.questions.slice();
+        if(newQuestions.length === 0) {
+            newQuestions.push({
+                question: event.target.value,
+                choices: [],
+                answer: 0
+            });
+        } else {
+            newQuestions[this.state.currentQuestionNo-1] = {
+                question: event.target.value,
+                choices: [],
+                answer: 0
+            };
+        }
+        this.setState(prevState => ({
+            questions: newQuestions
+        }));
+    }
+
+    onChoiceInputsChangedHandler = (event, index) => {
+        var currentQUestionNo = this.state.currentQuestionNo;
+        var newQuestions = this.state.questions.slice();
+        var newChoices = newQuestions[currentQUestionNo-1].choices.slice();
+
+        if(newChoices[index-1] === undefined) {
+            newChoices.splice(index-1, 0, event.target.value);
+        } else {
+            newChoices[index-1] = event.target.value;
+        }
+
+        if(newQuestions.length !== 0) {
+            newQuestions[currentQUestionNo-1].choices = newChoices;
+        }
+        this.setState(prevState => ({
+            questions: newQuestions
+        }));
+    }
+
+    onAnswerSelectHandler = (ca) => {
+        var currentQuestionNo = this.state.currentQuestionNo;
+        var newQuestions = this.state.questions.slice();
+        newQuestions[currentQuestionNo-1].answer = ca;
+        this.setState(prevState => ({
+            currentAnswer: ca
+        }));
+        this.setState(prevState => ({
+            questions: newQuestions
+        }));
+        console.log(this.state.questions);
     }
 
     continueButtonClickHandler = (event) => {
@@ -41,12 +96,15 @@ class CreateQuiz extends Component {
                 this.setState({
                     ...this.state,
                     creatingQuiz: true,
-                    noOfQuestions: event.target.value,
                     currentQuestionNo: 1
                 });
+                console.log(this.state.noOfQuestions);
             } else {
                 this.setState(prevState => ({
                     currentQuestionNo: prevState.currentQuestionNo + 1
+                }));
+                this.setState(prevState => ({
+                    nextQuestion: 1
                 }));
                 // clear the complete form for new question and choices
             }
@@ -54,20 +112,6 @@ class CreateQuiz extends Component {
             // show better designed error alert
             alert('Please Select the language and no of questions to start creating quiz');
         }
-    }
-
-    onQuestionInputChangedHandler = (event) => {
-        console.log(event.target.value);
-    }
-
-    onChoiceInputsChangedHandler = (event) => {
-        console.log('choices changed');
-    }
-
-    onAnswerSelectHandler = (ca) => {
-        this.setState(prevState => ({
-            answer: ca
-        }))
     }
 
     render() {
@@ -88,16 +132,30 @@ class CreateQuiz extends Component {
                     </div>
                     <div className={classes.noOfQuestions}>
                         <label htmlFor="">No of Questions</label>
-                        <Input changed={this.inputChangedHandler} inputType="number" className="noq"></Input>
+                        <Input 
+                            changed={this.noOfQuestionInputChangedHandler} 
+                            inputType="number" 
+                            className="noq"
+                            value={false}
+                        ></Input>
                     </div>
                 </Aux>
             );
         } else {
+            console.log(this.state.noOfQuestions);
             body = (
                 <Aux>
                     {this.state.currentQuestionNo !== 0 ? <p className={classes.questionSNo}>Q. <span>{this.state.currentQuestionNo}</span>/<span>{this.state.noOfQuestions}</span></p> : null}
-                    <Question changed={this.onQuestionInputChangedHandler} />
-                    <Choices changed={this.onChoiceInputsChangedHandler} clicked={this.onAnswerSelectHandler} answer={this.state.answer} />
+                    <Question 
+                        changed={this.onQuestionInputChangedHandler} 
+                        value={this.state.nextQuestion === 1}
+                    />
+                    <Choices 
+                        changed={this.onChoiceInputsChangedHandler} 
+                        clicked={this.onAnswerSelectHandler} 
+                        answer={this.state.currentAnswer}
+                        value={this.state.nextQuestion === 1}
+                    />
                 </Aux>
             );
         }
@@ -110,4 +168,10 @@ class CreateQuiz extends Component {
     }
 }
 
-export default CreateQuiz;
+const mapStateToProps = state => {
+    return {
+        token: state.auth.token
+    }
+}
+
+export default connect(mapStateToProps)(CreateQuiz);

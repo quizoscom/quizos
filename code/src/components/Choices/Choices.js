@@ -11,7 +11,11 @@ const choices = (props) => {
         choices = [1, 2, 3, 4].map(i => {
             return (
                 <div key={i}>
-                    <Input inputType="text" changed={props.changed} />
+                    <Input 
+                        inputType="text" 
+                        changed={(event) => props.changed(event, i)}
+                        value={props.value}
+                    />
                     <p className={props.answer === i ? classes.answer : ''} onClick={() => props.clicked(i)}>ca</p>
                 </div>
             );

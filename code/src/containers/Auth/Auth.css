@@ -26,6 +26,27 @@
     text-decoration: none;   
 }
 
+.OR {
+    margin: 2em 0em;
+}
+
+.googleLogin {
+    background-size: cover;
+    border: none;
+    background-color: transparent;
+    height: 5em;
+    width: 320px;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.errorMessage {
+    font-size: 1.5rem;
+    color: crimson;
+    font-weight: 700;
+}
+
 @media (min-width: 1000px) {
     .Auth {
         width: 500px;

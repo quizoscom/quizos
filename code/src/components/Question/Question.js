@@ -12,7 +12,11 @@ const question = (props) => {
         body = (
             <Aux>
                 <label>Question</label>
-                <Input changed={props.changed} inputType="text" ></Input>
+                <Input 
+                    changed={props.changed} 
+                    inputType="text"
+                    value={props.value}
+                ></Input>
             </Aux>
         )
     } else {

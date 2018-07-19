@@ -12,7 +12,7 @@ const toolbar = (props) => (
             <Link to="/"><img src={Logo} alt="Evaluiz"/></Link>
         </div>
         <nav className={classes.Nav}>
-            <Navigationitems />
+            <Navigationitems isAuth={props.isAuth} />
         </nav>
     </header>
 );
