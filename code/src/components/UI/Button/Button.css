@@ -17,12 +17,6 @@
     background-color: #ffd241;
 }
 
-.nimp {
-    
-}
-
-.quiz-continue-btn {
-    position: fixed;
-    bottom: 2em;
-    right: 2em;
+.quiz-prev-btn {
+    background-color: #aaa;
 }

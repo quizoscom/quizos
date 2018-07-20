@@ -14,7 +14,7 @@ const choices = (props) => {
                     <Input 
                         inputType="text" 
                         changed={(event) => props.changed(event, i)}
-                        value={props.value}
+                        value={props.value.length >= i ? props.value[i-1] : ""}
                     />
                     <p className={props.answer === i ? classes.answer : ''} onClick={() => props.clicked(i)}>ca</p>
                 </div>

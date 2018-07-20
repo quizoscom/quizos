@@ -35,3 +35,22 @@
     margin-bottom: 1em;
     color: #fff;
 }
+
+.CreateQuiz > div.ButtonGroup {
+    position: fixed;
+    bottom: 4em;
+    right: 4em;
+    margin-bottom: 0;
+}
+
+.CreateQuiz > div.ButtonGroup > button {
+    margin-right: 1em;
+}
+
+.Close {
+    float: right;
+    width: 45px;
+    cursor: pointer;
+    margin-right: 1em;
+    margin-top: 1em;
+}

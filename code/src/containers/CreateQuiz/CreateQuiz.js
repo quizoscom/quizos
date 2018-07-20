@@ -1,27 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import qs from 'qs';
 
 import classes from './CreateQuiz.css';
+import QuestionMarkIcon from '../../assets/close-icon.png';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
+import { duplicacyCheckingForArray } from '../../shared/utility';
 
 class CreateQuiz extends Component {
     state = {
-        selectedLanguage: '',
+        quizId: '',
+        selectedLanguage: 'select',
         noOfQuestions: 0,
         questions: [],
-        // questions: [
-        //     {question: 'In React, What method is used to update the state?', choices: ['updateState()', 'changeState()', 'setState()', 'stateChange()'], answer: 3},
-        //     {question: 'What function allows you to render React content in an HTML page?', choices: ['ReactDOM.start()', 'React.render()', 'ReactDOM.render()', 'React.mount()'], answer: 3}
-        // ],
         currentQuestionNo: 0,
         creatingQuiz: false,
         currentAnswer: 0,
-        nextQuestion: 0,
+        currentQuestionValue: '',
+        currentChoicesValues: []
+    }
+
+    componentDidMount() {
+        if(localStorage.getItem('questionsData')) {
+            const questionsData = JSON.parse(localStorage.getItem('questionsData'));
+            console.log(questionsData);
+            this.setState(prevState => ({
+                selectedLanguage: questionsData.language,
+                noOfQuestions: questionsData.noOfQuestions,
+                questions: questionsData.questions,
+                currentQuestionValue: questionsData.questions[0].question,
+                currentChoicesValues: questionsData.questions[0].choices
+            }));
+        }
     }
 
     selectChangeHandler = (event) => {
@@ -39,41 +55,45 @@ class CreateQuiz extends Component {
     }
 
     onQuestionInputChangedHandler = (event) => {
-        var newQuestions = this.state.questions.slice();
+        let questionValue = event.target.value;
+        let newQuestions = this.state.questions.slice();
         if(newQuestions.length === 0) {
             newQuestions.push({
-                question: event.target.value,
+                question: questionValue,
                 choices: [],
                 answer: 0
             });
         } else {
             newQuestions[this.state.currentQuestionNo-1] = {
-                question: event.target.value,
+                question: questionValue,
                 choices: [],
                 answer: 0
             };
         }
         this.setState(prevState => ({
+            currentQuestionValue: questionValue,
             questions: newQuestions
         }));
     }
 
     onChoiceInputsChangedHandler = (event, index) => {
+        var choiceValue = event.target.value;
         var currentQUestionNo = this.state.currentQuestionNo;
         var newQuestions = this.state.questions.slice();
         var newChoices = newQuestions[currentQUestionNo-1].choices.slice();
 
         if(newChoices[index-1] === undefined) {
-            newChoices.splice(index-1, 0, event.target.value);
+            newChoices.splice(index-1, 0, choiceValue);
         } else {
-            newChoices[index-1] = event.target.value;
+            newChoices[index-1] = choiceValue;
         }
 
         if(newQuestions.length !== 0) {
             newQuestions[currentQUestionNo-1].choices = newChoices;
         }
         this.setState(prevState => ({
-            questions: newQuestions
+            questions: newQuestions,
+            currentChoicesValues: newChoices
         }));
     }
 
@@ -82,14 +102,28 @@ class CreateQuiz extends Component {
         var newQuestions = this.state.questions.slice();
         newQuestions[currentQuestionNo-1].answer = ca;
         this.setState(prevState => ({
-            currentAnswer: ca
-        }));
-        this.setState(prevState => ({
+            currentAnswer: ca,
             questions: newQuestions
         }));
     }
 
-    continueButtonClickHandler = (event) => {
+    previousButtonClickHandler = () => {
+        if(this.state.currentQuestionNo >= 2) {
+            this.setState(prevState => ({
+                currentQuestionNo: prevState.currentQuestionNo - 1,
+                currentQuestionValue: prevState.questions[this.state.currentQuestionNo-2].question,
+                currentChoicesValues: prevState.questions[this.state.currentQuestionNo-2].choices
+            }));
+        } else {
+            alert('If you want to change the language or no of questions, click on close button on top right');
+        }
+    }
+
+    saveQuestions = (questionsData) => {
+        localStorage.setItem('questionsData', JSON.stringify(questionsData));
+    }
+
+    continueButtonClickHandler = () => {
         if(this.state.selectedLanguage !== "" && this.state.selectedLanguage !== undefined && this.state.selectedLanguage !== "select" && this.state.noOfQuestions !== 0) {
             if(this.state.currentQuestionNo === 0) {
                 this.setState({
@@ -97,15 +131,79 @@ class CreateQuiz extends Component {
                     creatingQuiz: true,
                     currentQuestionNo: 1
                 });
-                console.log(this.state.noOfQuestions);
+                this.saveQuestions({
+                    questions: this.state.questions,
+                    language: this.state.selectedLanguage,
+                    noOfQuestions: this.state.noOfQuestions,
+                    quizId: this.state.quizId
+                });
             } else {
-                this.setState(prevState => ({
-                    currentQuestionNo: prevState.currentQuestionNo + 1
-                }));
-                this.setState(prevState => ({
-                    nextQuestion: 1
-                }));
-                // clear the complete form for new question and choices
+                // if language and no of questions are selected
+
+                // proceed iff the question, choices and current answer is selected
+                let formComplete = 0;
+                let choicesDuplicacy = 0;
+                if(this.state.questions.length >= this.state.currentQuestionNo) {
+                    if("question" in this.state.questions[this.state.currentQuestionNo-1] && "choices" in this.state.questions[this.state.currentQuestionNo-1] && "answer" in this.state.questions[this.state.currentQuestionNo-1]) {
+                        if(this.state.questions[this.state.currentQuestionNo-1].question !== "" && this.state.questions[this.state.currentQuestionNo-1].choices.length === 4 && this.state.questions[this.state.currentQuestionNo-1].answer !== 0) {
+                            if(duplicacyCheckingForArray(this.state.questions[this.state.currentQuestionNo-1].choices)) {
+                                choicesDuplicacy = 1;
+                            }
+                            formComplete = 1;
+                        }
+                    }
+                }
+
+                if(formComplete) {
+                    if(!choicesDuplicacy) {
+                        if((this.state.questions.length === this.state.noOfQuestions) && (this.state.currentQuestionNo === this.state.questions.length)) {
+                            // check for questions duplicacy
+                            const questionsArr = this.state.questions.map(row => {
+                                return row.question;
+                            });
+                            if(!duplicacyCheckingForArray(questionsArr)) {
+                                axios.post('http://localhost/evaluiz/set/set-quiz.php', qs.stringify({
+                                    questions: this.state.questions,
+                                    language: this.state.selectedLanguage,
+                                    userId: this.props.userId
+                                }))
+                                .then(res => {
+                                    console.log(res.data);
+                                })
+                            } else {
+                                alert('Duplicate questions are not allowed, Please recheck your questions before submiting');
+                            }
+                        } else {
+                            // update currentQuestionNo and clear the complete form for new question and choices
+                            console.log(this.state.currentQuestionNo)
+                            if(this.state.questions.length > this.state.currentQuestionNo) {
+                                this.setState(prevState => ({
+                                    currentQuestionNo: prevState.currentQuestionNo + 1,
+                                    currentQuestionValue: this.state.questions[this.state.currentQuestionNo].question,
+                                    currentChoicesValues: this.state.questions[this.state.currentQuestionNo].choices,
+                                    currentAnswer: 0
+                                }));
+                            } else {
+                                this.setState(prevState => ({
+                                    currentQuestionNo: prevState.currentQuestionNo + 1,
+                                    currentQuestionValue: '',
+                                    currentChoicesValues: [],
+                                    currentAnswer: 0
+                                }));
+                            }
+                        }
+                        this.saveQuestions({
+                            questions: this.state.questions,
+                            language: this.state.selectedLanguage,
+                            noOfQuestions: this.state.noOfQuestions,
+                            quizId: this.state.quizId
+                        });
+                    } else {
+                        alert("Chocies can't be duplicate");
+                    }
+                } else {
+                    alert('Input the question, choices and selected correct answer before proceeding');
+                }
             }
         } else {
             // show better designed error alert
@@ -113,14 +211,30 @@ class CreateQuiz extends Component {
         }
     }
 
+    onCloseIconClickHandler = () => {
+        // confirm before proceeding
+        this.setState(prevState => ({
+            selectedLanguage: 'select',
+            noOfQuestions: 0,
+            questions: [],
+            currentQuestionNo: 0,
+            creatingQuiz: false,
+            currentAnswer: 0,
+            currentQuestionValue: '',
+            currentChoicesValues: []
+        }));
+    }
+
     render() {
         let body = '';
         if(this.state.creatingQuiz === false) {
+            console.log(this.state.selectedLanguage);
+            console.log(this.state.questions);
             body = (
                 <Aux>
                     <div className={classes.selectCont}>
                         <label>Choose Your Language</label>
-                        <select onChange={this.selectChangeHandler} defaultValue="select">
+                        <select onChange={this.selectChangeHandler} value={this.state.selectedLanguage}>
                             <option value="select" disabled>Select</option>
                             <option value="React">React</option>
                             <option value="Redux">Redux</option>
@@ -135,41 +249,52 @@ class CreateQuiz extends Component {
                             changed={this.noOfQuestionInputChangedHandler} 
                             inputType="number" 
                             className="noq"
-                            value={false}
+                            value={this.state.noOfQuestions !== 0 ? this.state.noOfQuestions : ""}
                         ></Input>
                     </div>
                 </Aux>
             );
         } else {
-            console.log(this.state.noOfQuestions);
             body = (
                 <Aux>
                     {this.state.currentQuestionNo !== 0 ? <p className={classes.questionSNo}>Q. <span>{this.state.currentQuestionNo}</span>/<span>{this.state.noOfQuestions}</span></p> : null}
                     <Question 
                         changed={this.onQuestionInputChangedHandler} 
-                        value={this.state.nextQuestion === 1}
+                        value={this.state.currentQuestionValue}
                     />
                     <Choices 
                         changed={this.onChoiceInputsChangedHandler} 
                         clicked={this.onAnswerSelectHandler} 
                         answer={this.state.currentAnswer}
-                        value={this.state.nextQuestion === 1}
+                        value={this.state.currentChoicesValues}
                     />
                 </Aux>
             );
         }
         return (
-            <div className={classes.CreateQuiz}>
-                {body}
-                <Button btnType="cta" clicked={this.continueButtonClickHandler} className="quiz-continue-btn" >Continue</Button>
-            </div> 
+            <Aux>
+                <img
+                    onClick={this.onCloseIconClickHandler} 
+                    className={classes.Close} 
+                    src={QuestionMarkIcon} 
+                    alt="Close"
+                />
+                <div className={classes.CreateQuiz}>
+                    {body}
+                    <div className={classes.ButtonGroup}>
+                        <Button btnType="cta" clicked={this.previousButtonClickHandler} className="quiz-prev-btn" >Previous</Button>
+                        <Button btnType="cta" clicked={this.continueButtonClickHandler} className="quiz-continue-btn" >Continue</Button>
+                    </div>
+                </div>
+            </Aux> 
         );
     }
 }
 
 const mapStateToProps = state => {
     return {
-        token: state.auth.token
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 }
 

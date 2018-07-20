@@ -57,14 +57,12 @@ class Auth extends Component {
                         <FormField 
                             formFieldType="email" 
                             changed={(event) => this.onInputChangedHandler(event, "email")} 
-                            label="Email"
-                            value={false} 
+                            label="Email" 
                         />
                         <FormField 
                             formFieldType="password" 
                             changed={(event) => this.onInputChangedHandler(event, "password")} 
-                            label="Password"
-                            value={false} 
+                            label="Password" 
                         />
                         <Button btnType="cta">{this.state.register ? 'Sign Up' : 'Login'}</Button>
                     </form>

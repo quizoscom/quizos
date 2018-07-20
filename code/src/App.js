@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import classes from './App.css';
@@ -10,6 +10,7 @@ import Dashboard from './containers/Dashboard/Dashboard';
 import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
 import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
+import Error404 from './components/Error404/Error404';
 
 import * as actions from './store/actions';
 
@@ -25,11 +26,11 @@ class App extends Component {
       routes = (
         <Switch>
             <Route path="/dashboard" component={Dashboard} />
-            <Route path="/create-quiz" component={CreateQuiz} />
+            <Route path="/create-quiz" exact component={CreateQuiz} />
             <Route path="/quiz" component={Quiz} />
             <Route path="/auth" component={Auth} />
             <Route path="/" exact component={Home} />
-            <Redirect to="/" />
+            <Route component={Error404} />
           </Switch>
       );
     } else {
@@ -37,7 +38,7 @@ class App extends Component {
         <Switch>
           <Route path="/auth" component={Auth} />
           <Route path="/" exact component={Home} />
-          {/* <Redirect to="/" /> */}
+          <Route component={Error404} />
         </Switch>
       );
     }
