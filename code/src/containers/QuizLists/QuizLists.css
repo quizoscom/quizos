@@ -1,0 +1,47 @@
+.QuizLists {
+    padding: 1em 2em;
+}
+
+.selectCont {
+    text-align: left;
+    margin: 4em 0em 2em 0em;
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.selectCont label {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.selectCont select {
+    font-size: 1.2rem;
+    margin: 10px 0px;
+    padding: 6px 18px;
+    font-family: 'Righteous', cursive;
+}
+
+.Table {
+    width: auto;
+    background-color: #fff;
+    margin: 0 auto;
+    font-size: 1.1rem;
+}
+
+.Table td,
+.Table th {
+    padding: 12px 1em;
+}
+
+.Table tr td:last-child img {
+    width: 25px;
+    cursor: pointer;
+}
+
+.Table td img {
+    width: 40px;
+}
+
+.takeQuiz {
+
+}

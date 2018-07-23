@@ -18,6 +18,7 @@ class CreateQuiz extends Component {
         quizId: '',
         selectedLanguage: 'select',
         noOfQuestions: 0,
+        testTime: 0,
         questions: [],
         currentQuestionNo: 0,
         creatingQuiz: false,
@@ -29,7 +30,6 @@ class CreateQuiz extends Component {
     componentDidMount() {
         if(localStorage.getItem('questionsData')) {
             const questionsData = JSON.parse(localStorage.getItem('questionsData'));
-            console.log(questionsData);
             this.setState(prevState => ({
                 selectedLanguage: questionsData.language,
                 noOfQuestions: questionsData.noOfQuestions,
@@ -48,10 +48,25 @@ class CreateQuiz extends Component {
     }
 
     noOfQuestionInputChangedHandler = (event) => {
+        let noOfQuestions = parseInt(event.target.value, 10);
+        if(noOfQuestions === "" || noOfQuestions <= 0) {
+            noOfQuestions = 0;
+        }
         this.setState({
             ...this.state,
-            noOfQuestions: parseInt(event.target.value, 10)
-        })
+            noOfQuestions: noOfQuestions
+        });
+    }
+
+    testTimeInputChangedHandler = (event) => {
+        let testTime = parseInt(event.target.value, 10);
+        if(testTime === "" || testTime <= 0) {
+            testTime = 0;
+        }
+        this.setState({
+            ...this.state,
+            testTime: testTime
+        });
     }
 
     onQuestionInputChangedHandler = (event) => {
@@ -124,7 +139,7 @@ class CreateQuiz extends Component {
     }
 
     continueButtonClickHandler = () => {
-        if(this.state.selectedLanguage !== "" && this.state.selectedLanguage !== undefined && this.state.selectedLanguage !== "select" && this.state.noOfQuestions !== 0) {
+        if(this.state.selectedLanguage !== "" && this.state.selectedLanguage !== undefined && this.state.selectedLanguage !== "select" && this.state.noOfQuestions !== 0 && this.state.testTime !== 0) {
             if(this.state.currentQuestionNo === 0) {
                 this.setState({
                     ...this.state,
@@ -162,20 +177,28 @@ class CreateQuiz extends Component {
                                 return row.question;
                             });
                             if(!duplicacyCheckingForArray(questionsArr)) {
-                                axios.post('http://localhost/evaluiz/set/set-quiz.php', qs.stringify({
+                                axios.post('http://localhost/evaluiz/set/set-quiz-data.php', qs.stringify({
                                     questions: this.state.questions,
                                     language: this.state.selectedLanguage,
-                                    userId: this.props.userId
+                                    userId: this.props.userId,
+                                    quizId: this.state.quizId,
+                                    testTIme: this.state.testTime
                                 }))
                                 .then(res => {
-                                    console.log(res.data);
-                                })
+                                    if(res.data['status'] === 'success') {
+                                        // save quizId into state
+                                        this.setState(prevState => ({
+                                            quizId: res.data['quiz_id']
+                                        }));
+                                    } else {
+                                        alert(res.data['msg']);
+                                    }
+                                });
                             } else {
                                 alert('Duplicate questions are not allowed, Please recheck your questions before submiting');
                             }
                         } else {
                             // update currentQuestionNo and clear the complete form for new question and choices
-                            console.log(this.state.currentQuestionNo)
                             if(this.state.questions.length > this.state.currentQuestionNo) {
                                 this.setState(prevState => ({
                                     currentQuestionNo: prevState.currentQuestionNo + 1,
@@ -202,12 +225,12 @@ class CreateQuiz extends Component {
                         alert("Chocies can't be duplicate");
                     }
                 } else {
-                    alert('Input the question, choices and selected correct answer before proceeding');
+                    alert('Input the question, choices and select correct answer before proceeding');
                 }
             }
         } else {
             // show better designed error alert
-            alert('Please Select the language and no of questions to start creating quiz');
+            alert('Please Select the language, no of questions and test time to start creating quiz');
         }
     }
 
@@ -223,13 +246,12 @@ class CreateQuiz extends Component {
             currentQuestionValue: '',
             currentChoicesValues: []
         }));
+        localStorage.removeItem('questions');
     }
 
     render() {
         let body = '';
         if(this.state.creatingQuiz === false) {
-            console.log(this.state.selectedLanguage);
-            console.log(this.state.questions);
             body = (
                 <Aux>
                     <div className={classes.selectCont}>
@@ -249,7 +271,16 @@ class CreateQuiz extends Component {
                             changed={this.noOfQuestionInputChangedHandler} 
                             inputType="number" 
                             className="noq"
-                            value={this.state.noOfQuestions !== 0 ? this.state.noOfQuestions : ""}
+                            value={this.state.noOfQuestions}
+                        ></Input>
+                    </div>
+                    <div className={classes.testTime}>
+                        <label htmlFor="">Test Time (in minutes)</label>
+                        <Input 
+                            changed={this.testTimeInputChangedHandler} 
+                            inputType="number" 
+                            className="noq"
+                            value={this.state.testTime}
                         ></Input>
                     </div>
                 </Aux>
@@ -293,7 +324,6 @@ class CreateQuiz extends Component {
 
 const mapStateToProps = state => {
     return {
-        token: state.auth.token,
         userId: state.auth.userId
     }
 }

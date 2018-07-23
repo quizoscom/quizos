@@ -8,6 +8,7 @@ import Layout from './hoc/Layout/Layout';
 import Home from './containers/Home/Home';
 import Dashboard from './containers/Dashboard/Dashboard';
 import CreateQuiz from './containers/CreateQuiz/CreateQuiz';
+import QuizLists from './containers/QuizLists/QuizLists';
 import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Error404 from './components/Error404/Error404';
@@ -27,7 +28,8 @@ class App extends Component {
         <Switch>
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/create-quiz" exact component={CreateQuiz} />
-            <Route path="/quiz" component={Quiz} />
+            <Route path="/available-quizzes" component={QuizLists} />
+            <Route path="/quiz/:language/:quizId" component={Quiz} />
             <Route path="/auth" component={Auth} />
             <Route path="/" exact component={Home} />
             <Route component={Error404} />

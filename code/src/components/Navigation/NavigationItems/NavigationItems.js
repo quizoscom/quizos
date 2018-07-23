@@ -13,7 +13,7 @@ const navigationItems = (props) => {
             <Aux>
                 <NavigationItem link="/dashboard">Dashboard</NavigationItem>
                 <NavigationItem link="/create-quiz">Create Quiz</NavigationItem>
-                <NavigationItem link="/quiz">Take Quiz</NavigationItem>
+                <NavigationItem link="/available-quizzes">Take Quiz</NavigationItem>
                 <NavigationItem link="/logout">Logout</NavigationItem> 
             </Aux>
         );

@@ -13,7 +13,6 @@ const reducer = (state = initialState, action) => {
         case actionTypes.AUTH_START:
             return updateObject(state, {error: null, loading: true});
         case actionTypes.AUTH_SUCCESS:
-            console.log('auth reducer');
             return updateObject(state, {token: action.idToken, userId: action.userId, error: null, loading: false});
         case actionTypes.AUTH_FAILED:
             return updateObject(state, {error: action.error, loading: false});
