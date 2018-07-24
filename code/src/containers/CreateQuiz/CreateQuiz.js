@@ -35,7 +35,8 @@ class CreateQuiz extends Component {
                 noOfQuestions: questionsData.noOfQuestions,
                 questions: questionsData.questions,
                 currentQuestionValue: questionsData.questions[0].question,
-                currentChoicesValues: questionsData.questions[0].choices
+                currentChoicesValues: questionsData.questions[0].choices,
+                testTime: questionsData.testTime
             }));
         }
     }
@@ -79,11 +80,19 @@ class CreateQuiz extends Component {
                 answer: 0
             });
         } else {
-            newQuestions[this.state.currentQuestionNo-1] = {
-                question: questionValue,
-                choices: [],
-                answer: 0
-            };
+            if(newQuestions.length >= this.state.currentQuestionNo) {
+                newQuestions[this.state.currentQuestionNo-1] = {
+                    question: questionValue,
+                    choices: this.state.currentChoicesValues,
+                    answer: this.state.currentAnswer
+                };
+            } else {
+                newQuestions[this.state.currentQuestionNo-1] = {
+                    question: questionValue,
+                    choices: [],
+                    answer: 0
+                };
+            }
         }
         this.setState(prevState => ({
             currentQuestionValue: questionValue,
@@ -95,6 +104,13 @@ class CreateQuiz extends Component {
         var choiceValue = event.target.value;
         var currentQUestionNo = this.state.currentQuestionNo;
         var newQuestions = this.state.questions.slice();
+        if(newQuestions.length < currentQUestionNo) {
+            newQuestions[currentQUestionNo-1] = {
+                question: "",
+                choices: [],
+                answer: 0
+            }
+        }
         var newChoices = newQuestions[currentQUestionNo-1].choices.slice();
 
         if(newChoices[index-1] === undefined) {
@@ -146,13 +162,8 @@ class CreateQuiz extends Component {
                     creatingQuiz: true,
                     currentQuestionNo: 1
                 });
-                this.saveQuestions({
-                    questions: this.state.questions,
-                    language: this.state.selectedLanguage,
-                    noOfQuestions: this.state.noOfQuestions,
-                    quizId: this.state.quizId
-                });
             } else {
+                console.log(this.state.questions);
                 // if language and no of questions are selected
 
                 // proceed iff the question, choices and current answer is selected
@@ -219,7 +230,8 @@ class CreateQuiz extends Component {
                             questions: this.state.questions,
                             language: this.state.selectedLanguage,
                             noOfQuestions: this.state.noOfQuestions,
-                            quizId: this.state.quizId
+                            quizId: this.state.quizId,
+                            testTime: this.state.testTime
                         });
                     } else {
                         alert("Chocies can't be duplicate");

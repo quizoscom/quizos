@@ -42,10 +42,9 @@ class Auth extends Component {
     }
 
     render() {
-        console.log(this.props.isAuth);
         let authRedirect = null;
         if(this.props.isAuth) {
-            authRedirect = <Redirect to="/" />
+            authRedirect = <Redirect to={this.props.redirectPath} />
         }
         return (
             <Aux>
@@ -86,7 +85,8 @@ const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
         errorMessage: state.auth.error,
-        isAuth: state.auth.token !== null
+        isAuth: state.auth.token !== null,
+        redirectPath: state.auth.redirectPath
     }
 }
 

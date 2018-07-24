@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './Home.css';
 import questionMark from '../../assets/question-mark-icon.png';
 
 import Button from '../../components/UI/Button/Button';
+import * as actions from '../../store/actions/';
 
 class Home extends Component {
     onClickTakeQuizHandler = () => {
-        console.log('take quiz');
+        if(this.props.isAuth) {
+            this.props.history.push("/available-quizzes");
+        } else {
+            this.props.onSetRedirectPath("/available-quizzes");
+            this.props.history.push("/auth");
+        } 
     }
 
     onClickCreateQuizHandler = () => {
-        console.log('create quiz');
+        if(this.props.isAuth) {
+            this.props.history.push("/create-quiz");
+        } else {
+            this.props.onSetRedirectPath("/create-quiz");
+            this.props.history.push("/auth");
+        }
     }
 
     render() {
@@ -29,4 +41,16 @@ class Home extends Component {
     }
 }
 
-export default Home;
+const mapStateToProps = state => {
+    return {
+        isAuth: state.auth.token !== null
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetRedirectPath: (path) => dispatch(actions.redirectPath(path))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -97,3 +97,16 @@ export const authCheckState = () => {
         }
     }
 }
+
+export const setRedirectPath = (path) => {
+    return {
+        type: actionTypes.SET_REDIRECT_PATH,
+        redirectPath: path
+    }
+};
+
+export const redirectPath = (path) => {
+    return dispatch => {
+        dispatch(setRedirectPath(path));
+    }
+};

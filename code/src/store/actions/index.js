@@ -1,4 +1,5 @@
 export {
     auth,
-    authCheckState
+    authCheckState,
+    redirectPath
 } from './auth';

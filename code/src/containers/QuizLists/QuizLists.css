@@ -4,17 +4,23 @@
 
 .selectCont {
     text-align: left;
+}
+
+.selectCont > div {
+    text-align: left;
     margin: 4em 0em 2em 0em;
     color: #fff;
     font-size: 1.3rem;
+    margin-right: 2em;
+    display: inline-block;
 }
 
-.selectCont label {
+.selectCont > div label {
     display: block;
     font-size: 0.9rem;
 }
 
-.selectCont select {
+.selectCont > div select {
     font-size: 1.2rem;
     margin: 10px 0px;
     padding: 6px 18px;
@@ -26,11 +32,29 @@
     background-color: #fff;
     margin: 0 auto;
     font-size: 1.1rem;
+    padding: 8px 2px;
+    border-spacing: 12px 1px;
 }
 
 .Table td,
 .Table th {
     padding: 12px 1em;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+
+.Table th:not(:last-child) {
+    border-bottom: 1px dotted;
+    cursor: pointer;
+}
+
+.Table th:last-child {
+    background-color: #ffd241;
+    padding: 0 20px;
+}
+
+.Table th:not(:last-child):hover {
+    background-color: #eee;
 }
 
 .Table tr td:last-child img {
@@ -42,6 +66,6 @@
     width: 40px;
 }
 
-.takeQuiz {
+.tableCont {
 
 }
