@@ -1,7 +1,8 @@
 export {
     auth,
     authCheckState,
-    redirectPath
+    redirectPath,
+    logOut
 } from './auth';
 export {
     quizComplete,

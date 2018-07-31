@@ -10,9 +10,6 @@ import LinkedInIcon from '../../assets/linkedin-icon.png';
 import WhatsAppIcon from '../../assets/whatsapp-icon.png';
 import GmailIcon from '../../assets/gmail-icon.png';
 
-import Button from '../../components/UI/Button/Button';
-import ShareIcon from '../../assets/share-icon.png';
-
 class Score extends Component {
     state = {
         recentScores: [15, 20, 18, 19, 20, 1]

@@ -7,6 +7,7 @@ import classes from './App.css';
 import Layout from './hoc/Layout/Layout';
 
 import Error404 from './components/Error404/Error404';
+import LogOut from './components/LogOut/LogOut';
 
 import Home from './containers/Home/Home';
 import Dashboard from './containers/Dashboard/Dashboard';
@@ -35,6 +36,7 @@ class App extends Component {
             <Route path="/quiz/:language/:quizId" component={Quiz} />
             <Route path="/score" component={Score}/>
             <Route path="/auth" component={Auth} />
+            <Route path="/logout" component={LogOut}/>
             <Route path="/" exact component={Home} />
             <Route component={Error404} />
           </Switch>

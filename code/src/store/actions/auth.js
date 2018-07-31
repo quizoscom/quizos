@@ -90,10 +90,22 @@ export const auth = (email, password, register) => {
 
 export const authCheckState = () => {
     return dispatch => {
-        const token = localStorage.getItem('token');
-        if(token) {
-            const userId = localStorage.getItem('userId');
-            dispatch(authSuccess(token, userId));
+        const expirationTime = new Date(localStorage.getItem('expirationTime')).getTime();
+        const currentTIme = new Date().getTime();
+        console.log(expirationTime);
+        console.log(currentTIme);
+        if(currentTIme >= expirationTime) {
+            localStorage.removeItem('expirationTime');
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('questionsData');
+            dispatch(setRedirectPath("/"));
+        } else {
+            const token = localStorage.getItem('token');
+            if(token) {
+                const userId = localStorage.getItem('userId');
+                dispatch(authSuccess(token, userId));
+            }
         }
     }
 }
@@ -110,3 +122,19 @@ export const redirectPath = (path) => {
         dispatch(setRedirectPath(path));
     }
 };
+
+export const onLogOut = () => {
+    return {
+        type: actionTypes.AUTH_LOG_OUT
+    }
+}
+
+export const logOut = () => {
+    return dispatch => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('expirationTime');
+        localStorage.removeItem('questionsData');
+        dispatch(onLogOut());
+    }
+}
