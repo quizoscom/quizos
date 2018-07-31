@@ -10,7 +10,7 @@ class Layout extends Component {
     render() {
         return (
             <Aux>
-                <Toolbar isAuth={this.props.isAuth} />
+                <Toolbar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} />
                 <main className={classes.Content}>
                     {this.props.children}
                 </main>
@@ -21,7 +21,8 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuth: state.auth.token !== null
+        isAuth: state.auth.token !== null,
+        isQuizActive: state.quiz.quizActive
     }
 }
 

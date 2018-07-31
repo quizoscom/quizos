@@ -20,3 +20,9 @@
 .quiz-prev-btn {
     background-color: #aaa;
 }
+
+.SeeScoreButton {
+    margin: 0 !important;
+    margin-top: 3em !important;
+    font-size: 1.5rem;
+}

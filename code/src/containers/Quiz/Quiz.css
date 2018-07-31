@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:800i|Roboto:500');
+
 .Quiz {
     position: relative;
     top: 2em;
@@ -26,4 +28,77 @@
 
 .ButtonGroup > button {
     margin-right: 1em;
+}
+
+.PreQuizInformations {
+    margin: 0 auto;
+    width: 86%;
+    margin-top: 5em;
+}
+
+.PreQuizInformations > div {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 4em;
+}
+
+.PreQuizInformations > div.Info {
+}
+
+.PreQuizInformations .Info ol {
+    margin-top: 2em;
+}
+
+.PreQuizInformations .Info ol li {
+    margin-top: 1em;
+    font-size: 1.2rem;
+}
+
+.PreQuizInformations p.Title {
+    font-size: 1.5rem;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.Icon {
+    text-align: center;
+}
+
+.Icon img {
+    width: 200px;
+}
+
+.CounterComplete {
+    text-align: center;
+    padding: 7em 1em;
+}
+
+.CounterComplete img {
+    width: 300px;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+    .PreQuizInformations > div {
+        width: 48%;
+    }
+
+    .Icon img {
+        width: 300px;
+    }
+}
+
+@media (min-width: 1500px) {
+    .PreQuizInformations {
+        margin-top: 10em;
+    }
+
+    .Icon img {
+        position: relative;
+        top: -1em;
+    }
+
+    .PreQuizInformations .Info ol li {
+        font-size: 1.5rem;
+    }
 }
