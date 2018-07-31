@@ -41,14 +41,14 @@ class Quiz extends Component {
         .then(res => {
             this.setState(prevState => ({
                 timer: parseFloat(res.data.test_time) * 60,
-                noOfQuestions: parseInt(res.data.total_questions, 10),
                 questions: res.data.questions
             }));
+            this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10));
         });
     }
 
     onButtonContinueClickedHandler = () => {
-        if(this.props.currentQuestionsNumber+1 === this.state.noOfQuestions) {
+        if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
             this.props.onQuizComplete(this.props.answers, 0);
         } else {
             this.props.onQuizContinue(this.currentSelectedAnswer);
@@ -122,7 +122,7 @@ class Quiz extends Component {
                             padding: '0 2em',
                             fontSize: '2rem'
                         }}>
-                            <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.state.noOfQuestions}</span></p>
+                            <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
                             <div className={classes.counterCont}>
                                 <ReactCountdownClock
                                     seconds={this.state.timer}
@@ -166,7 +166,8 @@ const mapStateToProps = state => {
         score: state.quiz.score,
         redirectTo: state.quiz.redirectTo,
         quizActive: state.quiz.quizActive,
-        counterComplete: state.quiz.counterComplete
+        counterComplete: state.quiz.counterComplete,
+        noOfQuestions: state.quiz.noOfQuestions
     }
 }
 
@@ -176,7 +177,8 @@ const mapDisptachToPros = dispatch => {
         onQuizContinue: (answer) => dispatch(actions.quizCont(answer)),
         onQuizQuit: () => dispatch(actions.quizQuitHandler()),
         onSeeScore: (answers) => dispatch(actions.seeScore(answers, 0)),
-        onCounterComplete: () => dispatch(actions.counterCompleted())
+        onCounterComplete: () => dispatch(actions.counterCompleted()),
+        setNoOfQuestions: (noOfQuestions) => dispatch(actions.setNoOfQuestions(noOfQuestions))
     }
 }
 

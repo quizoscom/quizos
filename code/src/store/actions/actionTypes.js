@@ -12,3 +12,5 @@ export const QUIZ_QUIT = 'QUIZ_QUIT';
 export const QUIZ_COMPLETE = 'QUIZ_COMPLETE';
 
 export const COUNTER_COMPLETE = 'COUNTER_COMPLETE';
+
+export const SET_NO_QF_QUESTIONS = 'SET_NO_QF_QUESTIONS';

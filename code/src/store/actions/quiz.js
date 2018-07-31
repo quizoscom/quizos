@@ -1,5 +1,5 @@
-import axios from 'axios';
-import qs from 'qs';
+// import axios from 'axios';
+// import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
 
@@ -12,7 +12,8 @@ export const quizContinue = (answer) => {
 
 export const quizCompleteSuccess = (score) => {
     return {
-        type: actionTypes.QUIZ_COMPLETE_SUCCESS
+        type: actionTypes.QUIZ_COMPLETE_SUCCESS,
+        score: score
     };
 };
 
@@ -23,7 +24,7 @@ export const quizCompleteFailed = (error) => {
     };
 };
 
-export const quizComplete = (answers) => {
+export const quizComplete = () => {
     return {
         type: actionTypes.QUIZ_COMPLETE
     };
@@ -75,5 +76,18 @@ export const counterComplete = () => {
 export const counterCompleted = () => {
     return dispatch => {
         dispatch(counterComplete());
+    }
+}
+
+export const noOfQuestionsSet = (noOfQuestions) => {
+    return {
+        type: actionTypes.SET_NO_QF_QUESTIONS,
+        noOfQuestions: noOfQuestions
+    }
+}
+
+export const setNoOfQuestions = (noOfQuestions) => {
+    return dispatch => {
+        dispatch(noOfQuestionsSet(noOfQuestions));
     }
 }

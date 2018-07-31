@@ -9,5 +9,6 @@ export {
     quizComp,
     quizQuitHandler,
     seeScore,
-    counterCompleted
+    counterCompleted,
+    setNoOfQuestions
 } from './quiz';
