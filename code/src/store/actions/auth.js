@@ -91,8 +91,6 @@ export const authCheckState = () => {
     return dispatch => {
         const expirationTime = new Date(localStorage.getItem('expirationTime')).getTime();
         const currentTIme = new Date().getTime();
-        console.log(expirationTime);
-        console.log(currentTIme);
         if(currentTIme >= expirationTime) {
             localStorage.removeItem('expirationTime');
             localStorage.removeItem('token');

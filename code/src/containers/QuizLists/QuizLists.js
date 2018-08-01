@@ -42,12 +42,17 @@ class QuizLists extends Component {
 
     onTableHeaderClickHandler = (sortby) => {
         let newCurrentOrder = Object.assign({}, this.state.currentOrder);
+        console.log(newCurrentOrder);
+
         const newQuizArr = this.state.quizzes.slice();
+        console.log(newQuizArr);
+
         let sortableObject = {};
 
         for(let i = 0; i < newQuizArr.length; i++) {
             sortableObject['' + i] = newQuizArr[i][sortby]
         }
+        console.log(sortableObject);
 
         let keysSorted = null;
 
@@ -66,18 +71,35 @@ class QuizLists extends Component {
                 }
                 
             });
+        } else if(sortby === 'language') {
+            keysSorted = Object.keys(sortableObject).sort(function(a,b) {
+                var x = sortableObject[a].toLowerCase();
+                var y = sortableObject[b].toLowerCase();
+                if(newCurrentOrder[sortby] === 'desc') {
+                    return x > y ? -1 : x < y ? 1 : 0;
+                } else {
+                    return x < y ? -1 : x > y ? 1 : 0;
+                }
+            });
         } else {
             if(newCurrentOrder[sortby] === 'desc') {
                 keysSorted = Object.keys(sortableObject).sort(function(a,b) {
+                    console.log(sortableObject[a]);
+                    console.log(sortableObject[b]);
+                    console.log(sortableObject[a] - sortableObject[b])
                     return sortableObject[a] - sortableObject[b]
                 });
             } else {
                 keysSorted = Object.keys(sortableObject).sort(function(a,b) {
+                    console.log(sortableObject[a]);
+                    console.log(sortableObject[b]);
+                    console.log(sortableObject[b] - sortableObject[a]);
                     return sortableObject[b] - sortableObject[a]
                 });
             }
             
         }
+        console.log(keysSorted);
 
         let sortedQuizzes = [];
         for(let i = 0; i < keysSorted.length; i++) {
