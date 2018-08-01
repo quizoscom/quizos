@@ -6,11 +6,11 @@ const initialState = {
     currentQuestionsNumber: -1,
     loading: false,
     error: null,
-    score: 18,
+    score: 0,
     quizActive: 0,
-    redirectTo: "/score",
+    redirectTo: "",
     counterComplete: 0,
-    noOfQuestions: 20
+    noOfQuestions: 0
 }
 
 const reducer = (state = initialState, action) => {
@@ -27,7 +27,15 @@ const reducer = (state = initialState, action) => {
             });
         case actionTypes.QUIZ_CONTINUE:
             let newAnswers = state.answers.slice();
-            newAnswers[state.currentQuestionsNumber-1] = action.answer;
+            console.log(newAnswers);
+            if(state.currentQuestionsNumber >= 0 ) {
+                if(typeof newAnswers[state.currentQuestionsNumber] === "undefined") {
+                    newAnswers[state.currentQuestionsNumber] = {questionId: '', answer: ''};
+                }
+                newAnswers[state.currentQuestionsNumber]['answer'] = action.answer;
+                newAnswers[state.currentQuestionsNumber]['questionId'] = action.questionId;
+            }
+            console.log(newAnswers);
             const newCurrentQuestionsNumber = state.currentQuestionsNumber + 1 ;
             return updateObject(state, { answers: newAnswers, currentQuestionsNumber: newCurrentQuestionsNumber, quizActive: 1 });
         case actionTypes.QUIZ_COMPLETE_SUCCESS:

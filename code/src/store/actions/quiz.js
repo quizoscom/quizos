@@ -3,10 +3,11 @@
 
 import * as actionTypes from './actionTypes';
 
-export const quizContinue = (answer) => {
+export const quizContinue = (answer, questionId) => {
     return {
         type: actionTypes.QUIZ_CONTINUE,
-        answer: answer
+        answer: answer,
+        questionId: questionId
     };
 };
 
@@ -36,16 +37,17 @@ export const quizQuit = () => {
     };
 };
 
-export const quizCont = (answer) => {
+export const quizCont = (answer, questionId) => {
     return dispatch => {
         // console.log('quiz continue')
-        dispatch(quizContinue(answer));
+        dispatch(quizContinue(answer, questionId));
     };
 };
 
 export const quizComp = (answers, timerValue) => {
     return dispatch => {
         console.log('quiz complete');
+        console.log(answers);
         dispatch(quizComplete(answers));
 
         // server call to save answers and timerValue and calculate score

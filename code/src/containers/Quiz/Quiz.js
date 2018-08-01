@@ -12,6 +12,8 @@ import CounterCompleteIcon from '../../assets/times-up-icon.png';
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
 import Button from '../../components/UI/Button/Button';
+import Loader from '../../components/UI/Loader/Loader';
+
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import * as actions from '../../store/actions';
@@ -23,6 +25,7 @@ class Quiz extends Component {
         noOfQuestions: 0,
         questions: [],
         currentSelectedAnswer: '',
+        currentSelectedQuestionId: '',
         preQuizInfo: [
             { id: 1, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
             { id: 2, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
@@ -39,6 +42,7 @@ class Quiz extends Component {
         }));
         axios.post('http://localhost/evaluiz/get/get-quiz-data.php', qs.stringify({quizId: quizId}))
         .then(res => {
+            console.log(res.data.questions);
             this.setState(prevState => ({
                 timer: parseFloat(res.data.test_time) * 60,
                 questions: res.data.questions
@@ -49,15 +53,19 @@ class Quiz extends Component {
 
     onButtonContinueClickedHandler = () => {
         if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
-            this.props.onQuizComplete(this.props.answers, 0);
+            this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+            setTimeout(() => {
+                this.props.onQuizComplete(this.props.answers, 0); 
+            }, 3000);
         } else {
-            this.props.onQuizContinue(this.currentSelectedAnswer);
+            this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
         }
     }
 
     onAnswerSelectedHandler = (selected) => {
         this.setState(prevState => ({
-            currentSelectedAnswer: selected
+            currentSelectedAnswer: selected,
+            currentSelectedQuestionId: prevState.questions[this.props.currentQuestionsNumber].question_id
         }));
     }
 
@@ -109,10 +117,10 @@ class Quiz extends Component {
                 </div>
             );
         } else {
-            body = <p>Loading</p>;
+            body = <Loader />;
         }
 
-        if(this.state.questions.length !== 0 && this.props.redirectTo !== "/" && this.props.quizActive !== 0 && this.props.counterComplete === 0) {
+        if(this.state.questions.length !== 0 && this.props.redirectTo !== "/" && this.props.quizActive !== 0 && this.props.counterComplete === 0 && this.props.currentQuestionsNumber < this.props.noOfQuestions) {
             body = (
                 <Aux>
                     <p className={classes.Language}>{this.state.language} Quiz</p>
@@ -174,7 +182,7 @@ const mapStateToProps = state => {
 const mapDisptachToPros = dispatch => {
     return {
         onQuizComplete: (answers, timerValue) => dispatch(actions.quizComp(answers, timerValue)),
-        onQuizContinue: (answer) => dispatch(actions.quizCont(answer)),
+        onQuizContinue: (answer, questionId) => dispatch(actions.quizCont(answer, questionId)),
         onQuizQuit: () => dispatch(actions.quizQuitHandler()),
         onSeeScore: (answers) => dispatch(actions.seeScore(answers, 0)),
         onCounterComplete: () => dispatch(actions.counterCompleted()),
