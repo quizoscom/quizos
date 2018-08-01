@@ -19,14 +19,16 @@ class QuizLists extends Component {
             'avergage_scores': 'asc',
             'created_at': 'asc',
             'active_point': 'asc',
-        }
+        },
+        languages: []
     }
 
     componentDidMount() {
         axios.get('http://localhost/evaluiz/get/get-quiz-list.php')
         .then(res => {
             this.setState(prevState => ({
-                quizzes: res.data
+                quizzes: res.data.quizzes,
+                languages: res.data.languages
             }));
         });
     }
@@ -99,11 +101,9 @@ class QuizLists extends Component {
                         <select onChange={this.filterSelectChangeHandler} value={this.state.filterBy}>
                             <option value="select" disabled>Select</option>
                             <option value="all">All</option>
-                            <option value="React">React</option>
-                            <option value="Redux">Redux</option>
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
+                            {this.state.languages.map((lang, index) => {
+                                return <option key={index} value={lang}>{lang}</option>
+                            })}
                         </select>
                     </div>
                 </div>

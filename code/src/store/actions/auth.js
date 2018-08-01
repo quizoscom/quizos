@@ -81,8 +81,7 @@ export const auth = (email, password, register) => {
                 dispatch(authSuccess(res.data.idToken, res.data.localId));
             })
             .catch(err => {
-                // console.log(err.response);
-                // dispatch(authFailed(err.response.data.error.message.replace(/_/ig, ' ')));
+                dispatch(authFailed(err.response.data.error.message.replace(/_/ig, ' ')));
             });
         }
     };
