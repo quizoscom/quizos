@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import qs from 'qs';
 
 import classes from './CreateQuiz.css';
 import QuestionMarkIcon from '../../assets/close-icon.png';
@@ -9,9 +7,15 @@ import QuestionMarkIcon from '../../assets/close-icon.png';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Loader from '../../components/UI/Loader/Loader';
+
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
+import ShareLink from '../../components/ShareLink/ShareLink';
+
 import { duplicacyCheckingForArray } from '../../shared/utility';
+
+import * as actions from '../../store/actions';
 
 class CreateQuiz extends Component {
     state = {
@@ -19,12 +23,13 @@ class CreateQuiz extends Component {
         selectedLanguage: 'select',
         noOfQuestions: 0,
         testTime: 0,
+        difficulty: 'select',
         questions: [],
         currentQuestionNo: 0,
         creatingQuiz: false,
         currentAnswer: 0,
         currentQuestionValue: '',
-        currentChoicesValues: []
+        currentChoicesValues: [],
     }
 
     componentDidMount() {
@@ -36,7 +41,8 @@ class CreateQuiz extends Component {
                 questions: questionsData.questions,
                 currentQuestionValue: questionsData.questions[0].question,
                 currentChoicesValues: questionsData.questions[0].choices,
-                testTime: questionsData.testTime
+                testTime: questionsData.testTime,
+                difficulty: questionsData.difficulty
             }));
         }
     }
@@ -67,6 +73,13 @@ class CreateQuiz extends Component {
         this.setState({
             ...this.state,
             testTime: testTime
+        });
+    }
+
+    difficultySelectChangeHandler = (event) => {
+        this.setState({
+            ...this.state,
+            difficulty: event.target.value
         });
     }
 
@@ -155,7 +168,8 @@ class CreateQuiz extends Component {
     }
 
     continueButtonClickHandler = () => {
-        if(this.state.selectedLanguage !== "" && this.state.selectedLanguage !== undefined && this.state.selectedLanguage !== "select" && this.state.noOfQuestions !== 0 && this.state.testTime !== 0) {
+        if(this.state.selectedLanguage !== "" && this.state.selectedLanguage !== undefined && this.state.selectedLanguage !== "select" 
+            && this.state.noOfQuestions !== 0 && this.state.testTime !== 0 && this.state.difficulty !== 'select' && this.state.difficulty !== undefined) {
             if(this.state.currentQuestionNo === 0) {
                 this.setState({
                     ...this.state,
@@ -163,7 +177,6 @@ class CreateQuiz extends Component {
                     currentQuestionNo: 1
                 });
             } else {
-                console.log(this.state.questions);
                 // if language and no of questions are selected
 
                 // proceed iff the question, choices and current answer is selected
@@ -188,22 +201,13 @@ class CreateQuiz extends Component {
                                 return row.question;
                             });
                             if(!duplicacyCheckingForArray(questionsArr)) {
-                                axios.post('http://localhost/evaluiz/set/set-quiz-data.php', qs.stringify({
+                                this.props.onCreatingQuiz({
                                     questions: this.state.questions,
                                     language: this.state.selectedLanguage,
                                     userId: this.props.userId,
                                     quizId: this.state.quizId,
-                                    testTIme: this.state.testTime
-                                }))
-                                .then(res => {
-                                    if(res.data['status'] === 'success') {
-                                        // save quizId into state
-                                        this.setState(prevState => ({
-                                            quizId: res.data['quiz_id']
-                                        }));
-                                    } else {
-                                        alert(res.data['msg']);
-                                    }
+                                    testTIme: this.state.testTime,
+                                    difficulty: this.state.difficulty
                                 });
                             } else {
                                 alert('Duplicate questions are not allowed, Please recheck your questions before submiting');
@@ -231,7 +235,8 @@ class CreateQuiz extends Component {
                             language: this.state.selectedLanguage,
                             noOfQuestions: this.state.noOfQuestions,
                             quizId: this.state.quizId,
-                            testTime: this.state.testTime
+                            testTime: this.state.testTime,
+                            difficulty: this.state.difficulty
                         });
                     } else {
                         alert("Chocies can't be duplicate");
@@ -242,7 +247,7 @@ class CreateQuiz extends Component {
             }
         } else {
             // show better designed error alert
-            alert('Please Select the language, no of questions and test time to start creating quiz');
+            alert('Please Select the language, no of questions, test time and difficulty to start creating quiz');
         }
     }
 
@@ -262,72 +267,94 @@ class CreateQuiz extends Component {
     }
 
     render() {
-        let body = '';
-        if(this.state.creatingQuiz === false) {
-            body = (
-                <Aux>
-                    <div className={classes.selectCont}>
-                        <label>Choose Your Language</label>
-                        <select onChange={this.selectChangeHandler} value={this.state.selectedLanguage}>
-                            <option value="select" disabled>Select</option>
-                            <option value="React">React</option>
-                            <option value="Redux">Redux</option>
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="PHP">PHP</option>
-                            <option value="Python">Python</option>
-                        </select>
-                    </div>
-                    <div className={classes.noOfQuestions}>
-                        <label htmlFor="">No of Questions</label>
-                        <Input 
-                            changed={this.noOfQuestionInputChangedHandler} 
-                            inputType="number" 
-                            className="noq"
-                            value={this.state.noOfQuestions}
-                        ></Input>
-                    </div>
-                    <div className={classes.testTime}>
-                        <label htmlFor="">Test Time (in minutes)</label>
-                        <Input 
-                            changed={this.testTimeInputChangedHandler} 
-                            inputType="number" 
-                            className="noq"
-                            value={this.state.testTime}
-                        ></Input>
-                    </div>
-                </Aux>
-            );
-        } else {
-            body = (
-                <Aux>
-                    {this.state.currentQuestionNo !== 0 ? <p className={classes.questionSNo}>Q. <span>{this.state.currentQuestionNo}</span>/<span>{this.state.noOfQuestions}</span></p> : null}
-                    <Question 
-                        changed={this.onQuestionInputChangedHandler} 
-                        value={this.state.currentQuestionValue}
-                    />
-                    <Choices 
-                        changed={this.onChoiceInputsChangedHandler} 
-                        clicked={this.onAnswerSelectHandler} 
-                        answer={this.state.currentAnswer}
-                        value={this.state.currentChoicesValues}
-                    />
-                </Aux>
-            );
+        let body = <Loader />;
+        if(this.props.loading === false) {
+            if(this.state.creatingQuiz === false) {
+                body = (
+                    <Aux>
+                        <div className={classes.selectCont}>
+                            <label>Choose Your Language</label>
+                            <select onChange={this.selectChangeHandler} value={this.state.selectedLanguage}>
+                                <option value="select" disabled>Select</option>
+                                <option value="React">React</option>
+                                <option value="Redux">Redux</option>
+                                <option value="JavaScript">JavaScript</option>
+                                <option value="PHP">PHP</option>
+                                <option value="Python">Python</option>
+                            </select>
+                        </div>
+                        <div className={classes.noOfQuestions}>
+                            <label htmlFor="">No of Questions</label>
+                            <Input 
+                                changed={this.noOfQuestionInputChangedHandler} 
+                                inputType="number" 
+                                className="noq"
+                                value={this.state.noOfQuestions}
+                            ></Input>
+                        </div>
+                        <div className={classes.testTime}>
+                            <label htmlFor="">Test Time (in minutes)</label>
+                            <Input 
+                                changed={this.testTimeInputChangedHandler} 
+                                inputType="number" 
+                                className="noq"
+                                value={this.state.testTime}
+                            ></Input>
+                        </div>
+                        <div className={classes.Difficulty}>
+                            <label htmlFor="">Difficulty</label>
+                            <select onChange={this.difficultySelectChangeHandler} value={this.state.difficulty}>
+                                <option value="select" disabled>Select</option>
+                                <option value="Beginners">Beginners</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </Aux>
+                );
+            } else if(this.props.shareLink !== '') {
+                body = <ShareLink shareLink={this.props.shareLink} />
+            } else {
+                body = (
+                    <Aux>
+                        {this.state.currentQuestionNo !== 0 ? <p className={classes.questionSNo}>Q. <span>{this.state.currentQuestionNo}</span>/<span>{this.state.noOfQuestions}</span></p> : null}
+                        <Question 
+                            changed={this.onQuestionInputChangedHandler} 
+                            value={this.state.currentQuestionValue}
+                        />
+                        <Choices 
+                            changed={this.onChoiceInputsChangedHandler} 
+                            clicked={this.onAnswerSelectHandler} 
+                            answer={this.state.currentAnswer}
+                            value={this.state.currentChoicesValues}
+                        />
+                    </Aux>
+                );
+            }
         }
+
         return (
             <Aux>
-                <img
-                    onClick={this.onCloseIconClickHandler} 
-                    className={classes.Close} 
-                    src={QuestionMarkIcon} 
-                    alt="Close"
-                />
+                {
+                    this.props.shareLink === '' && this.props.loading === false
+                    ? <img
+                        onClick={this.onCloseIconClickHandler} 
+                        className={classes.Close} 
+                        src={QuestionMarkIcon} 
+                        alt="Close"
+                    />
+                    : null
+                }
                 <div className={classes.CreateQuiz}>
                     {body}
-                    <div className={classes.ButtonGroup}>
-                        <Button btnType="cta" clicked={this.previousButtonClickHandler} className="quiz-prev-btn" >Previous</Button>
-                        <Button btnType="cta" clicked={this.continueButtonClickHandler} className="quiz-continue-btn" >Continue</Button>
-                    </div>
+                    {
+                        this.props.shareLink === '' && this.props.loading === false
+                        ? <div className={classes.ButtonGroup}>
+                            <Button btnType="cta" clicked={this.previousButtonClickHandler} className="quiz-prev-btn" >Previous</Button>
+                            <Button btnType="cta" clicked={this.continueButtonClickHandler} className="quiz-continue-btn" >Continue</Button>
+                          </div>
+                        : null
+                    }
                 </div>
             </Aux> 
         );
@@ -336,8 +363,16 @@ class CreateQuiz extends Component {
 
 const mapStateToProps = state => {
     return {
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        shareLink: state.createQuiz.shareLink,
+        loading: state.createQuiz.loading
     }
 }
 
-export default connect(mapStateToProps)(CreateQuiz);
+const mapDispatchToProps = dispatch => {
+    return {
+        onCreatingQuiz: (params) => dispatch(actions.creatingQuiz(params))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateQuiz);

@@ -8,6 +8,10 @@ import Button from '../../components/UI/Button/Button';
 import * as actions from '../../store/actions/';
 
 class Home extends Component {
+    componentDidMount() {
+        this.props.onSetRedirectPath("/");
+    }
+
     onClickTakeQuizHandler = () => {
         if(this.props.isAuth) {
             this.props.history.push("/available-quizzes");

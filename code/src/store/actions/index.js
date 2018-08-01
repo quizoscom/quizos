@@ -4,6 +4,7 @@ export {
     redirectPath,
     logOut
 } from './auth';
+
 export {
     quizComplete,
     quizCont,
@@ -11,5 +12,10 @@ export {
     quizQuitHandler,
     seeScore,
     counterCompleted,
-    setNoOfQuestions
+    setNoOfQuestions,
+    resetRedirectPathFromScore
 } from './quiz';
+
+export { 
+    creatingQuiz
+} from './createQuiz'

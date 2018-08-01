@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip' //https://github.com/wwayne/react-tooltip
 
 import classes from './Choices.css';
 
@@ -16,7 +17,17 @@ const choices = (props) => {
                         changed={(event) => props.changed(event, i)}
                         value={props.value.length >= i ? props.value[i-1] : ""}
                     />
-                    <p className={props.answer === i ? classes.answer : ''} onClick={() => props.clicked(i)}>ca</p>
+                    <p 
+                        className={props.answer === i ? classes.answer : ''} 
+                        onClick={() => props.clicked(i)}
+                        data-tip="Click it for choosing the correct answer"
+                    >
+                    ca</p>
+                    <ReactTooltip 
+                        type="light"
+                        effect="solid"
+                        place="right" 
+                    />
                 </div>
             );
         });

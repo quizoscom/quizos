@@ -27,7 +27,6 @@ const reducer = (state = initialState, action) => {
             });
         case actionTypes.QUIZ_CONTINUE:
             let newAnswers = state.answers.slice();
-            console.log(newAnswers);
             if(state.currentQuestionsNumber >= 0 ) {
                 if(typeof newAnswers[state.currentQuestionsNumber] === "undefined") {
                     newAnswers[state.currentQuestionsNumber] = {questionId: '', answer: ''};
@@ -35,7 +34,6 @@ const reducer = (state = initialState, action) => {
                 newAnswers[state.currentQuestionsNumber]['answer'] = action.answer;
                 newAnswers[state.currentQuestionsNumber]['questionId'] = action.questionId;
             }
-            console.log(newAnswers);
             const newCurrentQuestionsNumber = state.currentQuestionsNumber + 1 ;
             return updateObject(state, { answers: newAnswers, currentQuestionsNumber: newCurrentQuestionsNumber, quizActive: 1 });
         case actionTypes.QUIZ_COMPLETE_SUCCESS:
@@ -48,6 +46,16 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, { counterComplete: 1 });
         case actionTypes.SET_NO_QF_QUESTIONS:
             return updateObject(state, { noOfQuestions: action.noOfQuestions });
+        case actionTypes.RESET_ALL_QUIZ_STATES:
+            return updateObject(state, {
+                answers: [],
+                currentQuestionsNumber: -1,
+                loading: false,
+                error: null,
+                quizActive: 0,
+                redirectTo: "",
+                counterComplete: 0,
+            });
         default:
             return state;
     }

@@ -10,6 +10,8 @@ import LinkedInIcon from '../../assets/linkedin-icon.png';
 import WhatsAppIcon from '../../assets/whatsapp-icon.png';
 import GmailIcon from '../../assets/gmail-icon.png';
 
+import * as actions from '../../store/actions';
+
 class Score extends Component {
     state = {
         recentScores: [15, 20, 18, 19, 20, 1]
@@ -19,20 +21,25 @@ class Score extends Component {
         console.log('share click');
     }
 
+    componentDidMount() {
+        this.props.onLoad();
+    }
+
     render() {
         let body = <Redirect to="/" />;
         if(this.props.score !== 0 && this.props.noOfQuestions !== 0) {
             const shareDesc = `I got ${this.props.score} in React quiz. Evaluate yourself or others on thousands of language on evaluiz.com`;
+            const url = "evaluiz.com";
             body = (
                 <div className={classes.Score}>
                     <p className={classes.ScoreP}><span>Your Score</span> <span>{this.props.score}/{this.props.noOfQuestions}</span></p>
                     <div className={classes.ShareCont}>
                         <p>Share</p>
-                        <FacebookShareButton url="evaluiz.com" quote={shareDesc} ><img src={FacebookIcon} alt="Facebook Icon"/></FacebookShareButton>
-                        <TwitterShareButton url="evaluiz.com" via="evaluiz" title={shareDesc}><img src={TwitterIcon} alt="Twitter Icon"/></TwitterShareButton>
-                        <LinkedinShareButton url="evaluiz.com" description={shareDesc}><img src={LinkedInIcon} alt="LinkedIn Icon"/></LinkedinShareButton>
-                        <WhatsappShareButton url="evaluiz.com" title={shareDesc}><img src={WhatsAppIcon} alt="WhatsApp Icon"/></WhatsappShareButton>
-                        <EmailShareButton url="evaluiz.com" body={shareDesc} subject="evaluiz.com"><img src={GmailIcon} alt="Gmail Icon"/></EmailShareButton>
+                        <FacebookShareButton url={url} quote={shareDesc} ><img src={FacebookIcon} alt="Facebook Icon"/></FacebookShareButton>
+                        <TwitterShareButton url={url} via="evaluiz" title={shareDesc}><img src={TwitterIcon} alt="Twitter Icon"/></TwitterShareButton>
+                        <LinkedinShareButton url={url} description={shareDesc}><img src={LinkedInIcon} alt="LinkedIn Icon"/></LinkedinShareButton>
+                        <WhatsappShareButton url={url} title={shareDesc}><img src={WhatsAppIcon} alt="WhatsApp Icon"/></WhatsappShareButton>
+                        <EmailShareButton url={url} body={shareDesc} subject="evaluiz.com"><img src={GmailIcon} alt="Gmail Icon"/></EmailShareButton>
                     </div>
                     <div className={classes.RecentScores}>
                         <p>Recent Scores for this quiz</p>
@@ -55,4 +62,10 @@ export const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Score);
+export const mapDispatchToProps = dispatch => {
+    return {
+        onLoad: () => dispatch(actions.resetRedirectPathFromScore())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Score);

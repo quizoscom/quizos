@@ -20,6 +20,7 @@ import * as actions from '../../store/actions';
 
 class Quiz extends Component {
     state = {
+        quizId: '',
         language: '',
         timer: '',
         noOfQuestions: 0,
@@ -38,7 +39,8 @@ class Quiz extends Component {
         const quizId = this.props.match.params.quizId;
         const language = this.props.match.params.language;
         this.setState(prevState => ({
-            language: language
+            language: language,
+            quizId: quizId
         }));
         axios.post('http://localhost/evaluiz/get/get-quiz-data.php', qs.stringify({quizId: quizId}))
         .then(res => {
@@ -55,8 +57,9 @@ class Quiz extends Component {
         if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
             this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
             setTimeout(() => {
-                this.props.onQuizComplete(this.props.answers, 0); 
-            }, 3000);
+                console.log(this.props.userId);
+                this.props.onQuizComplete(this.props.answers, 0, this.state.quizId, this.props.userId);
+            }, 1500);
         } else {
             this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
         }
@@ -75,7 +78,7 @@ class Quiz extends Component {
     }
 
     onSeeScoreButtonClick = () => {
-        this.props.onSeeScore(this.props.answers);
+        this.props.onSeeScore(this.props.answers, this.state.quizId, this.props.userId);
     }
 
     onCompleteCounterHandler = () => {
@@ -175,16 +178,17 @@ const mapStateToProps = state => {
         redirectTo: state.quiz.redirectTo,
         quizActive: state.quiz.quizActive,
         counterComplete: state.quiz.counterComplete,
-        noOfQuestions: state.quiz.noOfQuestions
+        noOfQuestions: state.quiz.noOfQuestions,
+        userId: state.auth.userId
     }
 }
 
 const mapDisptachToPros = dispatch => {
     return {
-        onQuizComplete: (answers, timerValue) => dispatch(actions.quizComp(answers, timerValue)),
+        onQuizComplete: (answers, timerValue, quizId, userId) => dispatch(actions.quizComplete(answers, timerValue, quizId, userId)),
         onQuizContinue: (answer, questionId) => dispatch(actions.quizCont(answer, questionId)),
         onQuizQuit: () => dispatch(actions.quizQuitHandler()),
-        onSeeScore: (answers) => dispatch(actions.seeScore(answers, 0)),
+        onSeeScore: (answers, quizId, userId) => dispatch(actions.seeScore(answers, 0, quizId, userId)),
         onCounterComplete: () => dispatch(actions.counterCompleted()),
         setNoOfQuestions: (noOfQuestions) => dispatch(actions.setNoOfQuestions(noOfQuestions))
     }

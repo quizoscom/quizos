@@ -10,12 +10,14 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import authReducer from './store/reducers/auth';
 import quizReducer from './store/reducers/quiz';
+import createQuizReducer from './store/reducers/createQuiz';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    quiz: quizReducer
+    quiz: quizReducer,
+    createQuiz: createQuizReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

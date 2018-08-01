@@ -1,5 +1,5 @@
-// import axios from 'axios';
-// import qs from 'qs';
+import axios from 'axios';
+import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
 
@@ -25,12 +25,6 @@ export const quizCompleteFailed = (error) => {
     };
 };
 
-export const quizComplete = () => {
-    return {
-        type: actionTypes.QUIZ_COMPLETE
-    };
-};
-
 export const quizQuit = () => {
     return {
         type: actionTypes.QUIZ_QUIT
@@ -39,20 +33,35 @@ export const quizQuit = () => {
 
 export const quizCont = (answer, questionId) => {
     return dispatch => {
-        // console.log('quiz continue')
         dispatch(quizContinue(answer, questionId));
     };
 };
 
-export const quizComp = (answers, timerValue) => {
-    return dispatch => {
-        console.log('quiz complete');
-        console.log(answers);
-        dispatch(quizComplete(answers));
+export const quizComp = () => {
+    return {
+        type: actionTypes.QUIZ_COMPLETE
+    }
+}
 
-        // server call to save answers and timerValue and calculate score
-        let score = 20;
-        dispatch(quizCompleteSuccess(score));
+export const quizComplete = (answers, timerValue, quizId, userId) => {
+    return dispatch => {
+        dispatch(quizComp());
+        axios.post('http://localhost/evaluiz/set/set-quiz-answers.php', qs.stringify({
+            answers: answers,
+            quizId: quizId,
+            timerValue: timerValue,
+            userId: userId
+        }))
+        .then(res => {
+            if(res.data.status === 'success') {
+                dispatch(quizCompleteSuccess(res.data.score));
+            } else {
+                alert('server error');
+            }
+        })
+        .catch(err => {
+            
+        });
     };
 };
 
@@ -63,9 +72,9 @@ export const quizQuitHandler = () => {
     };
 };
 
-export const seeScore = (answers, timerValue) => {
+export const seeScore = (answers, timerValue, quizId) => {
     return dispatch => {
-        dispatch(quizComp(answers, timerValue));
+        dispatch(quizComplete(answers, timerValue, quizId));
     }
 }
 
@@ -91,5 +100,17 @@ export const noOfQuestionsSet = (noOfQuestions) => {
 export const setNoOfQuestions = (noOfQuestions) => {
     return dispatch => {
         dispatch(noOfQuestionsSet(noOfQuestions));
+    }
+}
+
+export const resetRedirectPath = () => {
+    return {
+        type: actionTypes.RESET_ALL_QUIZ_STATES
+    }
+}
+
+export const resetRedirectPathFromScore = () => {
+    return dispatch => {
+        dispatch(resetRedirectPath());
     }
 }
