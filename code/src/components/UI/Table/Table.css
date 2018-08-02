@@ -1,18 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
 .Table {
     background-color: #fff;
     text-transform: capitalize;
+    border-collapse: collapse;
+    width: 95%;
+    font-family: 'Roboto', sans-serif;
 }
 
 .Table tbody tr:last-child td {
-    padding-bottom: 19px;
+    padding-bottom: 9px;
 }
 
 .Table thead th,
 .Table tbody td {
-    padding: 7px 2em;
-    font-size: 1.3rem;
+    padding: 9px 10px;
+    font-size: 1.1rem;
+}
+
+.Table tbody tr:hover {
+    background-color: #eee;
 }
 
 .Table thead th {
     font-weight: 700;
+}
+
+.Table thead tr {
+    background-color: #00364E;
+    color: #fff;
+}
+
+ 
+/* Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically. */
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50% !important;
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	/*
+	Label the data
+	*/
+	td:nth-of-type(1):before { content: "S.No."; }
+	td:nth-of-type(2):before { content: "Language"; }
+	td:nth-of-type(3):before { content: "Date"; }
+	td:nth-of-type(4):before { content: "Users"; }
+	td:nth-of-type(5):before { content: "MaxMarksObt"; }
+	td:nth-of-type(6):before { content: "Difficulty"; }
 }
