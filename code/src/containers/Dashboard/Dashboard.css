@@ -7,10 +7,6 @@
     margin-left: 3em;
 }
 
-.Dashboard.qc p {
-    background-color: #ffd241 !important;
-}
-
 .Dashboard p.Title {
     background-color: #fff;
     margin-bottom: 2px;
@@ -19,13 +15,22 @@
     font-size: 1.3rem;
 }
 
+.qt {
+    margin-bottom: 10em;
+}
+
 .ButtonGroup {
     display: inline-block;
-    right: 3em;
+    right: 0em;
     position: fixed;
-    bottom: 2em;
+    bottom: 0em;
+    background-color: #003644;
+    width: 100%;
 }
 
 .ButtonGroup button {
     margin-right: 2em;
+    float: right;
+    position: relative;
+    bottom: 1em;
 }

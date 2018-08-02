@@ -19,15 +19,6 @@
     margin-bottom: 10px;
 }
 
-.CreateQuiz .selectCont select {
-    height: 2.3em;
-    font-size: 1.4rem;
-    width: 34%;
-    outline: none;
-    font-family: 'Righteous', cursive;
-    padding: 0px 10px;
-}
-
 .CreateQuiz .questionSNo {
     text-align: left;
     margin-left: -4em;

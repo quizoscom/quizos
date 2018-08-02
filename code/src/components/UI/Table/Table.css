@@ -14,8 +14,8 @@
 
 .Table thead th,
 .Table tbody td {
-    padding: 9px 10px;
-    font-size: 1.1rem;
+    padding: 11px 10px;
+    font-size: 1rem;
 }
 
 .Table tbody tr:hover {
@@ -29,6 +29,15 @@
 .Table thead tr {
     background-color: #00364E;
     color: #fff;
+}
+
+/* Pagination */
+.Pagination {
+
+}
+
+.Pagination {
+
 }
 
  

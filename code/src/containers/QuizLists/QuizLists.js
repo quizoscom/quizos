@@ -7,6 +7,8 @@ import classes from './QuizLists.css';
 import NewIcon from '../../assets/new-icon.png';
 import NewTabIcon from '../../assets/open-in-new-tab.png';
 
+import Select from '../../components/UI/Select/Select';
+
 class QuizLists extends Component {
     state = {
         quizzes: [],
@@ -120,13 +122,11 @@ class QuizLists extends Component {
                 <div className={classes.selectCont}>
                     <div>
                         <label>Filter By</label>
-                        <select onChange={this.filterSelectChangeHandler} value={this.state.filterBy}>
-                            <option value="select" disabled>Select</option>
-                            <option value="all">All</option>
-                            {this.state.languages.map((lang, index) => {
-                                return <option key={index} value={lang}>{lang}</option>
-                            })}
-                        </select>
+                        <Select
+                            changed={this.filterSelectChangeHandler}
+                            value={this.state.filterBy}
+                            options={["select", "All"].concat(this.state.languages)}
+                        />
                     </div>
                 </div>
                 <div className={classes.tableCont}>
@@ -148,7 +148,7 @@ class QuizLists extends Component {
                             {this.state.quizzes.map(row => {
                                 const av_scores = row['avergage_scores'] === 0 ? <img src={NewIcon} alt="New"/> : row['avergage_scores'] + '/10';
                                 let body = null;
-                                if(row['language'] === this.state.filterBy || this.state.filterBy === 'select' || this.state.filterBy === 'all') {
+                                if(row['language'] === this.state.filterBy || this.state.filterBy === 'select' || this.state.filterBy === 'All') {
                                     body = (
                                         <tr key={row['quiz_id']}>
                                             <td>{row['language']}</td>

@@ -1,0 +1,44 @@
+.Pagination {
+    width: 95%;
+    background-color: #fff;
+    margin-top: 2px;
+}
+
+.Pagination button {
+    display: inline-block;
+    padding: 7px 22px;
+    font-size: 1rem;
+    margin-top: 0 !important;
+    background-color: #ddd;
+    width: 173px;
+}
+
+.Pagination > div {
+    display: inline-block;
+    width: 50%;
+}
+
+.Pagination input {
+    display: inline-block;
+    width: 15%;
+    padding: 4px 7px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 1.1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+.Pagination p {
+    display: inline-block;
+    background-color: #fff;
+    padding: 5px 10px;
+    margin: 4px 0px;
+}
+
+.Pagination select {
+    height: 2em;
+    font-size: 1rem;
+    width: 33%;
+    margin-left: 2em;
+}

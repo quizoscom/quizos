@@ -8,6 +8,7 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
+import Select from '../../components/UI/Select/Select';
 
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
@@ -274,14 +275,11 @@ class CreateQuiz extends Component {
                     <Aux>
                         <div className={classes.selectCont}>
                             <label>Choose Your Language</label>
-                            <select onChange={this.selectChangeHandler} value={this.state.selectedLanguage}>
-                                <option value="select" disabled>Select</option>
-                                <option value="React">React</option>
-                                <option value="Redux">Redux</option>
-                                <option value="JavaScript">JavaScript</option>
-                                <option value="PHP">PHP</option>
-                                <option value="Python">Python</option>
-                            </select>
+                            <Select 
+                                changed={this.selectChangeHandler}
+                                value={this.state.selectedLanguage}
+                                options={["select", "React", "Redux", "JavaScript", "PHP", "Python"]}
+                            />
                         </div>
                         <div className={classes.noOfQuestions}>
                             <label htmlFor="">No of Questions</label>
@@ -303,12 +301,11 @@ class CreateQuiz extends Component {
                         </div>
                         <div className={classes.Difficulty}>
                             <label htmlFor="">Difficulty</label>
-                            <select onChange={this.difficultySelectChangeHandler} value={this.state.difficulty}>
-                                <option value="select" disabled>Select</option>
-                                <option value="Beginners">Beginners</option>
-                                <option value="Intermediate">Intermediate</option>
-                                <option value="Advanced">Advanced</option>
-                            </select>
+                            <Select 
+                                changed={this.difficultySelectChangeHandler}
+                                value={this.state.difficulty}
+                                options={["select", "Beginners", "Intermediate", "Advanced"]}
+                            />
                         </div>
                     </Aux>
                 );
