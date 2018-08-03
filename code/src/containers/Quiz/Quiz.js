@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-// import ReactCountdownClock from 'react-countdown-clock'; //https://github.com/pughpugh/react-countdown-clock
 
 import classes from './Quiz.css';
 import PreQuizIcon from '../../assets/pre-quiz-header-icon.png';
@@ -59,7 +58,7 @@ class Quiz extends Component {
             this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
             setTimeout(() => {
                 console.log(this.props.userId);
-                this.props.onQuizComplete(this.props.answers, 0, this.state.quizId, this.props.userId);
+                this.props.onQuizComplete(this.props.answers, (this.props.hr + ':' + this.props.mins + ':' + this.props.secs), this.state.quizId, this.props.userId);
             }, 1500);
         } else {
             this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
@@ -137,13 +136,6 @@ class Quiz extends Component {
                         }}>
                             <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
                             <div className={classes.counterCont}>
-                                {/* <ReactCountdownClock
-                                    seconds={this.state.timer}
-                                    color='#124f5f'
-                                    alpha={0.9}
-                                    size={100}
-                                    onComplete={(event) => this.onCompleteCounterHandler(event)}
-                                /> */}
                                 <Timer timer={this.state.timer} />
                             </div>
                         </div>
@@ -182,7 +174,10 @@ const mapStateToProps = state => {
         quizActive: state.quiz.quizActive,
         counterComplete: state.quiz.counterComplete,
         noOfQuestions: state.quiz.noOfQuestions,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        hr: state.timer.hr,
+        mins: state.timer.mins,
+        secs: state.timer.secs,
     }
 }
 

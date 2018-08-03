@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './Timer.css';
 
+import * as actions from '../../store/actions';
+
 class Timer extends Component {
     state = {
-        time: '',
-        hr: 0,
-        mins: 0,
-        secs: 0
+        time: ''
     }
 
     componentDidMount() {
@@ -30,6 +30,7 @@ class Timer extends Component {
 
     componentWillUnmount() {
         console.log('counter complete');
+        this.props.onTimerStopped(this.props.hr, this.props.mins, this.props.secs);
         clearInterval(this.timerID);
     }
 
@@ -40,6 +41,7 @@ class Timer extends Component {
         } else {
             time = this.padWithZero(hr) + ':' + this.padWithZero(mins) + ':' + this.padWithZero(secs);
         }
+        this.props.onTimerChange(hr, mins, secs);
         this.setState(prevState => ({
             time: time,
             hr: hr,
@@ -95,7 +97,8 @@ class Timer extends Component {
         }
 
         if(hr === 0 && mins === 0 && secs === 0) {
-            console.log('counter complete');
+            console.log('automatic counter complete');
+            this.props.onTimerStopped(0, 0, 0);
             clearInterval(this.timerID);
         }
 
@@ -107,10 +110,25 @@ class Timer extends Component {
         return (
             <p 
                 className={classes.Timer}
-                style={ this.state.hr === 0 && this.state.mins === 0 ? {color: '#ffd241'} : null}
+                style={ this.props.hr === 0 && this.props.mins === 0 ? {color: '#ffd241'} : null}
             >{this.state.time}</p>
         );
     }
 }
 
-export default Timer;
+const mapStateToProps = state => {
+    return {
+        hr: state.timer.hr,
+        mins: state.timer.mins,
+        secs: state.timer.secs
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onTimerChange: (hr, mins, secs) => dispatch(actions.timerRunning(hr, mins, secs)),
+        onTimerStopped: (hr, mins, secs) => dispatch(actions.timerStopped(hr, mins, secs))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timer);

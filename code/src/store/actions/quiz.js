@@ -45,6 +45,7 @@ export const quizComp = () => {
 
 export const quizComplete = (answers, timerValue, quizId, userId) => {
     return dispatch => {
+        console.log(timerValue);
         dispatch(quizComp());
         axios.post('http://localhost/evaluiz/set/set-quiz-answers.php', qs.stringify({
             answers: answers,

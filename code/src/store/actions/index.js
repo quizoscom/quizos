@@ -19,3 +19,8 @@ export {
 export { 
     creatingQuiz
 } from './createQuiz'
+
+export {
+    timerRunning,
+    timerStopped
+} from './timer'
