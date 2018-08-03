@@ -1,8 +1,11 @@
+.LoaderCont {
+    margin-top: 15em;
+}
+
 .LoadingP {
     color: #fff;
     font-size: 1.5em;
     text-align: center;
-    margin-top: 15em;
 }
 
 .Parent {
@@ -15,7 +18,7 @@
     clip: rect(0, 80px, 80px, 40px);
     height: 80px;
     width: 80px;
-    position: absolute;
+    position: relative;
 }
   
 .Loader2 {
@@ -23,7 +26,8 @@
     clip: rect(0, 80px, 80px, 40px);
     height: 80px;
     width: 80px;
-    position: absolute;
+    position: relative;
+    top: -80px;
     transform: rotate(180deg);
 }
   

@@ -68,9 +68,15 @@ class CreateQuiz extends Component {
 
     testTimeInputChangedHandler = (event) => {
         let testTime = parseInt(event.target.value, 10);
-        if(testTime === "" || testTime <= 0) {
-            testTime = 0;
+        if(testTime <= 180) {
+            if(testTime === "" || testTime <= 0) {
+                testTime = 0;
+            }
+        } else {
+            testTime = 180;
+            alert('Maximum allowed test time is 3 Hours (180 mins)');
         }
+
         this.setState({
             ...this.state,
             testTime: testTime

@@ -16,6 +16,7 @@ import QuizLists from './containers/QuizLists/QuizLists';
 import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Score from './containers/Score/Score';
+import Timer from './components/Timer/Timer';
 
 import * as actions from './store/actions';
 
@@ -37,6 +38,7 @@ class App extends Component {
             <Route path="/score" component={Score}/>
             <Route path="/auth" component={Auth} />
             <Route path="/logout" component={LogOut}/>
+            <Route path="/timer" component={Timer}/>
             <Route path="/" exact component={Home} />
             <Route component={Error404} />
           </Switch>

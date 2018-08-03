@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import qs from 'qs';
-import ReactCountdownClock from 'react-countdown-clock'; //https://github.com/pughpugh/react-countdown-clock
+// import ReactCountdownClock from 'react-countdown-clock'; //https://github.com/pughpugh/react-countdown-clock
 
 import classes from './Quiz.css';
 import PreQuizIcon from '../../assets/pre-quiz-header-icon.png';
@@ -13,6 +13,7 @@ import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
+import Timer from '../../components/Timer/Timer';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
@@ -46,7 +47,7 @@ class Quiz extends Component {
         .then(res => {
             console.log(res.data.questions);
             this.setState(prevState => ({
-                timer: parseFloat(res.data.test_time) * 60,
+                timer: parseFloat(res.data.test_time),
                 questions: res.data.questions
             }));
             this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10));
@@ -81,7 +82,8 @@ class Quiz extends Component {
         this.props.onSeeScore(this.props.answers, this.state.quizId, this.props.userId);
     }
 
-    onCompleteCounterHandler = () => {
+    onCompleteCounterHandler = (event) => {
+        console.log(event)
         this.props.onCounterComplete();
     }
 
@@ -135,13 +137,14 @@ class Quiz extends Component {
                         }}>
                             <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
                             <div className={classes.counterCont}>
-                                <ReactCountdownClock
+                                {/* <ReactCountdownClock
                                     seconds={this.state.timer}
                                     color='#124f5f'
                                     alpha={0.9}
                                     size={100}
-                                    onComplete={this.onCompleteCounterHandler}
-                                />
+                                    onComplete={(event) => this.onCompleteCounterHandler(event)}
+                                /> */}
+                                <Timer timer={this.state.timer} />
                             </div>
                         </div>
                         <div style={{
