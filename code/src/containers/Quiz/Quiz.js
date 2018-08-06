@@ -12,10 +12,10 @@ import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
-import Timer from '../../components/Timer/Timer';
 import Alert from '../../components/UI/Alert/Alert';
 import Confirm from '../../components/UI/Confirm/Confirm';
 
+import Timer from '../../components/Timer/Timer';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import * as actions from '../../store/actions';

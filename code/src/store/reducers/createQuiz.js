@@ -11,9 +11,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CREATE_QUIZ:
             return updateObject(state, { loading: true });
         case actionTypes.CREATE_QUIZ_SUCCESS:
-            return updateObject(state, { loading: false, shareLink: action.shareLink, quizId: action.quizId });
+            return updateObject(state, { loading: false, shareLink: action.shareLink, quizId: action.quizId});
         case actionTypes.CREATE_QUIZ_FAILED:
-            return updateObject(state, { loading: false, error: action.error });
+            return updateObject(state, { loading: false, error: action.error});
         default:
             return state;
     }

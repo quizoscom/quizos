@@ -5,11 +5,13 @@ import classes from './CreateQuiz.css';
 import QuestionMarkIcon from '../../assets/close-icon.png';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
+
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
 import Select from '../../components/UI/Select/Select';
 import Alert from '../../components/UI/Alert/Alert';
+import Confirm from '../../components/UI/Confirm/Confirm';
 
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
@@ -48,6 +50,23 @@ class CreateQuiz extends Component {
                 testTime: questionsData.testTime,
                 difficulty: questionsData.difficulty
             }));
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.props.okClicked) {
+            this.setState(prevState => ({
+                selectedLanguage: 'select',
+                noOfQuestions: 0,
+                questions: [],
+                currentQuestionNo: 0,
+                creatingQuiz: false,
+                currentAnswer: 0,
+                currentQuestionValue: '',
+                currentChoicesValues: []
+            }));
+            localStorage.removeItem('questions');
+            this.props.onOkClicked(0);
         }
     }
 
@@ -262,24 +281,14 @@ class CreateQuiz extends Component {
                 }
             }
         } else {
-            // show better designed error alert
             this.props.onShowAlert("Please Select the language, no of questions, test time and difficulty to start creating quiz", 'warning');
         }
     }
 
     onCloseIconClickHandler = () => {
-        // confirm before proceeding
-        this.setState(prevState => ({
-            selectedLanguage: 'select',
-            noOfQuestions: 0,
-            questions: [],
-            currentQuestionNo: 0,
-            creatingQuiz: false,
-            currentAnswer: 0,
-            currentQuestionValue: '',
-            currentChoicesValues: []
-        }));
-        localStorage.removeItem('questions');
+        if(this.state.creatingQuiz) {
+            this.props.onShowConfirm('Please Confirm to Quit');
+        }
     }
 
     render() {
@@ -373,6 +382,11 @@ class CreateQuiz extends Component {
                     ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
                     : null
                 }
+                {
+                    this.props.confirmMsg !== ''
+                    ? <Confirm>{this.props.confirmMsg}</Confirm>
+                    : null
+                }
             </Aux> 
         );
     }
@@ -384,7 +398,9 @@ const mapStateToProps = state => {
         shareLink: state.createQuiz.shareLink,
         loading: state.createQuiz.loading,
         alertMsg: state.alert.alertMsg,
-        alertType: state.alert.alertType
+        alertType: state.alert.alertType,
+        confirmMsg: state.confirm.confirmMsg,
+        okClicked: state.confirm.okClicked
     }
 }
 
@@ -392,7 +408,10 @@ const mapDispatchToProps = dispatch => {
     return {
         onCreatingQuiz: (params) => dispatch(actions.creatingQuiz(params)),
         onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
-        onHideAlert: () => dispatch(actions.hideAlert())
+        onHideAlert: () => dispatch(actions.hideAlert()),
+        onShowConfirm: (confirmMsg) => dispatch(actions.showConfirm(confirmMsg)),
+        onHideConfirm: () => dispatch(actions.hideConfirm()),
+        onOkClicked: (okClicked) => dispatch(actions.okClicked(okClicked))
     }
 }
 
