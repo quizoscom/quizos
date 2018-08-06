@@ -9,9 +9,7 @@ const select = (props) => {
             className={classes.Select}
         >
             {props.options.map((val, index) => {
-                return val === "select"
-                ? <option key={index} value={val} disabled>Select</option>
-                : <option key={index} value={val} >{val}</option>
+                return <option key={index} value={val} >{val}</option>
             })}
         </select>
     );

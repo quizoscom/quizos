@@ -10,7 +10,7 @@ const initialState = {
     quizActive: 0,
     redirectTo: "",
     counterComplete: 0,
-    noOfQuestions: 0
+    noOfQuestions: 0,
 }
 
 const reducer = (state = initialState, action) => {

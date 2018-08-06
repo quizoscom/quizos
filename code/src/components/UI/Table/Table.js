@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+ 
 import classes from './Table.css';
 
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
@@ -9,15 +11,15 @@ const table = (props) => {
         headerArr = Object.keys(props.content[i]);
     }
     const head = headerArr.map(head => {
-        return head === 'id' || head === 'total_questions' ? null : <th key={head}>{head.replace(/_/g, ' ')}</th>
+        return head !== 'total_questions' ? <th key={head}>{head.replace(/_/g, ' ')}</th> : null;
     });
     
     const tbody = props.content.map((row) => {
         return (
-            <tr key={props.viewType === 'created' ? 'qc-' + row['id'] : 'qt-' + row['id']}>
+            <tr key={props.viewType === 'created' ? 'qc-' + row['quiz_id'] : 'qt-' + row['quiz_id']}>
                 {Object.keys(row).map(col => {
-                    if(col === 'id') {
-                        return null
+                    if(col === 'quiz_id') {
+                        return <td key={col}><Link to={`/quiz/${row['language']}/${row[col]}`}>{row[col]}</Link></td>
                     } else if(col === 'max_marks_obtained' || col === 'marks_obtained') {
                         return row[col] === 'no users'
                         ? <td key={col}>{row[col]}</td>
@@ -25,7 +27,7 @@ const table = (props) => {
                     } else if(col !== 'total_questions' ) {
                         return <td key={col}>{row[col]}</td>
                     } else {
-                        return <td key={col}>{row[col]}</td>
+                        return null;
                     }
                 })}
             </tr>

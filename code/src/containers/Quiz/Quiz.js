@@ -13,6 +13,8 @@ import Choices from '../../components/Choices/Choices';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
 import Timer from '../../components/Timer/Timer';
+import Alert from '../../components/UI/Alert/Alert';
+import Confirm from '../../components/UI/Confirm/Confirm';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
@@ -32,7 +34,9 @@ class Quiz extends Component {
             { id: 2, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
             { id: 3, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
             { id: 4, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." }
-        ]
+        ],
+        alert: '',
+        alertType: ''
     }
 
     componentDidMount() {
@@ -44,7 +48,6 @@ class Quiz extends Component {
         }));
         axios.post('http://localhost/evaluiz/get/get-quiz-data.php', qs.stringify({quizId: quizId}))
         .then(res => {
-            console.log(res.data.questions);
             this.setState(prevState => ({
                 timer: parseFloat(res.data.test_time),
                 questions: res.data.questions
@@ -53,15 +56,36 @@ class Quiz extends Component {
         });
     }
 
+    componentDidUpdate() {
+        if(this.props.okClicked) {
+            this.props.onQuizQuit();
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.onOkClicked(0);
+        this.props.onResetRedirectPathFromScore();
+    }
+
     onButtonContinueClickedHandler = () => {
-        if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
-            this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
-            setTimeout(() => {
-                console.log(this.props.userId);
-                this.props.onQuizComplete(this.props.answers, (this.props.hr + ':' + this.props.mins + ':' + this.props.secs), this.state.quizId, this.props.userId);
-            }, 1500);
+        if(this.state.currentSelectedAnswer !== '' || this.props.quizActive === 0) {
+            if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+                setTimeout(() => {
+                    // calculate time spent on quiz
+                    const totalTimeInSecs = this.state.timer * 60;
+                    const timeLeftInSecs = (this.props.hr * 3600) + (this.props.mins * 60) + (this.props.secs);
+                    this.props.onQuizComplete(this.props.answers, (totalTimeInSecs - timeLeftInSecs), this.state.quizId, this.props.userId);
+                }, 1500);
+            } else {
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+            }
+            this.setState(prevState => ({
+                currentSelectedAnswer: '',
+            }));
+            this.props.onHideAlert();
         } else {
-            this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+            this.props.onShowAlert('Please select one of the answer before proceeding', 'warning');
         }
     }
 
@@ -73,8 +97,7 @@ class Quiz extends Component {
     }
 
     onQuitButtonClickHandler = () => {
-        // show confirm alert
-        this.props.onQuizQuit();
+        this.props.onShowConfirm('Please Confirm to Quit the Quiz');
     }
 
     onSeeScoreButtonClick = () => {
@@ -82,7 +105,6 @@ class Quiz extends Component {
     }
 
     onCompleteCounterHandler = (event) => {
-        console.log(event)
         this.props.onCounterComplete();
     }
 
@@ -155,9 +177,20 @@ class Quiz extends Component {
                 </Aux>
             );
         }
+
         return (
             <div className={classes.Quiz}>
                 {body}
+                {
+                    this.props.alertMsg !== ''
+                    ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
+                    : null
+                }
+                {
+                    this.props.confirmMsg !== ''
+                    ? <Confirm>{this.props.confirmMsg}</Confirm>
+                    : null
+                }
             </div>
         );
     }
@@ -178,6 +211,10 @@ const mapStateToProps = state => {
         hr: state.timer.hr,
         mins: state.timer.mins,
         secs: state.timer.secs,
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType,
+        confirmMsg: state.confirm.confirmMsg,
+        okClicked: state.confirm.okClicked
     }
 }
 
@@ -186,9 +223,15 @@ const mapDisptachToPros = dispatch => {
         onQuizComplete: (answers, timerValue, quizId, userId) => dispatch(actions.quizComplete(answers, timerValue, quizId, userId)),
         onQuizContinue: (answer, questionId) => dispatch(actions.quizCont(answer, questionId)),
         onQuizQuit: () => dispatch(actions.quizQuitHandler()),
+        onResetRedirectPathFromScore: () => dispatch(actions.resetRedirectPathFromScore()),
         onSeeScore: (answers, quizId, userId) => dispatch(actions.seeScore(answers, 0, quizId, userId)),
         onCounterComplete: () => dispatch(actions.counterCompleted()),
-        setNoOfQuestions: (noOfQuestions) => dispatch(actions.setNoOfQuestions(noOfQuestions))
+        setNoOfQuestions: (noOfQuestions) => dispatch(actions.setNoOfQuestions(noOfQuestions)),
+        onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onHideAlert: () => dispatch(actions.hideAlert()),
+        onShowConfirm: (confirmMsg) => dispatch(actions.showConfirm(confirmMsg)),
+        onHideConfirm: () => dispatch(actions.hideConfirm()),
+        onOkClicked: (okClicked) => dispatch(actions.okClicked(okClicked))
     }
 }
 

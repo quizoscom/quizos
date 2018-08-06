@@ -29,12 +29,12 @@ class Timer extends Component {
     }
 
     componentWillUnmount() {
-        console.log('counter complete');
         this.props.onTimerStopped(this.props.hr, this.props.mins, this.props.secs);
         clearInterval(this.timerID);
     }
 
     updateTimeState = (hr, mins, secs) => {
+        console.log('called');
         let time = '';
         if(hr === 0) {
             time = this.padWithZero(mins) + ':' + this.padWithZero(secs)
@@ -86,7 +86,6 @@ class Timer extends Component {
                     mins--;
                     secs = 59;
                 } else {
-                    console.log('called');
                     secs--
                 }
             } else if(mins === 0) {
@@ -97,12 +96,11 @@ class Timer extends Component {
         }
 
         if(hr === 0 && mins === 0 && secs === 0) {
-            console.log('automatic counter complete');
+            console.log('timer automatically stopped')
             this.props.onTimerStopped(0, 0, 0);
+            this.props.onCounterComplete();
             clearInterval(this.timerID);
         }
-
-        console.log(hr, mins, secs);
         return [hr, mins, secs];
     }
 
@@ -127,7 +125,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onTimerChange: (hr, mins, secs) => dispatch(actions.timerRunning(hr, mins, secs)),
-        onTimerStopped: (hr, mins, secs) => dispatch(actions.timerStopped(hr, mins, secs))
+        onTimerStopped: (hr, mins, secs) => dispatch(actions.timerStopped(hr, mins, secs)),
+        onCounterComplete: () => dispatch(actions.counterCompleted())
     }
 }
 

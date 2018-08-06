@@ -1,0 +1,42 @@
+.Confirm {
+    background-color: #9e9e9e;
+    margin: 0 auto;
+    width: 60%;
+    position: relative;
+    top: 36%;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 5px;
+    padding: 6px 6px 0 0;
+    text-align: center;
+}
+
+.Confirm p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 25px 35px 0px 35px ;
+    margin: 0 auto;
+    width: 75%;
+    color: #000;
+}
+
+.Confirm img {
+    float: right;
+    cursor: pointer;
+    width: auto;
+}
+
+.Confirm button {
+    margin: 0 1em 1.5em 1em;
+}
+
+.success {
+    background-color: #4caf50;
+}
+
+.failed {
+    background-color: #e53935;
+}
+
+.warning {
+    background-color: #d84315;
+}

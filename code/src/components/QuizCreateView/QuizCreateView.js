@@ -24,23 +24,32 @@ class QuizCreateView extends Component {
         this.fetchDataHandler(0, this.state.totalRowsToBeShown.replace(' rows', ''));
     }
 
-    fetchDataHandler = (limitRowsStart, limitRowsEnd) => {
+    fetchDataHandler = (limitRowsStart, limit) => {
         let url = "http://localhost/evaluiz/get/get-dashboard-details.php";
         if(this.props.quizViewType === "created") {
             url+= "?created"
         } else {
             url+= "?took"
         }
+
         axios.post(url, qs.stringify({
             userId: this.props.userId,
             limitRowsStart: limitRowsStart,
-            limitRowsEnd: limitRowsEnd
+            limit: limit
         }))
         .then(res => {
+            let prevButtonDisabled = this.state.prevButtonDisabled;
+            let nextButtonDisabled = this.state.nextButtonDisabled;
+            if(this.state.curPageNumber === res.data.total_pages) {
+                prevButtonDisabled = true;
+                nextButtonDisabled = true;
+            }
             this.setState(prevState => ({
                 quizzes: res.data.quizzes,
                 totalPages: res.data.total_pages,
                 totalRows: res.data.total_rows,
+                prevButtonDisabled: prevButtonDisabled,
+                nextButtonDisabled: nextButtonDisabled,
                 loading: false
             }));
         })
@@ -52,7 +61,8 @@ class QuizCreateView extends Component {
     totalRowsToBeShownChangedHandler = (event) => {
         const value = event.target.value
         this.setState(prevState => ({
-            totalRowsToBeShown: value
+            totalRowsToBeShown: value,
+            curPageNumber: 1
         }));
         this.fetchDataHandler(0, value.replace(' rows', ''));
     }
@@ -79,6 +89,10 @@ class QuizCreateView extends Component {
             prevDisabled = true;
             nextDisabled = true;
         }
+
+        const totalRowsToBeShown = parseInt(this.state.totalRowsToBeShown.replace(' rows', ''), 10);
+        const limitRowsStart = parseInt(totalRowsToBeShown*(currentPageNumber-1), 10);
+        this.fetchDataHandler(limitRowsStart, totalRowsToBeShown);
 
         this.setState(prevState => ({
             curPageNumber: currentPageNumber,
@@ -109,6 +123,10 @@ class QuizCreateView extends Component {
             prevDisabled = true;
             nextDisabled = true;
         }
+
+        const totalRowsToBeShown = parseInt(this.state.totalRowsToBeShown.replace(' rows', ''), 10);
+        const limitRowsStart = parseInt(totalRowsToBeShown*(currentPageNumber-1), 10);
+        this.fetchDataHandler(limitRowsStart, totalRowsToBeShown);
 
         this.setState(prevState => ({
             curPageNumber: currentPageNumber,
@@ -142,8 +160,8 @@ class QuizCreateView extends Component {
         }));
 
         const totalRowsToBeShown = parseInt(this.state.totalRowsToBeShown.replace(' rows', ''), 10);
-        console.log('limitRowsStart = ', totalRowsToBeShown*value);
-        console.log('limitRowsEnd = ', totalRowsToBeShown*value + totalRowsToBeShown);
+        const limitRowsStart = parseInt(totalRowsToBeShown*(value-1), 10);
+        this.fetchDataHandler(limitRowsStart, totalRowsToBeShown);
     }
 
     render() {

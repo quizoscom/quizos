@@ -14,7 +14,7 @@
 
 .Table thead th,
 .Table tbody td {
-    padding: 11px 10px;
+    padding: 13px 17px;
     font-size: 1rem;
 }
 
@@ -31,13 +31,8 @@
     color: #fff;
 }
 
-/* Pagination */
-.Pagination {
-
-}
-
-.Pagination {
-
+.Table td a {
+	font-size: 0.8rem;
 }
 
  

@@ -19,3 +19,11 @@ export const CREATE_QUIZ_FAILED = 'CREATE_QUIZ_FAILED';
 
 export const TIMER_RUNNING = 'TIMER_RUNNING';
 export const TIMER_STOPPED = 'TIMER_STOPPED';
+
+export const SHOW_ALERT = 'SHOW_ALERT';
+export const HIDE_ALERT = 'HIDE_ALERT';
+
+export const SHOW_CONFIRM = 'SHOW_CONFIRM';
+export const HIDE_CONFRIM = 'HIDE_CONFIRM';
+export const OK_CLICKED = 'OK_CLICKED';
+export const CANCEL_CLICKED = 'CANCEL_CLICKED';

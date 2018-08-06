@@ -25,6 +25,7 @@
     margin: 10px 0px;
     padding: 6px 18px;
     font-family: 'Righteous', cursive;
+    width: 100%;
 }
 
 .Table {
@@ -64,8 +65,4 @@
 
 .Table td img {
     width: 40px;
-}
-
-.tableCont {
-
 }

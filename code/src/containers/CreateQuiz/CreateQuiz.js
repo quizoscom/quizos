@@ -9,6 +9,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Loader from '../../components/UI/Loader/Loader';
 import Select from '../../components/UI/Select/Select';
+import Alert from '../../components/UI/Alert/Alert';
 
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
@@ -31,6 +32,8 @@ class CreateQuiz extends Component {
         currentAnswer: 0,
         currentQuestionValue: '',
         currentChoicesValues: [],
+        alert: '',
+        alertType: ''
     }
 
     componentDidMount() {
@@ -72,9 +75,10 @@ class CreateQuiz extends Component {
             if(testTime === "" || testTime <= 0) {
                 testTime = 0;
             }
+            this.props.onHideAlert();
         } else {
             testTime = 180;
-            alert('Maximum allowed test time is 3 Hours (180 mins)');
+            this.props.onShowAlert('Maximum allowed test time is 3 Hours (180 mins)', 'warning');
         }
 
         this.setState({
@@ -163,10 +167,11 @@ class CreateQuiz extends Component {
             this.setState(prevState => ({
                 currentQuestionNo: prevState.currentQuestionNo - 1,
                 currentQuestionValue: prevState.questions[this.state.currentQuestionNo-2].question,
-                currentChoicesValues: prevState.questions[this.state.currentQuestionNo-2].choices
+                currentChoicesValues: prevState.questions[this.state.currentQuestionNo-2].choices,
             }));
+            this.props.onHideAlert();
         } else {
-            alert('If you want to change the language or no of questions, click on close button on top right');
+            this.props.onShowAlert('If you want to change the language or no of questions, click on close button on top right', 'warning');
         }
     }
 
@@ -214,10 +219,11 @@ class CreateQuiz extends Component {
                                     userId: this.props.userId,
                                     quizId: this.state.quizId,
                                     testTIme: this.state.testTime,
-                                    difficulty: this.state.difficulty
+                                    difficulty: this.state.difficulty,
                                 });
+                                this.props.onHideAlert();
                             } else {
-                                alert('Duplicate questions are not allowed, Please recheck your questions before submiting');
+                                this.props.onShowAlert("'Duplicate questions are not allowed, Please recheck your questions before submiting", 'warning');
                             }
                         } else {
                             // update currentQuestionNo and clear the complete form for new question and choices
@@ -226,15 +232,18 @@ class CreateQuiz extends Component {
                                     currentQuestionNo: prevState.currentQuestionNo + 1,
                                     currentQuestionValue: this.state.questions[this.state.currentQuestionNo].question,
                                     currentChoicesValues: this.state.questions[this.state.currentQuestionNo].choices,
-                                    currentAnswer: 0
+                                    currentAnswer: 0,
+                                    alert: '',
+                                    alertType: ''
                                 }));
                             } else {
                                 this.setState(prevState => ({
                                     currentQuestionNo: prevState.currentQuestionNo + 1,
                                     currentQuestionValue: '',
                                     currentChoicesValues: [],
-                                    currentAnswer: 0
+                                    currentAnswer: 0,
                                 }));
+                                this.props.onHideAlert();
                             }
                         }
                         this.saveQuestions({
@@ -246,15 +255,15 @@ class CreateQuiz extends Component {
                             difficulty: this.state.difficulty
                         });
                     } else {
-                        alert("Chocies can't be duplicate");
+                        this.props.onShowAlert("Choices can't be duplicate", 'warning');
                     }
                 } else {
-                    alert('Input the question, choices and select correct answer before proceeding');
+                    this.props.onShowAlert("Input the question, choices and select correct answer before proceeding", 'warning');
                 }
             }
         } else {
             // show better designed error alert
-            alert('Please Select the language, no of questions, test time and difficulty to start creating quiz');
+            this.props.onShowAlert("Please Select the language, no of questions, test time and difficulty to start creating quiz", 'warning');
         }
     }
 
@@ -359,6 +368,11 @@ class CreateQuiz extends Component {
                         : null
                     }
                 </div>
+                {
+                    this.props.alertMsg !== ''
+                    ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
+                    : null
+                }
             </Aux> 
         );
     }
@@ -368,13 +382,17 @@ const mapStateToProps = state => {
     return {
         userId: state.auth.userId,
         shareLink: state.createQuiz.shareLink,
-        loading: state.createQuiz.loading
+        loading: state.createQuiz.loading,
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onCreatingQuiz: (params) => dispatch(actions.creatingQuiz(params))
+        onCreatingQuiz: (params) => dispatch(actions.creatingQuiz(params)),
+        onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onHideAlert: () => dispatch(actions.hideAlert())
     }
 }
 

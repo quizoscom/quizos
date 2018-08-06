@@ -12,6 +12,8 @@ import authReducer from './store/reducers/auth';
 import quizReducer from './store/reducers/quiz';
 import createQuizReducer from './store/reducers/createQuiz';
 import timerReducer from './store/reducers/timer';
+import alertReducer from './store/reducers/alert';
+import confirmReducer from './store/reducers/confirm';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
     auth: authReducer,
     quiz: quizReducer,
     createQuiz: createQuizReducer,
-    timer: timerReducer
+    timer: timerReducer,
+    alert: alertReducer,
+    confirm: confirmReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(

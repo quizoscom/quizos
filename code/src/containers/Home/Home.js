@@ -5,6 +5,7 @@ import classes from './Home.css';
 import questionMark from '../../assets/question-mark-icon.png';
 
 import Button from '../../components/UI/Button/Button';
+
 import * as actions from '../../store/actions/';
 
 class Home extends Component {
