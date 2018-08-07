@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import qs from 'qs';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { FacebookShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton, EmailShareButton } from 'react-share'; //https://github.com/nygardk/react-share
@@ -11,25 +13,53 @@ import WhatsAppIcon from '../../assets/whatsapp-icon.png';
 import GmailIcon from '../../assets/gmail-icon.png';
 
 import Loader from '../../components/UI/Loader/Loader';
+import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 
 import * as actions from '../../store/actions';
 
 class Score extends Component {
     state = {
-        recentScores: [15, 20, 18, 19, 20, 1]
-    }
-
-    onShareClickHandler = () => {
-        console.log('share click');
+        recentScores: [],
+        removeInlineLoader: false
     }
 
     componentDidMount() {
-        console.log('score.js');
         this.props.onLoad();
+        axios.post('http://localhost/evaluiz/get/get-recent-scores.php', qs.stringify({
+            quizId: this.props.quizId
+        }))
+        .then(res => {
+            if(typeof res.data.recent_scores !== "undefined") {
+                this.setState(prevState => ({
+                    recentScores: res.data.recent_scores
+                }));
+            } else {
+                this.setState(prevState => ({
+                    removeInlineLoader: true
+                }));
+            }
+        })
+        .catch(err => {
+
+        });
     }
 
     render() {
-        console.log(this.props.loading);
+
+        let recentScores = <InlineLoader />;
+        if(this.state.recentScores.length !== 0 && !this.state.removeInlineLoader) {
+            recentScores = (
+                <div className={classes.RecentScores}>
+                    <p>Recent Scores for this quiz</p>
+                    {this.state.recentScores.map((score, index) => {
+                        return <p key={index}>{score}/{this.props.noOfQuestions}</p>
+                    })}
+                </div>
+            );
+        } else if(this.state.removeInlineLoader) {
+            recentScores = null;
+        }
+
         let body = <Loader />;
         if(!this.props.loading) {
             body = <Redirect to="/" />;
@@ -47,12 +77,7 @@ class Score extends Component {
                             <WhatsappShareButton url={url} title={shareDesc}><img src={WhatsAppIcon} alt="WhatsApp Icon"/></WhatsappShareButton>
                             <EmailShareButton url={url} body={shareDesc} subject="evaluiz.com"><img src={GmailIcon} alt="Gmail Icon"/></EmailShareButton>
                         </div>
-                        <div className={classes.RecentScores}>
-                            <p>Recent Scores for this quiz</p>
-                            {this.state.recentScores.map((score, index) => {
-                                return <p key={index}>{score}/{this.props.noOfQuestions}</p>
-                            })}
-                        </div>
+                        {recentScores}
                         <hr className={classes.hr}/>
                     </div>
                 );

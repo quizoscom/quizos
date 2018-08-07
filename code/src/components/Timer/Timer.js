@@ -29,7 +29,6 @@ class Timer extends Component {
     }
 
     componentWillUnmount() {
-        // this.props.onTimerStopped(this.props.hr, this.props.mins, this.props.secs);
         this.isStopped = true;
         clearInterval(this.timerID);
     }
