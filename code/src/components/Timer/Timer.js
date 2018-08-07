@@ -29,12 +29,12 @@ class Timer extends Component {
     }
 
     componentWillUnmount() {
-        this.props.onTimerStopped(this.props.hr, this.props.mins, this.props.secs);
+        // this.props.onTimerStopped(this.props.hr, this.props.mins, this.props.secs);
+        this.isStopped = true;
         clearInterval(this.timerID);
     }
 
     updateTimeState = (hr, mins, secs) => {
-        console.log('called');
         let time = '';
         if(hr === 0) {
             time = this.padWithZero(mins) + ':' + this.padWithZero(secs)
@@ -42,7 +42,7 @@ class Timer extends Component {
             time = this.padWithZero(hr) + ':' + this.padWithZero(mins) + ':' + this.padWithZero(secs);
         }
         this.props.onTimerChange(hr, mins, secs);
-        this.setState(prevState => ({
+        !this.isStopped && this.setState(prevState => ({
             time: time,
             hr: hr,
             mins: mins,
@@ -96,8 +96,7 @@ class Timer extends Component {
         }
 
         if(hr === 0 && mins === 0 && secs === 0) {
-            console.log('timer automatically stopped')
-            this.props.onTimerStopped(0, 0, 0);
+            console.log('timer automatically stopped');
             this.props.onCounterComplete();
             clearInterval(this.timerID);
         }

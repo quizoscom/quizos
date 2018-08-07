@@ -2,11 +2,12 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
+    quizId: '',
     answers: [],
     currentQuestionsNumber: -1,
     loading: false,
     error: null,
-    score: 0,
+    score: '',
     quizActive: 0,
     redirectTo: "",
     counterComplete: 0,
@@ -34,7 +35,12 @@ const reducer = (state = initialState, action) => {
                 newAnswers[state.currentQuestionsNumber]['answer'] = action.answer;
                 newAnswers[state.currentQuestionsNumber]['questionId'] = action.questionId;
             }
-            const newCurrentQuestionsNumber = state.currentQuestionsNumber + 1 ;
+            let newCurrentQuestionsNumber = null;
+            if(action.quizContinueFlag === 1) {
+                newCurrentQuestionsNumber = state.currentQuestionsNumber + 1;
+            } else {
+                newCurrentQuestionsNumber = state.currentQuestionsNumber;
+            }
             return updateObject(state, { answers: newAnswers, currentQuestionsNumber: newCurrentQuestionsNumber, quizActive: 1 });
         case actionTypes.QUIZ_COMPLETE_SUCCESS:
             return updateObject(state, { loading: false, error: null, quizActive: 0, score: action.score, redirectTo: "/score"});
@@ -45,7 +51,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.COUNTER_COMPLETE:
             return updateObject(state, { counterComplete: 1 });
         case actionTypes.SET_NO_QF_QUESTIONS:
-            return updateObject(state, { noOfQuestions: action.noOfQuestions });
+            return updateObject(state, { noOfQuestions: action.noOfQuestions, quizId: action.quizId});
         case actionTypes.RESET_ALL_QUIZ_STATES:
             return updateObject(state, {
                 answers: [],

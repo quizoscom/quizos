@@ -3,11 +3,12 @@ import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
 
-export const quizContinue = (answer, questionId) => {
+export const quizContinue = (answer, questionId, quizContinueFlag) => {
     return {
         type: actionTypes.QUIZ_CONTINUE,
         answer: answer,
-        questionId: questionId
+        questionId: questionId,
+        quizContinueFlag: quizContinueFlag
     };
 };
 
@@ -31,9 +32,9 @@ export const quizQuit = () => {
     };
 };
 
-export const quizCont = (answer, questionId) => {
+export const quizCont = (answer, questionId, quizContinueFlag) => {
     return dispatch => {
-        dispatch(quizContinue(answer, questionId));
+        dispatch(quizContinue(answer, questionId, quizContinueFlag));
     };
 };
 
@@ -45,7 +46,6 @@ export const quizComp = () => {
 
 export const quizComplete = (answers, timerValue, quizId, userId) => {
     return dispatch => {
-        console.log(timerValue);
         dispatch(quizComp());
         axios.post('http://localhost/evaluiz/set/set-quiz-answers.php', qs.stringify({
             answers: answers,
@@ -57,25 +57,24 @@ export const quizComplete = (answers, timerValue, quizId, userId) => {
             if(res.data.status === 'success') {
                 dispatch(quizCompleteSuccess(res.data.score));
             } else {
-                alert('server error');
+                dispatch(quizCompleteFailed('server error'))
             }
         })
         .catch(err => {
-            
+            // dispatch(quizCompleteFailed(err.response.data.error))
         });
     };
 };
 
 export const quizQuitHandler = () => {
     return dispatch => {
-        console.log('quit quiz');
         dispatch(quizQuit());
     };
 };
 
-export const seeScore = (answers, timerValue, quizId) => {
+export const seeScore = (answers, timerValue, quizId, userId) => {
     return dispatch => {
-        dispatch(quizComplete(answers, timerValue, quizId));
+        dispatch(quizComplete(answers, timerValue, quizId, userId));
     }
 }
 
@@ -91,16 +90,17 @@ export const counterCompleted = () => {
     }
 }
 
-export const noOfQuestionsSet = (noOfQuestions) => {
+export const noOfQuestionsSet = (noOfQuestions, quizId) => {
     return {
         type: actionTypes.SET_NO_QF_QUESTIONS,
-        noOfQuestions: noOfQuestions
+        noOfQuestions: noOfQuestions,
+        quizId: quizId
     }
 }
 
-export const setNoOfQuestions = (noOfQuestions) => {
+export const setNoOfQuestions = (noOfQuestions, quizId) => {
     return dispatch => {
-        dispatch(noOfQuestionsSet(noOfQuestions));
+        dispatch(noOfQuestionsSet(noOfQuestions, quizId));
     }
 }
 

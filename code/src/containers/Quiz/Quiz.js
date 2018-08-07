@@ -43,8 +43,7 @@ class Quiz extends Component {
         const quizId = this.props.match.params.quizId;
         const language = this.props.match.params.language;
         this.setState(prevState => ({
-            language: language,
-            quizId: quizId
+            language: language
         }));
         axios.post('http://localhost/evaluiz/get/get-quiz-data.php', qs.stringify({quizId: quizId}))
         .then(res => {
@@ -52,7 +51,7 @@ class Quiz extends Component {
                 timer: parseFloat(res.data.test_time),
                 questions: res.data.questions
             }));
-            this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10));
+            this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10), quizId);
         });
     }
 
@@ -70,15 +69,15 @@ class Quiz extends Component {
     onButtonContinueClickedHandler = () => {
         if(this.state.currentSelectedAnswer !== '' || this.props.quizActive === 0) {
             if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
-                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId, 1);
                 setTimeout(() => {
                     // calculate time spent on quiz
                     const totalTimeInSecs = this.state.timer * 60;
                     const timeLeftInSecs = (this.props.hr * 3600) + (this.props.mins * 60) + (this.props.secs);
-                    this.props.onQuizComplete(this.props.answers, (totalTimeInSecs - timeLeftInSecs), this.state.quizId, this.props.userId);
+                    this.props.onQuizComplete(this.props.answers, (totalTimeInSecs - timeLeftInSecs), this.props.quizId, this.props.userId);
                 }, 1500);
             } else {
-                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId);
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId, 1);
             }
             this.setState(prevState => ({
                 currentSelectedAnswer: '',
@@ -94,6 +93,7 @@ class Quiz extends Component {
             currentSelectedAnswer: selected,
             currentSelectedQuestionId: prevState.questions[this.props.currentQuestionsNumber].question_id
         }));
+        this.props.onQuizContinue(selected, this.state.questions[this.props.currentQuestionsNumber].question_id, 0);
     }
 
     onQuitButtonClickHandler = () => {
@@ -101,7 +101,7 @@ class Quiz extends Component {
     }
 
     onSeeScoreButtonClick = () => {
-        this.props.onSeeScore(this.props.answers, this.state.quizId, this.props.userId);
+        this.props.onSeeScore(this.props.answers, this.props.quizId, this.props.userId);
     }
 
     onCompleteCounterHandler = (event) => {
@@ -109,44 +109,46 @@ class Quiz extends Component {
     }
 
     render() {
-        let body = null;
-        if(this.props.redirectTo !== "") {
-            body = <Redirect to={this.props.redirectTo} />
-        } else if(this.props.quizActive === 0 && this.props.counterComplete === 0) {
-            body = (
-                <Aux>
-                    <p className={classes.Language}>{this.state.language} Quiz</p>
-                    <div className={classes.PreQuizInformations}>
-                        <div className={classes.Icon}>
-                            <img src={PreQuizIcon} alt="Note" />
+        let body = <Loader />;
+        if(!this.props.loading) {
+            if(this.props.redirectTo !== "") {
+                body = <Redirect to={this.props.redirectTo} />
+            } else if(this.props.quizActive === 0 && this.props.counterComplete === 0) {
+                body = (
+                    <Aux>
+                        <p className={classes.Language}>{this.state.language} Quiz</p>
+                        <div className={classes.PreQuizInformations}>
+                            <div className={classes.Icon}>
+                                <img src={PreQuizIcon} alt="Note" />
+                            </div>
+                            <div className={classes.Info}>
+                                <p className={classes.Title}>READ CAREFULLY BEFORE PROCEEDING</p>
+                                <ol>
+                                    {this.state.preQuizInfo.map(info => {
+                                        return <li key={info.id}>{info.text}</li>
+                                    })}
+                                </ol>
+                            </div>
                         </div>
-                        <div className={classes.Info}>
-                            <p className={classes.Title}>READ CAREFULLY BEFORE PROCEEDING</p>
-                            <ol>
-                                {this.state.preQuizInfo.map(info => {
-                                    return <li key={info.id}>{info.text}</li>
-                                })}
-                            </ol>
+                        <div className={classes.ButtonGroup}>
+                            <Button btnType="nimp" clicked={this.onQuitButtonClickHandler} >Cancel</Button>
+                            <Button btnType="cta" clicked={this.onButtonContinueClickedHandler} >Continue</Button>
                         </div>
+                    </Aux>
+                );
+            } else if(this.props.counterComplete) {
+                body = (
+                    <div className={classes.CounterComplete}>
+                        <img src={CounterCompleteIcon} alt="Counter Complete Icon"/>
+                        <Button btnType="cta" className="SeeScoreButton" clicked={this.onSeeScoreButtonClick} >See Your Score</Button>
                     </div>
-                    <div className={classes.ButtonGroup}>
-                        <Button btnType="nimp" clicked={this.onQuitButtonClickHandler} >Cancel</Button>
-                        <Button btnType="cta" clicked={this.onButtonContinueClickedHandler} >Continue</Button>
-                    </div>
-                </Aux>
-            );
-        } else if(this.props.counterComplete) {
-            body = (
-                <div className={classes.CounterComplete}>
-                    <img src={CounterCompleteIcon} alt="Counter Complete Icon"/>
-                    <Button btnType="cta" className="SeeScoreButton" clicked={this.onSeeScoreButtonClick} >See Your Score</Button>
-                </div>
-            );
-        } else {
-            body = <Loader />;
+                );
+            } else {
+                body = <Loader />;
+            }
         }
 
-        if(this.state.questions.length !== 0 && this.props.redirectTo !== "/" && this.props.quizActive !== 0 && this.props.counterComplete === 0 && this.props.currentQuestionsNumber < this.props.noOfQuestions) {
+        if(this.state.questions.length !== 0 && this.props.redirectTo !== "/" && this.props.quizActive !== 0 && this.props.counterComplete === 0 && this.props.currentQuestionsNumber < this.props.noOfQuestions && !this.props.loading) {
             body = (
                 <Aux>
                     <p className={classes.Language}>{this.state.language} Quiz</p>
@@ -198,6 +200,7 @@ class Quiz extends Component {
 
 const mapStateToProps = state => {
     return {
+        quizId: state.quiz.quizId,
         currentQuestionsNumber: state.quiz.currentQuestionsNumber,
         answers: state.quiz.answers,
         loading: state.quiz.loading,
@@ -221,12 +224,12 @@ const mapStateToProps = state => {
 const mapDisptachToPros = dispatch => {
     return {
         onQuizComplete: (answers, timerValue, quizId, userId) => dispatch(actions.quizComplete(answers, timerValue, quizId, userId)),
-        onQuizContinue: (answer, questionId) => dispatch(actions.quizCont(answer, questionId)),
+        onQuizContinue: (answer, questionId, quizContinueFlag) => dispatch(actions.quizCont(answer, questionId, quizContinueFlag)),
         onQuizQuit: () => dispatch(actions.quizQuitHandler()),
         onResetRedirectPathFromScore: () => dispatch(actions.resetRedirectPathFromScore()),
         onSeeScore: (answers, quizId, userId) => dispatch(actions.seeScore(answers, 0, quizId, userId)),
         onCounterComplete: () => dispatch(actions.counterCompleted()),
-        setNoOfQuestions: (noOfQuestions) => dispatch(actions.setNoOfQuestions(noOfQuestions)),
+        setNoOfQuestions: (noOfQuestions, quizId) => dispatch(actions.setNoOfQuestions(noOfQuestions, quizId)),
         onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
         onHideAlert: () => dispatch(actions.hideAlert()),
         onShowConfirm: (confirmMsg) => dispatch(actions.showConfirm(confirmMsg)),
