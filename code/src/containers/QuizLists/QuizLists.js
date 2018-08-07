@@ -1,45 +1,105 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import qs from 'qs';
 import { Link } from 'react-router-dom';
 
 import classes from './QuizLists.css';
-
-import NewIcon from '../../assets/new-icon.png';
 import NewTabIcon from '../../assets/open-in-new-tab.png';
 
 import Select from '../../components/UI/Select/Select';
+import Loader from '../../components/UI/Loader/Loader';
+import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
+import Button from '../../components/UI/Button/Button';
+
+import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 class QuizLists extends Component {
     state = {
         quizzes: [],
         filterBy: 'select',
         sortBy: 'language',
-        tableHeaders: ['language', 'total_questions', 'avergage_scores', 'created_at', 'Take Quiz'],
+        completeSortyBy: 'latest',
+        tableHeaders: ['language', 'total_questions', 'total_users', 'avergage_scores', 'created_at', 'Take Quiz'],
         currentOrder: {
-            'language': 'asc',
-            'total_questions': 'asc',
-            'avergage_scores': 'asc',
-            'created_at': 'asc',
-            'active_point': 'asc',
+            'language': '',
+            'total_questions': '',
+            'avergage_scores': '',
+            'created_at': 'desc',
+            'active_point': '',
         },
-        languages: []
+        languages: [],
+        loading: true,
+        loadingMore: false,
+        totalRowsToBeLoaded: 10,
+        limitStart: 0,
+        removeLoadMore: 0
     }
 
     componentDidMount() {
-        axios.get('http://localhost/evaluiz/get/get-quiz-list.php')
-        .then(res => {
+        this.fetchData(this.state.limitStart, this.state.completeSortyBy, this.state.filterBy);
+    }
+
+    fetchData = (limitStart, orderBy, filterBy) => {
+        if(this.state.quizzes.length === 0) {
             this.setState(prevState => ({
-                quizzes: res.data.quizzes,
-                languages: res.data.languages
+                loading: true
             }));
+        } else {
+            this.setState(prevState => ({
+                loadingMore: true
+            }));
+        }
+        axios.post('http://localhost/evaluiz/get/get-quiz-list.php', qs.stringify({
+            totalRows: this.state.totalRowsToBeLoaded,
+            limitStart: limitStart,
+            orderBy: orderBy,
+            filterBy: filterBy
+        }))
+        .then(res => {
+            if(typeof res.data.quizzes !== "undefined") {
+                const quizzes = this.state.quizzes.slice();
+                let newQuizzes = quizzes.concat(res.data.quizzes);
+                this.setState(prevState => ({
+                    quizzes: newQuizzes,
+                    languages: res.data.languages,
+                    loading: false,
+                    loadingMore: false
+                }));
+                if(res.data.quizzes.length < this.state.totalRowsToBeLoaded) {
+                    this.setState(prevState => ({
+                        removeLoadMore: 1,
+                        loadingMore: false
+                    }));
+                }
+            } else {
+                this.setState(prevState => ({
+                    removeLoadMore: 1,
+                    loadingMore: false
+                }));
+            }
         });
     }
 
     filterSelectChangeHandler = (event) => {
         const value = event.target.value;
         this.setState(prevState => ({
-            filterBy: value
+            filterBy: value,
+            quizzes: [],
+            removeLoadMore: 0,
+            limitStart: 0
         }));
+        this.fetchData(0, this.state.completeSortyBy, value);
+    }
+
+    sortSelectChangeHandler = (event) => {
+        const value = event.target.value;
+        this.setState(prevState => ({
+            completeSortyBy: value,
+            quizzes: [],
+            removeLoadMore: 0,
+            limitStart: 0
+        }));
+        this.fetchData(0, value, this.state.filterBy);
     }
 
     onTableHeaderClickHandler = (sortby) => {
@@ -104,54 +164,89 @@ class QuizLists extends Component {
         }));
     }
 
+    onLoadMoreButtonClickedHandler = () => {
+        const limitStart = this.state.limitStart + this.state.totalRowsToBeLoaded
+        this.setState(prevState => ({
+            limitStart: limitStart
+        }));
+        this.fetchData(limitStart, this.state.completeSortyBy, this.state.filterBy);
+    }
+
     render() {
+        let body = <Loader loaderStyle={{left: '-40px'}} loader2Style={{left: '40px'}}/>;
+        if(this.state.loading === false) {
+            body = (
+                <Aux>
+                    <div className={classes.selectCont}>
+                        <div>
+                            <label>Filter By</label>
+                            <Select
+                                changed={this.filterSelectChangeHandler}
+                                value={this.state.filterBy}
+                                options={["select", "All"].concat(this.state.languages)}
+                            />
+                        </div>
+                        <div>
+                            <label>Sort By</label>
+                            <Select
+                                changed={this.sortSelectChangeHandler}
+                                value={this.state.completeSortyBy}
+                            options={["popular", "latest", "total_users", "total_questions"]}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.tableCont}>
+                        <table className={classes.Table}>
+                            <thead>
+                                <tr>
+                                    {this.state.tableHeaders.map(head => {
+                                        let style = null;
+                                        if(this.state.currentOrder[head] === 'desc') {
+                                            style = {borderBottom: '1px solid'}
+                                        } else if(this.state.currentOrder[head] === 'asc') {
+                                            style = {borderTop: '1px solid'}
+                                        }
+                                        return <th 
+                                                onClick={head !== 'Take Quiz' ? () => this.onTableHeaderClickHandler(head) : null}
+                                                className={head === 'Take Quiz' ? classes.takeQuiz: ''} 
+                                                key={head}
+                                                style={style}
+                                                >
+                                                    {head.replace(/_/g, ' ')}
+                                                </th>
+                                    })}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.quizzes.map(row => {
+                                    const avScores = row['avergage_scores'] === 0 ? '-' : Math.ceil(parseFloat(row['avergage_scores'])) + '/' + row['total_questions'];
+                                    const totalUsers = row['total_users'] === 0 ? '-' : Math.ceil(parseFloat(row['total_users']));
+                                    let body = null;
+                                    if(row['language'] === this.state.filterBy || this.state.filterBy === 'select' || this.state.filterBy === 'All') {
+                                        body = (
+                                            <tr key={row['quiz_id']}>
+                                                <td>{row['language']}</td>
+                                                <td>{row['total_questions']}</td>
+                                                <td>{totalUsers}</td>
+                                                <td>{avScores}</td>
+                                                <td>{row['created_at']}</td>
+                                                <td><Link to={`/quiz/${row['language']}/${row['quiz_id']}`}><img src={NewTabIcon} alt="Take Quiz"/></Link></td>
+                                            </tr>
+                                        );
+                                    }
+                                    return body;
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                    {this.state.loadingMore ? <InlineLoader /> : null}
+                    {!this.state.removeLoadMore ? <Button clicked={this.onLoadMoreButtonClickedHandler} disabled={this.state.loadingMore}>Load more</Button> : <p className={classes.thatsAll}>That's all</p> }
+                </Aux>
+            );
+        }
         return (
             <div className={classes.QuizLists}>
-                <div className={classes.selectCont}>
-                    <div>
-                        <label>Filter By</label>
-                        <Select
-                            changed={this.filterSelectChangeHandler}
-                            value={this.state.filterBy}
-                            options={["select", "All"].concat(this.state.languages)}
-                        />
-                    </div>
-                </div>
-                <div className={classes.tableCont}>
-                    <table className={classes.Table}>
-                        <thead>
-                            <tr>
-                                {this.state.tableHeaders.map(head => {
-                                    return <th 
-                                              onClick={head !== 'Take Quiz' ? () => this.onTableHeaderClickHandler(head) : null}
-                                              className={head === 'Take Quiz' ? classes.takeQuiz: ''} 
-                                              key={head}
-                                            >
-                                                {head.replace(/_/g, ' ')}
-                                            </th>
-                                })}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.quizzes.map(row => {
-                                const av_scores = row['avergage_scores'] === 0 ? <img src={NewIcon} alt="New"/> : row['avergage_scores'] + '/10';
-                                let body = null;
-                                if(row['language'] === this.state.filterBy || this.state.filterBy === 'select' || this.state.filterBy === 'All') {
-                                    body = (
-                                        <tr key={row['quiz_id']}>
-                                            <td>{row['language']}</td>
-                                            <td>{row['total_questions']}</td>
-                                            <td>{av_scores}</td>
-                                            <td>{row['created_at']}</td>
-                                            <td><Link to={`/quiz/${row['language']}/${row['quiz_id']}`}><img src={NewTabIcon} alt="Take Quiz"/></Link></td>
-                                        </tr>
-                                    );
-                                }
-                                return body;
-                            })}
-                        </tbody>
-                    </table>
-                </div>
+                {body}
             </div>
         );
     }

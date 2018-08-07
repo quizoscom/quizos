@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Tangerine');
+
 .QuizLists {
     padding: 1em 2em;
 }
@@ -45,7 +47,7 @@
 }
 
 .Table th:not(:last-child) {
-    border-bottom: 1px dotted;
+    background-color: #efefef;
     cursor: pointer;
 }
 
@@ -55,7 +57,7 @@
 }
 
 .Table th:not(:last-child):hover {
-    background-color: #eee;
+    background-color: #fff;
 }
 
 .Table tr td:last-child img {
@@ -65,4 +67,16 @@
 
 .Table td img {
     width: 40px;
+}
+
+.QuizLists button {
+    padding: 4px 18px;
+    font-size: 0.9rem;
+    background-color: #ffab91;
+}
+
+.thatsAll {
+    color: #fff;
+    font-size: 3.5rem;
+    font-family: 'Tangerine', cursive;
 }

@@ -5,4 +5,5 @@
     outline: none;
     font-family: 'Righteous', cursive;
     padding: 0px 10px;
+    text-transform: capitalize;
 }

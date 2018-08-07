@@ -9,7 +9,7 @@ const select = (props) => {
             className={classes.Select}
         >
             {props.options.map((val, index) => {
-                return <option key={index} value={val} >{val}</option>
+                return <option key={index} value={val} >{val.replace(/_/g, ' ')}</option>
             })}
         </select>
     );

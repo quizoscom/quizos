@@ -64,6 +64,14 @@ class Dashboard extends Component {
         }));
     }
 
+    onClickTakeQuizHandler = () => {
+        this.props.history.push("/available-quizzes");
+    }
+
+    onClickCreateQuizHandler = () => {
+        this.props.history.push("/create-quiz");
+    }
+
     render() {
         return (
             <div className={classes.Dashboard}>
