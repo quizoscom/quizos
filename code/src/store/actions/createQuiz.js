@@ -29,13 +29,13 @@ export const creatingQuiz = (params) => {
         dispatch(createQuiz());
         axios.post('http://localhost/evaluiz/set/set-quiz-data.php', qs.stringify(params))
          .then(res => {
-             console.log(params);
             if(res.data['status'] === 'success') {
                 dispatch(createQuizSuccess('http://localhost:3000/quiz/' + params.language + '/' + res.data['quiz_id'], res.data['quiz_id']));
             } else {
                 dispatch(createQuizFailed(res.data['msg']));
-                alert(res.data['msg']);
             }
+        }).catch(err => {
+            dispatch(createQuizFailed('Server Error, Please try again after some time'));
         });
     };
 };

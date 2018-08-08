@@ -1,7 +1,9 @@
 export {
     auth,
+    authFailedAction,
     authCheckState,
     redirectPath,
+    googleLogin,
     logOut
 } from './auth';
 

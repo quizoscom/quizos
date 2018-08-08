@@ -52,6 +52,9 @@ class Quiz extends Component {
                 questions: res.data.questions
             }));
             this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10), quizId);
+        })
+        .catch(err => {
+            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
         });
     }
 
@@ -178,6 +181,13 @@ class Quiz extends Component {
                     </div>
                 </Aux>
             );
+        }
+
+        console.log(this.props.error);
+        if(this.props.error !== null && this.props.error !== '') {
+            this.props.onShowAlert(this.props.error, 'failed');
+        } else {
+            this.props.onHideAlert();
         }
 
         return (

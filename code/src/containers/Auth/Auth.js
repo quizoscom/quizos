@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import GoogleLogin from 'react-google-login';
+import GoogleLogin from 'react-google-login'; // https://github.com/anthonyjgrove/react-google-login
 
 import classes from './Auth.css';
 
@@ -28,7 +28,11 @@ class Auth extends Component {
 
     onFormSubmitHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth(this.state.email, this.state.password, this.state.register);
+        if(this.state.email !== '' && this.state.password !== '') {
+            this.props.onAuth(this.state.email, this.state.password, this.state.register, 'firebase');
+        } else {
+            this.props.onAuthFailedAction('EMAIL AND PASSWORD ARE REQUIRED');
+        }
     }
 
     registerLoginToggleLinkClickHandler = () => {
@@ -37,8 +41,12 @@ class Auth extends Component {
         }))
     }
 
-    responseGoogle = (response) => {
-        console.log(response);
+    responseGoogleSuccess = (res) => {
+        this.props.onGoogleLogin(res.profileObj.email, res.googleId, res.tokenId, res.tokenObj.expires_in);
+    }
+
+    responseGoogleFailed = (err) => {
+        console.log(err);
     }
 
     render() {
@@ -71,8 +79,8 @@ class Auth extends Component {
                         className={classes.googleLogin}
                         clientId="1006569016085-g688ugm0ei4tp65lsnuask8n09go5ujo.apps.googleusercontent.com"
                         buttonText=""
-                        onSuccess={this.responseGoogle}
-                        onFailure={this.responseGoogle}
+                        onSuccess={this.responseGoogleSuccess}
+                        onFailure={this.responseGoogleFailed}
                     />
                     <p onClick={this.registerLoginToggleLinkClickHandler} className={classes.registerLoginToggleLink}>{this.state.register ? 'Already a user? Login' : 'Not a User? Register'}</p>
                 </div>
@@ -92,7 +100,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, register) => dispatch(actions.auth(email, password, register))
+        onAuth: (email, password, register, medium) => dispatch(actions.auth(email, password, register, medium)),
+        onAuthFailedAction: (error) => dispatch(actions.authFailedAction(error)),
+        onGoogleLogin: (email, userId, token, expiresIn) => dispatch(actions.googleLogin(email, userId, token, expiresIn))
     }
 }
 

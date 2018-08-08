@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import qs from 'qs';
 import { Link } from 'react-router-dom';
@@ -10,6 +11,9 @@ import Select from '../../components/UI/Select/Select';
 import Loader from '../../components/UI/Loader/Loader';
 import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 import Button from '../../components/UI/Button/Button';
+import Alert from '../../components/UI/Alert/Alert';
+
+import * as actions from '../../store/actions';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
@@ -77,6 +81,9 @@ class QuizLists extends Component {
                     loadingMore: false
                 }));
             }
+        })
+        .catch(err => {
+            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
         });
     }
 
@@ -246,10 +253,29 @@ class QuizLists extends Component {
         }
         return (
             <div className={classes.QuizLists}>
+                {
+                    this.props.alertMsg !== ''
+                    ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
+                    : null
+                }
                 {body}
             </div>
         );
     }
 }
 
-export default QuizLists;
+const mapStateToProps = state => {
+    return {
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onHideAlert: () => dispatch(actions.hideAlert()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizLists);

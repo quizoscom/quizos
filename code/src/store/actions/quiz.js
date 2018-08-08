@@ -57,11 +57,11 @@ export const quizComplete = (answers, timerValue, quizId, userId) => {
             if(res.data.status === 'success') {
                 dispatch(quizCompleteSuccess(res.data.score));
             } else {
-                dispatch(quizCompleteFailed('server error'))
+                dispatch(quizCompleteFailed('Server Error, Please Try Again'));
             }
         })
         .catch(err => {
-            // dispatch(quizCompleteFailed(err.response.data.error))
+            dispatch(quizCompleteFailed('Server Error, Please Try Again'));
         });
     };
 };

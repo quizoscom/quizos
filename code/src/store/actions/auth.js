@@ -24,9 +24,14 @@ export const authFailed = (error) => {
     };
 };
 
-export const auth = (email, password, register) => {
+export const authFailedAction = (error) => {
     return dispatch => {
-        console.log('actions auth');
+        dispatch(authFailed(error));
+    }
+}
+
+export const auth = (email, password, register, medium) => {
+    return dispatch => {
         dispatch(authStart());
         const API_KEY="AIzaSyB04gE4c2KLcZsOwDM8JhAQx1AJQ37OwWo";
         const BASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/';
@@ -41,14 +46,12 @@ export const auth = (email, password, register) => {
                 const params = {
                     email: email,
                     token: res.data.idToken,
-                    userId: res.data.localId
+                    userId: res.data.localId,
+                    medium: medium
                 }
 
-                axios.post('http://localhost/evaluiz/auth.php', qs.stringify(params))
+                axios.post('http://localhost/evaluiz/auth/auth.php', qs.stringify(params))
                 .then(response => {
-                    this.setState(prevState => ({
-                        errorMessage: ""
-                    }));
                     if(response.data.status === 'success') {
                         const expirationTime = new Date(new Date().getTime() + res.data.expiresIn * 1000);
                         localStorage.setItem('token', res.data.idToken);
@@ -60,7 +63,7 @@ export const auth = (email, password, register) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                    dispatch(authFailed('Server Error, Please try again after some time'));
                 });
             })
             .catch(err => {
@@ -86,6 +89,31 @@ export const auth = (email, password, register) => {
         }
     };
 };
+
+export const googleLogin = (email, userId, token, expiresIn) => {
+    return dispatch => {
+        axios.post('http://localhost/evaluiz/auth/auth.php', qs.stringify({
+            email: email,
+            token: token,
+            userId: userId,
+            medium: 'google'
+        }))
+        .then(response => {
+            if(response.data.status === 'success') {
+                const expirationTime = new Date(new Date().getTime() + expiresIn * 1000);
+                localStorage.setItem('token', token);
+                localStorage.setItem('userId', userId);
+                localStorage.setItem('expirationTime', expirationTime);
+                dispatch(authSuccess(token, userId));
+            } else {
+                dispatch(authFailed(response.data.msg));
+            }
+        })
+        .catch(error => {
+            dispatch(authFailed('Server Error, Please try again after some time'));
+        });
+    }
+}
 
 export const authCheckState = () => {
     return dispatch => {

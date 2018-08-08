@@ -82,10 +82,9 @@ class CreateQuiz extends Component {
         if(noOfQuestions === "" || noOfQuestions <= 0) {
             noOfQuestions = 0;
         }
-        this.setState({
-            ...this.state,
+        this.setState(prevState => ({
             noOfQuestions: noOfQuestions
-        });
+        }));
     }
 
     testTimeInputChangedHandler = (event) => {
@@ -100,17 +99,16 @@ class CreateQuiz extends Component {
             this.props.onShowAlert('Maximum allowed test time is 3 Hours (180 mins)', 'warning');
         }
 
-        this.setState({
-            ...this.state,
+        this.setState(prevState => ({
             testTime: testTime
-        });
+        }));
     }
 
     difficultySelectChangeHandler = (event) => {
-        this.setState({
-            ...this.state,
-            difficulty: event.target.value
-        });
+        const value = event.target.value;
+        this.setState(prevState => ({
+            difficulty: value
+        }));
     }
 
     onQuestionInputChangedHandler = (event) => {
@@ -354,6 +352,10 @@ class CreateQuiz extends Component {
             }
         }
 
+        if(this.props.error) {
+            this.props.onShowAlert(this.props.error, 'failed');
+        }
+
         return (
             <Aux>
                 {
@@ -400,7 +402,8 @@ const mapStateToProps = state => {
         alertMsg: state.alert.alertMsg,
         alertType: state.alert.alertType,
         confirmMsg: state.confirm.confirmMsg,
-        okClicked: state.confirm.okClicked
+        okClicked: state.confirm.okClicked,
+        error: state.createQuiz.error
     }
 }
 

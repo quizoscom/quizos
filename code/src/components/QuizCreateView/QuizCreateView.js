@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import qs from 'qs';
 
 import Table from '../UI/Table/Table';
 import Loader from '../UI/Loader/Loader';
+import Alert from '../UI/Alert/Alert';
+
 import Pagination from '../Pagination/Pagination';
+import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import classes from './QuizCreateView.css';
+
+import * as actions from '../../store/actions';
 
 class QuizCreateView extends Component {
     state = {
@@ -17,7 +23,7 @@ class QuizCreateView extends Component {
         totalRows: 0,
         curPageNumber: 1,
         prevButtonDisabled: true,
-        nextButtonDisabled: false
+        nextButtonDisabled: false,
     }
 
     componentDidMount() {
@@ -38,23 +44,27 @@ class QuizCreateView extends Component {
             limit: limit
         }))
         .then(res => {
-            let prevButtonDisabled = this.state.prevButtonDisabled;
-            let nextButtonDisabled = this.state.nextButtonDisabled;
-            if(this.state.curPageNumber === res.data.total_pages) {
-                prevButtonDisabled = true;
-                nextButtonDisabled = true;
+            if(res.data.status === 'success') {
+                let prevButtonDisabled = this.state.prevButtonDisabled;
+                let nextButtonDisabled = this.state.nextButtonDisabled;
+                if(this.state.curPageNumber === res.data.total_pages) {
+                    prevButtonDisabled = true;
+                    nextButtonDisabled = true;
+                }
+                this.setState(prevState => ({
+                    quizzes: res.data.quizzes,
+                    totalPages: res.data.total_pages,
+                    totalRows: res.data.total_rows,
+                    prevButtonDisabled: prevButtonDisabled,
+                    nextButtonDisabled: nextButtonDisabled,
+                    loading: false
+                }));
+            } else {
+                this.props.onShowAlert('Server Error, Please Try after some time', 'failed');    
             }
-            this.setState(prevState => ({
-                quizzes: res.data.quizzes,
-                totalPages: res.data.total_pages,
-                totalRows: res.data.total_rows,
-                prevButtonDisabled: prevButtonDisabled,
-                nextButtonDisabled: nextButtonDisabled,
-                loading: false
-            }));
         })
         .catch(err => {
-            console.log(err);
+            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
         });
     }
 
@@ -190,8 +200,31 @@ class QuizCreateView extends Component {
                 </div>
             );
         }
-        return body;
+        return (
+            <Aux>
+                {
+                    this.props.alertMsg !== ''
+                    ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
+                    : null
+                }
+                {body}
+            </Aux>
+        );
     }
 }
 
-export default QuizCreateView;
+const mapStateToProps = state => {
+    return {
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onHideAlert: () => dispatch(actions.hideAlert()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizCreateView);

@@ -8,8 +8,10 @@ import classes from './Backdrop.css';
 class Backdrop extends Component {
     backdropClickedHandler = (event) => {
         event.preventDefault();
-        this.props.onHideAlert();
-        this.props.onHideConfirm();
+        if(this.props.alertType !== 'failed') {
+            this.props.onHideAlert();
+            this.props.onHideConfirm();
+        }
     }
 
     render() {
@@ -21,6 +23,13 @@ class Backdrop extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     return {
         onHideAlert: () => dispatch(actions.hideAlert()),
@@ -28,4 +37,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Backdrop);
+export default connect(mapStateToProps, mapDispatchToProps)(Backdrop);

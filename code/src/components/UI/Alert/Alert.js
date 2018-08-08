@@ -22,7 +22,7 @@ class Alert extends Component {
         return !this.props.alertMsg !== ''
             ? (<Backdrop>
                     <div className={classNames} onClick={this.childClickedHandler}>
-                        <img onClick={this.closeImageClickedHandler} src={CloseIcon} alt="Close" />
+                        {this.props.alertType !== 'failed' ? <img onClick={this.closeImageClickedHandler} src={CloseIcon} alt="Close" /> : null }
                         <h2>{this.props.alertType}</h2>
                         <p>{this.props.children}</p>
                     </div>
