@@ -59,8 +59,10 @@ class QuizCreateView extends Component {
                     nextButtonDisabled: nextButtonDisabled,
                     loading: false
                 }));
+            } else if(res.data.length === 0) {
+                this.props.onShowAlert('Try creating a quiz or taking one', 'failed');
             } else {
-                this.props.onShowAlert('Server Error, Please Try after some time', 'failed');    
+                this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
             }
         })
         .catch(err => {

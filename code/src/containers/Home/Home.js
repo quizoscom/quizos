@@ -32,8 +32,9 @@ class Home extends Component {
     }
 
     render() {
+        const height = window.screen.height;
         return (
-            <div className={classes.Home}>
+            <div className={classes.Home} style={{height: height}}>
                 <img src={questionMark} alt=""/>
                 <p>Easiest Way to Create or Take A Quiz</p>
                 <p className={classes.Subtitle}>(It's free to use forever)</p>

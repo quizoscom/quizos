@@ -25,3 +25,9 @@
 .gitLink {
     top: 1px;
 }
+
+@media (max-width: 800px) {
+    .NavigationItem.onlyDesktop {
+        display: none;
+    }
+}

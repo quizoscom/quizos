@@ -25,3 +25,10 @@
     height: 41px;
     margin: 14px 9px;
 }
+
+@media (max-width: 800px) {
+    .Logo img {
+        height: 41px;
+        margin: 16px 60px;
+    }
+}

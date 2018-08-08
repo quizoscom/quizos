@@ -12,10 +12,10 @@ const navigationItems = (props) => {
         if(props.isAuth) {
             body = (
                 <Aux>
-                    <NavigationItem link="/dashboard">Dashboard</NavigationItem>
-                    <NavigationItem link="/create-quiz">Create Quiz</NavigationItem>
-                    <NavigationItem link="/available-quizzes">Take Quiz</NavigationItem>
-                    <NavigationItem link="/logout">Logout</NavigationItem>
+                    <NavigationItem className="onlyDesktop" link="/dashboard">Dashboard</NavigationItem>
+                    <NavigationItem className="onlyDesktop" link="/create-quiz">Create Quiz</NavigationItem>
+                    <NavigationItem className="onlyDesktop" link="/available-quizzes">Take Quiz</NavigationItem>
+                    <NavigationItem className="onlyDesktop" link="/logout">Logout</NavigationItem>
                 </Aux>
             );
         } else {

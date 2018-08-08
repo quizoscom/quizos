@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Aux from '../Auxiliary/Auxiliary';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 
 import classes from './Layout.css';
 
 class Layout extends Component {
+    state = {
+        sidebarOpen: true
+    }
+
+    showSettings = (event) => {
+        event.preventDefault();
+    }
+
     render() {
         return (
-            <Aux>
+            <div id="outer-container">
                 <Toolbar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} />
-                <main className={classes.Content}>
+                { !this.props.isQuizActive ? <Sidebar isAuth={this.props.isAuth} /> : null }
+                
+                <main className={classes.Content} id="page-wrap">
                     {this.props.children}
                 </main>
-            </Aux>
+            </div>
         );
     }
 }
