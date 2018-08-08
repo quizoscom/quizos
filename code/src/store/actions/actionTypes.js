@@ -27,3 +27,5 @@ export const SHOW_CONFIRM = 'SHOW_CONFIRM';
 export const HIDE_CONFRIM = 'HIDE_CONFIRM';
 export const OK_CLICKED = 'OK_CLICKED';
 export const CANCEL_CLICKED = 'CANCEL_CLICKED';
+
+export const NEW_USER = 'NEW_USER';

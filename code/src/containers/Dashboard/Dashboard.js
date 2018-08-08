@@ -73,37 +73,42 @@ class Dashboard extends Component {
     }
 
     render() {
-        return (
-            <div className={classes.Dashboard}>
-                <QuizCreateView 
-                    createSelectOptions={this.createSelectOptions}
-                    userId={this.props.userId}
-                    quizViewType="created"
-                    className="qc"
-                    titleStyle={{ backgroundColor: '#ffd241' }}
-                    label="Quiz created by You"
-                    viewType="created"
-                />
-                <QuizCreateView 
-                    createSelectOptions={this.createSelectOptions}
-                    userId={this.props.userId}
-                    quizViewType="took"
-                    className="qt"
-                    label="Quiz took by You"
-                    viewType="took"
-                />
-                <div className={classes.ButtonGroup}>
-                    <Button clicked={this.onClickTakeQuizHandler} >Take Quiz</Button>
-                    <Button clicked={this.onClickCreateQuizHandler} btnType="cta">Create Quiz</Button>
+        let body = <p>New User</p>;
+        if(!this.props.newUser) {
+            body = (
+                <div className={classes.Dashboard}>
+                    <QuizCreateView 
+                        createSelectOptions={this.createSelectOptions}
+                        userId={this.props.userId}
+                        quizViewType="created"
+                        className="qc"
+                        titleStyle={{ backgroundColor: '#ffd241' }}
+                        label="Quiz created by You"
+                        viewType="created"
+                    />
+                    <QuizCreateView 
+                        createSelectOptions={this.createSelectOptions}
+                        userId={this.props.userId}
+                        quizViewType="took"
+                        className="qt"
+                        label="Quiz took by You"
+                        viewType="took"
+                    />
+                    <div className={classes.ButtonGroup}>
+                        <Button clicked={this.onClickTakeQuizHandler} >Take Quiz</Button>
+                        <Button clicked={this.onClickCreateQuizHandler} btnType="cta">Create Quiz</Button>
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
+        return body;
     }
 }
 
 const mapStateToProps = state => {
     return {
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        newUser: state.auth.newUser
     }
 }
 

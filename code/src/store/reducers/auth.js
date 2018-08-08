@@ -6,6 +6,7 @@ const initialState = {
     userId: null,
     loading: false,
     error: null,
+    newUser: 0,
     redirectPath: "/"
 }
 
@@ -21,6 +22,8 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, { token: null, userId: null, error: null, redirectPath: "/" });
         case actionTypes.SET_REDIRECT_PATH:
             return updateObject(state, { redirectPath: action.redirectPath });
+        case actionTypes.NEW_USER:
+            return updateObject(state, { newUser: 1 });
         default:
             return state;
     }

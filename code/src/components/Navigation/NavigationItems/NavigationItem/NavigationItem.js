@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 
 const navigationItem = (props) => {
     const classNames = [classes.NavigationItem, classes[props.className]].join(' ');
-    console.log(props.className);
     return (
         <li className={classNames} style={props.style}>
             {

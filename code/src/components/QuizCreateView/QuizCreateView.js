@@ -44,29 +44,33 @@ class QuizCreateView extends Component {
             limit: limit
         }))
         .then(res => {
-            if(res.data.status === 'success') {
-                let prevButtonDisabled = this.state.prevButtonDisabled;
-                let nextButtonDisabled = this.state.nextButtonDisabled;
-                if(this.state.curPageNumber === res.data.total_pages) {
-                    prevButtonDisabled = true;
-                    nextButtonDisabled = true;
+            if(typeof res.data.length !== "undefined") {
+                if(res.data.status === 'success') {
+                    let prevButtonDisabled = this.state.prevButtonDisabled;
+                    let nextButtonDisabled = this.state.nextButtonDisabled;
+                    if(this.state.curPageNumber === res.data.total_pages) {
+                        prevButtonDisabled = true;
+                        nextButtonDisabled = true;
+                    }
+                    this.setState(prevState => ({
+                        quizzes: res.data.quizzes,
+                        totalPages: res.data.total_pages,
+                        totalRows: res.data.total_rows,
+                        prevButtonDisabled: prevButtonDisabled,
+                        nextButtonDisabled: nextButtonDisabled,
+                        loading: false
+                    }));
+                } else {
+                    console.log('here here')
+                    this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
                 }
-                this.setState(prevState => ({
-                    quizzes: res.data.quizzes,
-                    totalPages: res.data.total_pages,
-                    totalRows: res.data.total_rows,
-                    prevButtonDisabled: prevButtonDisabled,
-                    nextButtonDisabled: nextButtonDisabled,
-                    loading: false
-                }));
-            } else if(res.data.length === 0) {
-                this.props.onShowAlert('Try creating a quiz or taking one', 'failed');
             } else {
-                this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+                this.props.onSetNewUser();
             }
         })
         .catch(err => {
-            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+            console.log(err)
+            // this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
         });
     }
 
@@ -226,6 +230,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
         onHideAlert: () => dispatch(actions.hideAlert()),
+        onSetNewUser: () => dispatch(actions.setNewUser())
     }
 }
 

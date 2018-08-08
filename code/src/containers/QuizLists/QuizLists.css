@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Tangerine');
 
 .QuizLists {
-    padding: 1em 2em;
+    padding: 0em 2em;
 }
 
 .selectCont {
@@ -10,7 +10,7 @@
 
 .selectCont > div {
     text-align: left;
-    margin: 4em 0em 2em 0em;
+    margin: 2em 0em 2em 0em;
     color: #fff;
     font-size: 1.3rem;
     margin-right: 2em;

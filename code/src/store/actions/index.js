@@ -1,5 +1,6 @@
 export {
     auth,
+    setNewUser,
     authFailedAction,
     authCheckState,
     redirectPath,

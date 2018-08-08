@@ -163,3 +163,15 @@ export const logOut = () => {
         dispatch(onLogOut());
     }
 }
+
+export const setNewUserAction = () => {
+    return {
+        type: actionTypes.NEW_USER
+    }
+}
+
+export const setNewUser = () => {
+    return dispatch => {
+        dispatch(setNewUserAction());
+    }
+}
