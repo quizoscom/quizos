@@ -175,3 +175,16 @@ export const setNewUser = () => {
         dispatch(setNewUserAction());
     }
 }
+
+export const forgotPasswordAction = () => {
+    return {
+        type: actionTypes.FORGOT_PASSWORD
+    }
+}
+
+export const forgotPassword = (email) => {
+    return dispatch => {
+        console.log('forgot password = ', email);
+        // https://firebase.google.com/docs/reference/rest/auth/#section-change-password
+    }
+}

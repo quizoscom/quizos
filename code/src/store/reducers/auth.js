@@ -7,6 +7,7 @@ const initialState = {
     loading: false,
     error: null,
     newUser: 0,
+    forgotPassword: 0,
     redirectPath: "/"
 }
 

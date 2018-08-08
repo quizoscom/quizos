@@ -9,21 +9,37 @@
 .title {
     font-size: 2rem;
     color: #fff;
-    margin: 4em 0 2em 0;
+    margin: 1em 0 2em 0;
 }
 
-.registerLoginToggleLink {
+.bottomLinks {
+    margin-bottom: 3em;
+    margin-top: 2em;
+}
+
+.bottomLinks > p {
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.registerLoginToggleLink,
+.forgotPasswordLink {
     color: #d30b55;
     text-decoration: underline;
-    margin-top: 2em;
-    margin-bottom: 0;
-    position: relative;
-    top: 20px;
     cursor: pointer;
 }
 
-.registerLoginToggleLink:hover {
-    text-decoration: none;   
+.registerLoginToggleLink {
+    float: right;
+}
+
+.forgotPasswordLink {
+    float: left;
+}
+
+.registerLoginToggleLink:hover,
+.forgotPasswordLink:hover {
+    text-decoration: none;
 }
 
 .OR {
