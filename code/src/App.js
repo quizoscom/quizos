@@ -16,7 +16,9 @@ import QuizLists from './containers/QuizLists/QuizLists';
 import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Score from './containers/Score/Score';
-import Timer from './components/Timer/Timer';
+import ResetPassword from './containers/ResetPassword/ResetPassword';
+
+import EmailTemplate from './containers/EmailTemplate/EmailTemplate';
 
 import * as actions from './store/actions';
 
@@ -38,7 +40,6 @@ class App extends Component {
             <Route path="/score" component={Score}/>
             <Route path="/auth" component={Auth} />
             <Route path="/logout" component={LogOut}/>
-            <Route path="/timer" component={Timer}/>
             <Route path="/" exact component={Home} />
             <Route component={Error404} />
           </Switch>
@@ -47,6 +48,8 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/auth" component={Auth} />
+          <Route path="/reset-password/:uid" component={ResetPassword} />
+          <Route path="/email" component={EmailTemplate} />
           <Route path="/" exact component={Home} />
           <Route component={Error404} />
         </Switch>

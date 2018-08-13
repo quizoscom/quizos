@@ -8,6 +8,7 @@ import classes from './Auth.css';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Button from '../../components/UI/Button/Button';
 import Alert from '../../components/UI/Alert/Alert';
+import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 import FormField from '../../components/FormField/FormField';
 import GoogleLoginImage from '../../assets/google-sign-in-logo.png';
 
@@ -18,7 +19,6 @@ class Auth extends Component {
         register: false,
         email: '',
         password: '',
-        forgotPassword: 0
     }
 
     onInputChangedHandler = (event, type) => {
@@ -52,15 +52,41 @@ class Auth extends Component {
     }
 
     forgotPasswordClickHandler = () => {
-        this.setState(prevState => ({
-            forgotPassword: 1
-        }));
+        this.props.onForgotPasswordLinkClick();
+    }
+
+    forgotPasswordSubmitHandler = (event) => {
+        event.preventDefault();
+        if(this.state.email !== '') {
+            this.props.onSendLink(this.state.email);
+        } else {
+            this.props.onAuthFailedAction('EMAIL IS REQUIRED TO GET PASSWORD RESET LINK');
+        }
     }
 
     render() {
         let body = null;
-        if(this.state.forgotPassword) {
-            body = <p>Forgot Password</p>
+        if(this.props.forgotPassword) {
+            body = (
+                <Aux>
+                    <p className={classes.title}>Forgot Password</p>
+                    <div className={classes.ForgotPassword}>
+                        <form onSubmit={this.forgotPasswordSubmitHandler}>
+                            <p className={classes.errorMessage}>{this.props.errorMessage}</p>
+                            <FormField 
+                                formFieldType="email" 
+                                changed={(event) => this.onInputChangedHandler(event, "email")} 
+                                label="Email" 
+                            />
+                            {
+                                this.props.loading === true
+                                ? <InlineLoader style={{color: '#000'}} />
+                                : <Button btnType="cta">Send Link</Button>
+                            }
+                        </form>
+                    </div>
+                </Aux>
+            );
         } else {
             let authRedirect = null;
             if(this.props.isAuth) {
@@ -73,6 +99,15 @@ class Auth extends Component {
                     <div className={classes.Auth}>
                         <form onSubmit={this.onFormSubmitHandler} >
                             <p className={classes.errorMessage}>{this.props.errorMessage}</p>
+                            {
+                                this.props.linkSent === 1
+                                ? (
+                                    <div className={classes.LinkSentMessage}>
+                                        <p>Password Link Sent Successfully, Check your email</p>
+                                    </div>
+                                )
+                                : null
+                            }
                             <FormField 
                                 formFieldType="email" 
                                 changed={(event) => this.onInputChangedHandler(event, "email")} 
@@ -118,7 +153,9 @@ const mapStateToProps = state => {
         isAuth: state.auth.token !== null,
         redirectPath: state.auth.redirectPath,
         alertMsg: state.alert.alertMsg,
-        alertType: state.alert.alertType
+        alertType: state.alert.alertType,
+        forgotPassword: state.auth.forgotPassword,
+        linkSent: state.auth.linkSent
     }
 }
 
@@ -128,6 +165,8 @@ const mapDispatchToProps = dispatch => {
         onAuthFailedAction: (error) => dispatch(actions.authFailedAction(error)),
         onGoogleLogin: (email, userId, token, expiresIn) => dispatch(actions.googleLogin(email, userId, token, expiresIn)),
         onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onForgotPasswordLinkClick: () => dispatch(actions.forgotPasswordLinkClick()),
+        onSendLink: (email) => dispatch(actions.sendLink(email))
     }
 }
 

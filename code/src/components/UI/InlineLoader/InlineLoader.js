@@ -2,8 +2,8 @@ import React from 'react';
 
 import classes from './InlineLoader.css';
 
-const inlineLoader = () => (
-    <div className={classes.InlineLoader}>
+const inlineLoader = (props) => (
+    <div className={classes.InlineLoader} style={props.style}>
         <p>Loading...</p>
         <div className={classes.Loader}></div>
     </div>

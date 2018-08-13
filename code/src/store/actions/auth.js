@@ -176,15 +176,88 @@ export const setNewUser = () => {
     }
 }
 
-export const forgotPasswordAction = () => {
+export const forgotPasswordLinkClickAction = () => {
     return {
         type: actionTypes.FORGOT_PASSWORD
     }
 }
 
-export const forgotPassword = (email) => {
+export const forgotPasswordLinkClick = () => {
     return dispatch => {
-        console.log('forgot password = ', email);
+        dispatch(forgotPasswordLinkClickAction())
+    }
+}
+
+export const sendLinkAction = (email) => {
+    return {
+        type: actionTypes.PASSWORD_RESET_LINK_SENT,
+        email: email
+    }
+}
+
+export const sendLink = (email) => {
+    return dispatch => {
+        axios.post('http://localhost/evaluiz/get/email-exists-check.php', qs.stringify({email: email}))
+        .then(res => {
+            console.log(res.data);
+            if(res.data.status === 'success') {
+                if(res.data.msg === 'exists') {
+                    dispatch(sendLinkSuccessAction());
+                } else {
+                    dispatch(sendLinkFailedAction('Entered email does not exists, If you are new, Please use Sign Up to create your account'));
+                }
+            }
+        })
+        .catch(err => {
+            dispatch(sendLinkFailedAction('Server Error, Please try after some time'));
+        });
+        dispatch(sendLinkAction(email));
         // https://firebase.google.com/docs/reference/rest/auth/#section-change-password
+    }
+}
+
+export const sendLinkFailedAction = (error) => {
+    return {
+        type: actionTypes.PASSWORD_RESET_LINK_SENT_FAILED,
+        error: error
+    }
+}
+
+export const sendLinkSuccessAction = () => {
+    return {
+        type: actionTypes.PASSWORD_RESET_LINK_SENT_SUCCESS
+    }
+}
+
+export const changePasswordAction = () => {
+    return {
+        type: actionTypes.CHANGE_PASSWORD
+    }
+}
+
+export const changePassword = (email, password, medium) => {
+    return dispatch => {
+        // server call
+        console.log(email, password, medium);
+        dispatch(changePasswordAction());
+    }
+}
+
+export const changedPasswordSuccessAction = () => {
+    return {
+        type: actionTypes.CHANGE_PASSWORD_SUCCESS
+    }
+}
+
+export const changedPasswordSuccess = () => {
+    return dispatch => {
+        dispatch(changedPasswordSuccessAction())
+    }
+}
+
+export const changedPasswordFailedAction = (error) => {
+    return {
+        type: actionTypes.CHANGE_PASSWORD_FAILED,
+        error: error
     }
 }

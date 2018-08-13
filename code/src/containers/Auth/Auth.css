@@ -1,4 +1,4 @@
-.Auth {
+.Auth, .ForgotPassword {
     margin: 0 auto;
     background-color: #fff;
     width: 54%;
@@ -63,8 +63,18 @@
     font-weight: 700;
 }
 
+.LinkSentMessage {
+    background-color: #43a047;
+    margin: 0 auto;
+    width: 90%;
+    padding: 1px 16px;
+    color: #fff;
+    margin-bottom: 3em;
+    border-left: 4px solid #1b5e20;
+}
+
 @media (min-width: 1000px) {
-    .Auth {
+    .Auth, .ForgotPassword {
         width: 500px;
     }
 }

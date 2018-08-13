@@ -14,12 +14,12 @@
 
 @keyframes typing {
     0% {
-      box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.2), 
-                  24px 0px 0px 0px rgba(255,255,255,0.2);
+      box-shadow: 12px 0px 0px 0px rgba(0,0,0,0.2), 
+                  24px 0px 0px 0px rgba(0,0,0,0.2);
     }
     
     25% {
-      box-shadow: 12px 0px 0px 0px rgba(255,255,255,2), 
-                  24px 0px 0px 0px rgba(255,255,255,0.2);
+      box-shadow: 12px 0px 0px 0px rgba(0,0,0,2), 
+                  24px 0px 0px 0px rgba(0,0,0,0.2);
       }
   }

@@ -5,7 +5,10 @@ export {
     authCheckState,
     redirectPath,
     googleLogin,
-    logOut
+    logOut,
+    forgotPasswordLinkClick,
+    sendLink,
+    changePassword
 } from './auth';
 
 export {
