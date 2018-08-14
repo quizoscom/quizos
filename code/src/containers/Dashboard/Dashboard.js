@@ -6,6 +6,8 @@ import classes from './Dashboard.css';
 import Button from '../../components/UI/Button/Button';
 import QuizCreateView from '../../components/QuizCreateView/QuizCreateView';
 
+import Features from '../../components/Features/Features';
+
 class Dashboard extends Component {
     state = {
         loadingQuizTook: false,
@@ -73,7 +75,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        let body = <p>New User</p>;
+        let body = <Features />;
         if(!this.props.newUser) {
             body = (
                 <div className={classes.Dashboard}>

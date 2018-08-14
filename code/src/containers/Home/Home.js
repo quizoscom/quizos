@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import classes from './Home.css';
 import questionMark from '../../assets/question-mark-icon.png';
 
+import Aux from '../../hoc/Auxiliary/Auxiliary';
+import Features from '../../components/Features/Features';
 import Button from '../../components/UI/Button/Button';
+
+import Reviews from '../../components/Reviews/Reviews';
 
 import * as actions from '../../store/actions/';
 
@@ -19,7 +23,7 @@ class Home extends Component {
         } else {
             this.props.onSetRedirectPath("/available-quizzes");
             this.props.history.push("/auth");
-        } 
+        }
     }
 
     onClickCreateQuizHandler = () => {
@@ -32,17 +36,21 @@ class Home extends Component {
     }
 
     render() {
-        const height = window.screen.height;
         return (
-            <div className={classes.Home} style={{height: height}}>
-                <img src={questionMark} alt=""/>
-                <p>Easiest Way to Create or Take A Quiz</p>
-                <p className={classes.Subtitle}>(It's free to use forever)</p>
-                <div className={classes.ButtonGroup}>
-                    <Button clicked={this.onClickTakeQuizHandler} >Take Quiz</Button>
-                    <Button clicked={this.onClickCreateQuizHandler} btnType="cta">Create Quiz</Button>
+            <Aux>
+                <Reviews />
+                <div className={classes.Home}>
+                    <img src={questionMark} alt=""/>
+                    <p>Easiest Way to Create or Take A Quiz</p>
+                    <p className={classes.Subtitle}>(It's free to use forever)</p>
+                    <div className={classes.ButtonGroup}>
+                        <Button clicked={this.onClickTakeQuizHandler} >Take Quiz</Button>
+                        <Button clicked={this.onClickCreateQuizHandler} btnType="cta">Create Quiz</Button>
+                    </div>
                 </div>
-            </div>
+                <hr />
+                <Features />
+            </Aux>
         );
     }
 }

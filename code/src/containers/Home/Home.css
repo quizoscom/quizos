@@ -20,3 +20,8 @@
 .Home p.Subtitle {
     margin-bottom: 2em;
 }
+
+hr {
+    margin-top: 6em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

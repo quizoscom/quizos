@@ -42,3 +42,7 @@ export {
     hideConfirm,
     okClicked
 } from './confirm'
+
+export {
+    saveRatingAndReview
+} from './ratings'
