@@ -48,7 +48,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/auth" component={Auth} />
-          <Route path="/reset-password/:uid" component={ResetPassword} />
+          <Route path="/reset-password" component={ResetPassword} />
           <Route path="/email" component={EmailTemplate} />
           <Route path="/" exact component={Home} />
           <Route component={Error404} />

@@ -8,7 +8,8 @@ export {
     logOut,
     forgotPasswordLinkClick,
     sendLink,
-    changePassword
+    changePassword,
+    changedPassswordResetStates
 } from './auth';
 
 export {

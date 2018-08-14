@@ -3,6 +3,9 @@ import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
 
+const API_KEY="AIzaSyB04gE4c2KLcZsOwDM8JhAQx1AJQ37OwWo";
+const BASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/';
+
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
@@ -33,8 +36,6 @@ export const authFailedAction = (error) => {
 export const auth = (email, password, register, medium) => {
     return dispatch => {
         dispatch(authStart());
-        const API_KEY="AIzaSyB04gE4c2KLcZsOwDM8JhAQx1AJQ37OwWo";
-        const BASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/';
         if(register) {
             // register a user with email and password using firebase authentication
             axios.post(`${BASE_URL}signupNewUser?key=${API_KEY}`, {
@@ -199,10 +200,21 @@ export const sendLink = (email) => {
     return dispatch => {
         axios.post('http://localhost/evaluiz/get/email-exists-check.php', qs.stringify({email: email}))
         .then(res => {
-            console.log(res.data);
             if(res.data.status === 'success') {
                 if(res.data.msg === 'exists') {
+                    axios.post(`${BASE_URL}getOobConfirmationCode?key=${API_KEY}`, {
+                        requestType: 'PASSWORD_RESET',
+                        email: email
+                    })
+                    .then(res => {
+                        console.log(res.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
                     dispatch(sendLinkSuccessAction());
+                } else if(res.data.msg === 'google') {
+                    dispatch(sendLinkFailedAction('Entered email does not exists, either you are new or had used Google Login'));
                 } else {
                     dispatch(sendLinkFailedAction('Entered email does not exists, If you are new, Please use Sign Up to create your account'));
                 }
@@ -212,7 +224,6 @@ export const sendLink = (email) => {
             dispatch(sendLinkFailedAction('Server Error, Please try after some time'));
         });
         dispatch(sendLinkAction(email));
-        // https://firebase.google.com/docs/reference/rest/auth/#section-change-password
     }
 }
 
@@ -235,11 +246,22 @@ export const changePasswordAction = () => {
     }
 }
 
-export const changePassword = (email, password, medium) => {
+export const changePassword = (password, medium, oobCode) => {
     return dispatch => {
-        // server call
-        console.log(email, password, medium);
-        dispatch(changePasswordAction());
+        axios.post(`${BASE_URL}resetPassword?key=${API_KEY}`, {
+            oobCode: oobCode,
+            newPassword: password
+        })
+        .then(res => {
+            console.log(res.data);
+            
+            // server call
+            console.log(password, medium, oobCode);
+            dispatch(changePasswordAction());
+        })
+        .catch(err => {
+            dispatch(changedPasswordFailedAction('The Link is expired, Please use reset password again to get new link'));
+        });
     }
 }
 
@@ -259,5 +281,17 @@ export const changedPasswordFailedAction = (error) => {
     return {
         type: actionTypes.CHANGE_PASSWORD_FAILED,
         error: error
+    }
+}
+
+export const changedPassswordResetStatesAction = () => {
+    return {
+        type: actionTypes.CHANGE_PASSWORD_RESET_STATES
+    }
+}
+
+export const changedPassswordResetStates = () => {
+    return dispatch => {
+        dispatch(changedPassswordResetStatesAction())
     }
 }

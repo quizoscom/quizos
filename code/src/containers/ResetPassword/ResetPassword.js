@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import axios from 'axios';
-import qs from 'qs';
+import queryString from 'query-string';
 import { connect } from 'react-redux';
 
 import classes from './ResetPassword.css';
@@ -14,32 +13,19 @@ import * as actions from '../../store/actions';
 
 class ResetPassword extends Component {
     state = {
-        email: '',
         medium: '',
-        password: ''
+        password: '',
+        tokenId: ''
     }
 
-    componentDidMount() {
-        axios.post('http://localhost/evaluiz/get/get-email.php', qs.stringify({uid: this.props.match.params.uid}))
-        .then(res => {
-            if(res.data.status === 'success') {
-                this.setState(prevState => ({
-                    email: res.data.email,
-                    medium: res.data.medium
-                }));
-            } else {
-                alert('server error');
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    componentWillUnmount() {
+        this.props.onChangedPassswordResetStates();
     }
 
     resetPasswordSubmitHandler = (event) => {
         event.preventDefault();
         if(this.state.password !== '') {
-            this.props.onChangePassword(this.state.email, this.state.password, this.state.medium)
+            this.props.onChangePassword(this.state.password, this.state.medium, queryString.parse(this.props.location.search).oobCode)
         } else {
 
         }
@@ -56,11 +42,11 @@ class ResetPassword extends Component {
                 <p className={classes.title}>Reset Password</p>
                 <div className={classes.ResetPassword}>
                     <form onSubmit={this.resetPasswordSubmitHandler}>
-                        <p className={classes.errorMessage}>{this.props.errorMessage}</p>
+                        <p className={classes.errorMessage}>{this.props.errorMessage !== null ? this.props.errorMessage.replace(/_/g, " ") : ""}</p>
                         <FormField 
                             formFieldType="password"
                             changed={this.onInputChangedHandler} 
-                            label="New  Password" 
+                            label="New Password" 
                         />
                         {
                             this.props.loading === true
@@ -84,7 +70,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onChangePassword: (email, password, medium) => dispatch(actions.changePassword(email, password, medium))
+        onChangePassword: (password, medium, oobCode) => dispatch(actions.changePassword(password, medium, oobCode)),
+        onChangedPassswordResetStates: () => dispatch(actions.changedPassswordResetStates())
     }
 }
 

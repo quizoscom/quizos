@@ -41,6 +41,8 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, { error: null, loading: false, passwordChanged: 1 });
         case actionTypes.CHANGE_PASSWORD_FAILED:
             return updateObject(state, { error: action.error, loading: false });
+        case actionTypes.CHANGE_PASSWORD_RESET_STATES:
+            return updateObject(state, { error: null, loading: false, forgotPassword: 0, linkSent: 0, passwordChanged: 0 });
         default:
             return state;
     }
