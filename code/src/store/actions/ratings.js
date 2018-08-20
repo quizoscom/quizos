@@ -21,12 +21,11 @@ export const saveRatingAndReview = (rating, review, usersId, quizId) => {
         }))
         .then(res => {
             if(res.data.status === 'success') {
-
+                dispatch(saveRatingAndReviewSuccessAction())
             } else {
-                dispatch(saveRatingAndReviewSuccessFailedAction(res.data.msg));
+                dispatch(saveRatingAndReviewSuccessFailedAction("Server Error, Please try after some time."));
             }
         });
-        // save rating and review to the server
     }
 }
 
@@ -38,7 +37,19 @@ export const saveRatingAndReviewSuccessAction = () => {
 
 export const saveRatingAndReviewSuccessFailedAction = (error) => {
     return {
-        type: actionTypes.SAVE_RATINGS_AND_REVIEW_SUCCESS,
+        type: actionTypes.SAVE_RATINGS_AND_REVIEW_FAILED,
         error: error
+    }
+}
+
+export const resetRatingsAndReviewStatesAction = () => {
+    return {
+        type: actionTypes.RESET_RATINGS_AND_REVIEW_STATES
+    }
+}
+
+export const resetRatingsAndReviewStates = () => {
+    return dispatch => {
+        dispatch(resetRatingsAndReviewStatesAction());
     }
 }

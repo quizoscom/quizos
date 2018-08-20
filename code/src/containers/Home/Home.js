@@ -8,8 +8,6 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import Features from '../../components/Features/Features';
 import Button from '../../components/UI/Button/Button';
 
-import Reviews from '../../components/Reviews/Reviews';
-
 import * as actions from '../../store/actions/';
 
 class Home extends Component {
@@ -38,7 +36,6 @@ class Home extends Component {
     render() {
         return (
             <Aux>
-                <Reviews />
                 <div className={classes.Home}>
                     <img src={questionMark} alt=""/>
                     <p>Easiest Way to Create or Take A Quiz</p>

@@ -44,5 +44,6 @@ export {
 } from './confirm'
 
 export {
-    saveRatingAndReview
+    saveRatingAndReview,
+    resetRatingsAndReviewStates
 } from './ratings'

@@ -111,6 +111,15 @@ class Quiz extends Component {
         this.props.onCounterComplete();
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if(nextProps.error !== null && nextProps.error !== '') {
+            nextProps.onShowAlert(nextProps.error, 'failed');
+        } else {
+            nextProps.onHideAlert();
+        }
+        return true;
+    }
+
     render() {
         let body = <Loader />;
         if(!this.props.loading) {
@@ -181,13 +190,6 @@ class Quiz extends Component {
                     </div>
                 </Aux>
             );
-        }
-
-        console.log(this.props.error);
-        if(this.props.error !== null && this.props.error !== '') {
-            this.props.onShowAlert(this.props.error, 'failed');
-        } else {
-            this.props.onHideAlert();
         }
 
         return (

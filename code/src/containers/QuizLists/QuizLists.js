@@ -23,12 +23,13 @@ class QuizLists extends Component {
         filterBy: 'select',
         sortBy: 'language',
         completeSortyBy: 'latest',
-        tableHeaders: ['language', 'total_questions', 'total_users', 'avergage_scores', 'created_at', 'Take Quiz'],
+        tableHeaders: ['language', 'total_questions', 'total_users', 'avergage_scores', 'avg_rating', 'created_at', 'Take Quiz'],
         currentOrder: {
             'language': '',
             'total_questions': '',
             'avergage_scores': '',
             'created_at': 'desc',
+            'avg_rating': '',
             'active_point': '',
         },
         languages: [],
@@ -112,6 +113,8 @@ class QuizLists extends Component {
     onTableHeaderClickHandler = (sortby) => {
         let newCurrentOrder = Object.assign({}, this.state.currentOrder);
         const newQuizArr = this.state.quizzes.slice();
+        console.log(newQuizArr);
+        console.log(sortby);
         let sortableObject = {};
 
         for(let i = 0; i < newQuizArr.length; i++) {
@@ -198,7 +201,7 @@ class QuizLists extends Component {
                             <Select
                                 changed={this.sortSelectChangeHandler}
                                 value={this.state.completeSortyBy}
-                            options={["popular", "latest", "total_users", "total_questions"]}
+                            options={["popular", "avg_rating", "latest", "total_users", "total_questions"]}
                             />
                         </div>
                     </div>
@@ -228,6 +231,7 @@ class QuizLists extends Component {
                                 {this.state.quizzes.map(row => {
                                     const avScores = row['avergage_scores'] === 0 ? '-' : Math.ceil(parseFloat(row['avergage_scores'])) + '/' + row['total_questions'];
                                     const totalUsers = row['total_users'] === 0 ? '-' : Math.ceil(parseFloat(row['total_users']));
+                                    const ratings = row['avg_rating'] !== 0 ? parseFloat(row['avg_rating']).toFixed(1) : '-';
                                     let body = null;
                                     if(row['language'] === this.state.filterBy || this.state.filterBy === 'select' || this.state.filterBy === 'All') {
                                         body = (
@@ -236,6 +240,7 @@ class QuizLists extends Component {
                                                 <td>{row['total_questions']}</td>
                                                 <td>{totalUsers}</td>
                                                 <td>{avScores}</td>
+                                                <td>{ratings}</td>
                                                 <td>{row['created_at']}</td>
                                                 <td><Link to={`/quiz/${row['language']}/${row['quiz_id']}`}><img src={NewTabIcon} alt="Take Quiz"/></Link></td>
                                             </tr>

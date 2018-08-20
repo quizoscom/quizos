@@ -12,6 +12,7 @@ import LinkedInIcon from '../../assets/linkedin-icon.png';
 import WhatsAppIcon from '../../assets/whatsapp-icon.png';
 import GmailIcon from '../../assets/gmail-icon.png';
 
+import Reviews from '../../components/Reviews/Reviews';
 import Loader from '../../components/UI/Loader/Loader';
 import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 
@@ -77,6 +78,7 @@ class Score extends Component {
                             <WhatsappShareButton url={url} title={shareDesc}><img src={WhatsAppIcon} alt="WhatsApp Icon"/></WhatsappShareButton>
                             <EmailShareButton url={url} body={shareDesc} subject="evaluiz.com"><img src={GmailIcon} alt="Gmail Icon"/></EmailShareButton>
                         </div>
+                        <Reviews />
                         {recentScores}
                         <hr className={classes.hr}/>
                     </div>
