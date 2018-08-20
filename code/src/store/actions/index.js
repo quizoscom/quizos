@@ -7,6 +7,7 @@ export {
     googleLogin,
     logOut,
     forgotPasswordLinkClick,
+    backToLoginClick,
     sendLink,
     changePassword,
     changedPassswordResetStates

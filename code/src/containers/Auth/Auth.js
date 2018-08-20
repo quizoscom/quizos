@@ -64,6 +64,10 @@ class Auth extends Component {
         }
     }
 
+    onBackToLoginClickHandler = () => {
+        this.props.onBackToLoginClick();
+    }
+
     render() {
         let body = null;
         if(this.props.forgotPassword) {
@@ -83,6 +87,7 @@ class Auth extends Component {
                                 ? <InlineLoader style={{color: '#000'}} />
                                 : <Button btnType="cta">Send Link</Button>
                             }
+                            <p className={classes.BackToLoginLink} onClick={this.onBackToLoginClickHandler}>back</p>
                         </form>
                     </div>
                 </Aux>
@@ -166,6 +171,7 @@ const mapDispatchToProps = dispatch => {
         onGoogleLogin: (email, userId, token, expiresIn) => dispatch(actions.googleLogin(email, userId, token, expiresIn)),
         onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
         onForgotPasswordLinkClick: () => dispatch(actions.forgotPasswordLinkClick()),
+        onBackToLoginClick: () => dispatch(actions.backToLoginClick()),
         onSendLink: (email) => dispatch(actions.sendLink(email))
     }
 }

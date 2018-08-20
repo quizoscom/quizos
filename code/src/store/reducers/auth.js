@@ -29,6 +29,8 @@ const reducer = (state = initialState, action) => {
             return updateObject(state, { newUser: 1 });
         case actionTypes.FORGOT_PASSWORD:
             return updateObject(state, { forgotPassword: 1, linkSent: 0 });
+        case actionTypes.BACK_TO_LOGIN:
+            return updateObject(state, { forgotPassword: 0, linkSent: 0, error: null, loading: false });
         case actionTypes.PASSWORD_RESET_LINK_SENT:
             return updateObject(state, { loading: true });
         case actionTypes.PASSWORD_RESET_LINK_SENT_SUCCESS:

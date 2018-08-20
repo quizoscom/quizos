@@ -60,7 +60,12 @@ export const auth = (email, password, register, medium) => {
                         localStorage.setItem('expirationTime', expirationTime);
                         dispatch(authSuccess(res.data.idToken, res.data.localId));
                     } else {
-                        dispatch(authFailed(response.data.msg));
+                        console.log(response.data);
+                        if(response.data.msg === 'email exists') {
+                            dispatch(authFailed('Either the email exists or you had used Google Login'));
+                        } else {
+                            dispatch(authFailed('Server Error, Please try again after some time'));
+                        }
                     }
                 })
                 .catch(error => {
@@ -68,7 +73,11 @@ export const auth = (email, password, register, medium) => {
                 });
             })
             .catch(err => {
-                dispatch(authFailed(err.response.data.error.message.replace(/_/ig, ' ')));
+                if(err.response.data.error.message === "EMAIL_EXISTS") {
+                    dispatch(authFailed('Either the email exists or you had used Google Login'));
+                } else {
+                    dispatch(authFailed(err.response.data.error.message.replace(/_/ig, ' ')));
+                }
             });
         } else {
             // login a user with email and password using firebase authentication
@@ -101,13 +110,25 @@ export const googleLogin = (email, userId, token, expiresIn) => {
         }))
         .then(response => {
             if(response.data.status === 'success') {
-                const expirationTime = new Date(new Date().getTime() + expiresIn * 1000);
-                localStorage.setItem('token', token);
-                localStorage.setItem('userId', userId);
-                localStorage.setItem('expirationTime', expirationTime);
-                dispatch(authSuccess(token, userId));
+                axios.post(`${BASE_URL}deleteAccount?key=${API_KEY}`, {
+                    idToken: response.data.token
+                })
+                .then(res => {
+                    const expirationTime = new Date(new Date().getTime() + expiresIn * 1000);
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('userId', userId);
+                    localStorage.setItem('expirationTime', expirationTime);
+                    dispatch(authSuccess(token, userId));
+                })
+                .catch(err => {
+                    if(typeof response.data.token !== "undefined") {
+                        dispatch(authSuccess(token, userId));
+                    } else {
+                        dispatch(authFailed("Server Error, Please try after some time"));   
+                    }
+                });
             } else {
-                dispatch(authFailed(response.data.msg));
+                dispatch(authFailed("Server Error, Please try after some time"));
             }
         })
         .catch(error => {
@@ -186,6 +207,18 @@ export const forgotPasswordLinkClickAction = () => {
 export const forgotPasswordLinkClick = () => {
     return dispatch => {
         dispatch(forgotPasswordLinkClickAction())
+    }
+}
+
+export const backToLoginClickAction = () => {
+    return {
+        type: actionTypes.BACK_TO_LOGIN
+    }
+}
+
+export const backToLoginClick = () => {
+    return dispatch => {
+        dispatch(backToLoginClickAction());
     }
 }
 
