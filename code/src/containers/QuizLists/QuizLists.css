@@ -11,10 +11,19 @@
 .selectCont > div {
     text-align: left;
     margin: 2em 0em 2em 0em;
-    color: #fff;
     font-size: 1.3rem;
     margin-right: 2em;
     display: inline-block;
+    width: 21%;
+}
+
+.selectCont > div label{
+    color: #fff;
+}
+
+.selectCont > div > div {
+    width: 100%;
+    font-size: 1rem;
 }
 
 .selectCont > div label {

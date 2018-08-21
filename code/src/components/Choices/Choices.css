@@ -20,12 +20,12 @@
 
 .Choices > div > p:hover,
 .Choices > div > p.active {
-    color: #ffd241;
+    color: #300356;
     text-decoration: underline;
 }
 
 .Choices > div > p.answer {
-    color: #ffd241;
+    color: #300356;
     text-decoration: underline;
 }
 
@@ -46,11 +46,13 @@
 }
 
 .choicesViewer p:hover {
-    border: 2px solid #ffd241;
-    color: #ffd241;
+    border-top: 1px solid #300356;
+    border-bottom: 1px solid #300356;
+    color: #300356;
 }
 
 .Choice.selected {
-    border: 2px solid #ffd241;
-    color: #ffd241;
+    border-top: 1px solid #300356;
+    border-bottom: 1px solid #300356;
+    color: #300356;
 }

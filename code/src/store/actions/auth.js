@@ -2,9 +2,10 @@ import axios from 'axios';
 import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
+import { SERVER_ROOT_URL, FIREBASE_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
-const API_KEY="AIzaSyB04gE4c2KLcZsOwDM8JhAQx1AJQ37OwWo";
-const BASE_URL = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/';
+export const API_KEY="AIzaSyB04gE4c2KLcZsOwDM8JhAQx1AJQ37OwWo";
 
 export const authStart = () => {
     return {
@@ -38,7 +39,7 @@ export const auth = (email, password, register, medium) => {
         dispatch(authStart());
         if(register) {
             // register a user with email and password using firebase authentication
-            axios.post(`${BASE_URL}signupNewUser?key=${API_KEY}`, {
+            axios.post(`${FIREBASE_ROOT_URL}signupNewUser?key=${API_KEY}`, {
                 email: email,
                 password: password,
                 returnSecureToken: true
@@ -51,7 +52,7 @@ export const auth = (email, password, register, medium) => {
                     medium: medium
                 }
 
-                axios.post('http://localhost/evaluiz/auth/auth.php', qs.stringify(params))
+                axios.post(`${SERVER_ROOT_URL}/auth/auth.php`, qs.stringify(params))
                 .then(response => {
                     if(response.data.status === 'success') {
                         const expirationTime = new Date(new Date().getTime() + res.data.expiresIn * 1000);
@@ -64,12 +65,12 @@ export const auth = (email, password, register, medium) => {
                         if(response.data.msg === 'email exists') {
                             dispatch(authFailed('Either the email exists or you had used Google Login'));
                         } else {
-                            dispatch(authFailed('Server Error, Please try again after some time'));
+                            dispatch(authFailed(SERVER_ERROR_MSG));
                         }
                     }
                 })
                 .catch(error => {
-                    dispatch(authFailed('Server Error, Please try again after some time'));
+                    dispatch(authFailed(SERVER_ERROR_MSG));
                 });
             })
             .catch(err => {
@@ -81,7 +82,7 @@ export const auth = (email, password, register, medium) => {
             });
         } else {
             // login a user with email and password using firebase authentication
-            axios.post(`${BASE_URL}verifyPassword?key=${API_KEY}`, {
+            axios.post(`${FIREBASE_ROOT_URL}verifyPassword?key=${API_KEY}`, {
                 email: email,
                 password: password,
                 returnSecureToken: true
@@ -102,7 +103,7 @@ export const auth = (email, password, register, medium) => {
 
 export const googleLogin = (email, userId, token, expiresIn) => {
     return dispatch => {
-        axios.post('http://localhost/evaluiz/auth/auth.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/auth/auth.php`, qs.stringify({
             email: email,
             token: token,
             userId: userId,
@@ -110,7 +111,7 @@ export const googleLogin = (email, userId, token, expiresIn) => {
         }))
         .then(response => {
             if(response.data.status === 'success') {
-                axios.post(`${BASE_URL}deleteAccount?key=${API_KEY}`, {
+                axios.post(`${FIREBASE_ROOT_URL}deleteAccount?key=${API_KEY}`, {
                     idToken: response.data.token
                 })
                 .then(res => {
@@ -124,15 +125,15 @@ export const googleLogin = (email, userId, token, expiresIn) => {
                     if(typeof response.data.token !== "undefined") {
                         dispatch(authSuccess(token, userId));
                     } else {
-                        dispatch(authFailed("Server Error, Please try after some time"));   
+                        dispatch(authFailed(SERVER_ERROR_MSG));
                     }
                 });
             } else {
-                dispatch(authFailed("Server Error, Please try after some time"));
+                dispatch(authFailed(SERVER_ERROR_MSG));
             }
         })
         .catch(error => {
-            dispatch(authFailed('Server Error, Please try again after some time'));
+            dispatch(authFailed(SERVER_ERROR_MSG));
         });
     }
 }
@@ -231,11 +232,11 @@ export const sendLinkAction = (email) => {
 
 export const sendLink = (email) => {
     return dispatch => {
-        axios.post('http://localhost/evaluiz/get/email-exists-check.php', qs.stringify({email: email}))
+        axios.post(`${SERVER_ROOT_URL}/get/email-exists-check.php`, qs.stringify({email: email}))
         .then(res => {
             if(res.data.status === 'success') {
                 if(res.data.msg === 'exists') {
-                    axios.post(`${BASE_URL}getOobConfirmationCode?key=${API_KEY}`, {
+                    axios.post(`${FIREBASE_ROOT_URL}getOobConfirmationCode?key=${API_KEY}`, {
                         requestType: 'PASSWORD_RESET',
                         email: email
                     })
@@ -254,7 +255,7 @@ export const sendLink = (email) => {
             }
         })
         .catch(err => {
-            dispatch(sendLinkFailedAction('Server Error, Please try after some time'));
+            dispatch(sendLinkFailedAction(SERVER_ERROR_MSG));
         });
         dispatch(sendLinkAction(email));
     }
@@ -281,7 +282,7 @@ export const changePasswordAction = () => {
 
 export const changePassword = (password, medium, oobCode) => {
     return dispatch => {
-        axios.post(`${BASE_URL}resetPassword?key=${API_KEY}`, {
+        axios.post(`${FIREBASE_ROOT_URL}resetPassword?key=${API_KEY}`, {
             oobCode: oobCode,
             newPassword: password
         })

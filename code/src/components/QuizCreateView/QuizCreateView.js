@@ -13,6 +13,8 @@ import Aux from '../../hoc/Auxiliary/Auxiliary';
 import classes from './QuizCreateView.css';
 
 import * as actions from '../../store/actions';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
 class QuizCreateView extends Component {
     state = {
@@ -31,7 +33,7 @@ class QuizCreateView extends Component {
     }
 
     fetchDataHandler = (limitRowsStart, limit) => {
-        let url = "http://localhost/evaluiz/get/get-dashboard-details.php";
+        let url = `${SERVER_ROOT_URL}/get/get-dashboard-details.php`;
         if(this.props.quizViewType === "created") {
             url+= "?created"
         } else {
@@ -62,7 +64,7 @@ class QuizCreateView extends Component {
                     }));
                 } else {
                     console.log('here here')
-                    this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+                    this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
                 }
             } else {
                 this.props.onSetNewUser();
@@ -70,7 +72,7 @@ class QuizCreateView extends Component {
         })
         .catch(err => {
             console.log(err)
-            // this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+            this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
         });
     }
 

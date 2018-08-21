@@ -10,6 +10,8 @@ import Alert from '../../components/UI/Alert/Alert';
 
 import classes from './Reviews.css';
 
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 import * as actions from '../../store/actions/';
 
 class Reviews extends Component {
@@ -19,7 +21,7 @@ class Reviews extends Component {
     }
 
     componentDidMount() {
-        axios.post('http://localhost/evaluiz/get/get-indiv-rating.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/get/get-indiv-rating.php`, qs.stringify({
             quizId: this.props.quizId,
             usersId: this.props.userId
         }))
@@ -38,7 +40,7 @@ class Reviews extends Component {
                 }
             }
         }).catch(err => {
-            this.props.onShowAlert('Server Error, Please try after some time', 'failed');
+            this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
         });
     }
 

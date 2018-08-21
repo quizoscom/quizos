@@ -14,6 +14,8 @@ import Button from '../../components/UI/Button/Button';
 import Alert from '../../components/UI/Alert/Alert';
 
 import * as actions from '../../store/actions';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
@@ -54,7 +56,7 @@ class QuizLists extends Component {
                 loadingMore: true
             }));
         }
-        axios.post('http://localhost/evaluiz/get/get-quiz-list.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/get/get-quiz-list.php`, qs.stringify({
             totalRows: this.state.totalRowsToBeLoaded,
             limitStart: limitStart,
             orderBy: orderBy,
@@ -64,9 +66,16 @@ class QuizLists extends Component {
             if(typeof res.data.quizzes !== "undefined") {
                 const quizzes = this.state.quizzes.slice();
                 let newQuizzes = quizzes.concat(res.data.quizzes);
+                let newLanguages = [];
+                for(let i = 0; i < res.data.languages.length; i++) {
+                    newLanguages = newLanguages.concat({
+                        value: res.data.languages[i],
+                        label: res.data.languages[i]
+                    });
+                }
                 this.setState(prevState => ({
                     quizzes: newQuizzes,
-                    languages: res.data.languages,
+                    languages: newLanguages,
                     loading: false,
                     loadingMore: false
                 }));
@@ -84,12 +93,12 @@ class QuizLists extends Component {
             }
         })
         .catch(err => {
-            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+            this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
         });
     }
 
     filterSelectChangeHandler = (event) => {
-        const value = event.target.value;
+        const value = event.value;
         this.setState(prevState => ({
             filterBy: value,
             quizzes: [],
@@ -100,7 +109,7 @@ class QuizLists extends Component {
     }
 
     sortSelectChangeHandler = (event) => {
-        const value = event.target.value;
+        const value = event.value;
         this.setState(prevState => ({
             completeSortyBy: value,
             quizzes: [],
@@ -113,8 +122,6 @@ class QuizLists extends Component {
     onTableHeaderClickHandler = (sortby) => {
         let newCurrentOrder = Object.assign({}, this.state.currentOrder);
         const newQuizArr = this.state.quizzes.slice();
-        console.log(newQuizArr);
-        console.log(sortby);
         let sortableObject = {};
 
         for(let i = 0; i < newQuizArr.length; i++) {
@@ -183,6 +190,13 @@ class QuizLists extends Component {
     }
 
     render() {
+
+        let sortByOptions = [];
+        let currentOrderKeys = Object.keys(this.state.currentOrder);
+        for(let i = 0; i < currentOrderKeys.length; i++) {
+            sortByOptions = sortByOptions.concat({ value: currentOrderKeys[i], label: currentOrderKeys[i].toString().replace(/_/g, ' ') })
+        }
+
         let body = <Loader loaderStyle={{left: '-40px'}} loader2Style={{left: '40px'}}/>;
         if(this.state.loading === false) {
             body = (
@@ -190,18 +204,24 @@ class QuizLists extends Component {
                     <div className={classes.selectCont}>
                         <div>
                             <label>Filter By</label>
-                            <Select
-                                changed={this.filterSelectChangeHandler}
-                                value={this.state.filterBy}
-                                options={["select", "All"].concat(this.state.languages)}
-                            />
+                            {
+                                this.state.languages.length !== 0
+                                ? <Select
+                                    changed={this.filterSelectChangeHandler}
+                                    defaultValue={this.state.filterBy}
+                                    options={[{value: "All", label: "All"}].concat(this.state.languages)}
+                                    isSearchable={true}
+                                  />
+                                : null
+                            }
                         </div>
                         <div>
                             <label>Sort By</label>
                             <Select
                                 changed={this.sortSelectChangeHandler}
-                                value={this.state.completeSortyBy}
-                            options={["popular", "avg_rating", "latest", "total_users", "total_questions"]}
+                                defaultValue={this.state.completeSortyBy}
+                                options={sortByOptions}
+                                isSearchable={false}
                             />
                         </div>
                     </div>

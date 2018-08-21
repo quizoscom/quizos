@@ -1,0 +1,1 @@
+export const SERVER_ERROR_MSG = "Server Error, Please try again after some time"

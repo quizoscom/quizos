@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import classes from './CreateQuiz.css';
-import QuestionMarkIcon from '../../assets/close-icon.png';
+import CloseIcon from '../../assets/close-icon.png';
 
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
@@ -25,6 +25,8 @@ class CreateQuiz extends Component {
     state = {
         quizId: '',
         selectedLanguage: 'select',
+        newLanguage: 0,
+        newLanguageValue: '',
         noOfQuestions: 0,
         testTime: 0,
         difficulty: 'select',
@@ -33,12 +35,11 @@ class CreateQuiz extends Component {
         creatingQuiz: false,
         currentAnswer: 0,
         currentQuestionValue: '',
-        currentChoicesValues: [],
-        alert: '',
-        alertType: ''
+        currentChoicesValues: []
     }
 
     componentDidMount() {
+        this.props.onLoadLanguages();
         if(localStorage.getItem('questionsData')) {
             const questionsData = JSON.parse(localStorage.getItem('questionsData'));
             this.setState(prevState => ({
@@ -54,27 +55,68 @@ class CreateQuiz extends Component {
     }
 
     componentDidUpdate() {
-        if(this.props.okClicked) {
+        if(this.props.okClicked || this.props.resetVal) {
             this.setState(prevState => ({
                 selectedLanguage: 'select',
                 noOfQuestions: 0,
+                testTime: 0,
                 questions: [],
                 currentQuestionNo: 0,
                 creatingQuiz: false,
                 currentAnswer: 0,
                 currentQuestionValue: '',
-                currentChoicesValues: []
+                currentChoicesValues: [],
+                difficulty: 'select'
             }));
-            localStorage.removeItem('questions');
-            this.props.onOkClicked(0);
+            localStorage.removeItem('questionsData');
+            if(this.props.okClicked) {
+                this.props.onOkClicked(0);
+            } else if(this.props.resetVal) {
+                this.props.onResetQuestionsRelatedState(0);
+            }
+        }
+        if(this.props.error !== null && this.props.error !== '') {
+            this.props.onShowAlert(this.props.error, 'failed');
         }
     }
 
-    selectChangeHandler = (event) => {
-        this.setState({
-            ...this.state,
-            selectedLanguage: event.target.value
-        });
+    languageChangedHandler = (event) => {
+        if(event.value === 'new') {
+            this.setState({
+                ...this.state,
+                newLanguage: 1
+            })
+        } else {
+            this.setState({
+                ...this.state,
+                selectedLanguage: event.value,
+                newLanguage: 0
+            });
+        }
+    }
+
+    newLanguageInputChangedHandler = (event) => {
+        const newLanguage = event.target.value;
+        let languageExists = 0;
+        for(let i = 0; i < this.props.languagesOptions.length; i++) {
+            if(newLanguage.toLowerCase() === this.props.languagesOptions[i].value.toLowerCase()) {
+                languageExists = 1;
+            }
+        }
+        if(!languageExists) {
+            this.setState({
+                ...this.state,
+                selectedLanguage: newLanguage,
+                newLanguageValue: newLanguage
+            });
+        } else {
+            this.props.onShowAlert('The entered Language already exists in the list, Please select it from there', 'warning');
+            this.setState({
+                ...this.state,
+                selectedLanguage: '',
+                newLanguageValue: ''
+            });
+        }
     }
 
     noOfQuestionInputChangedHandler = (event) => {
@@ -105,7 +147,7 @@ class CreateQuiz extends Component {
     }
 
     difficultySelectChangeHandler = (event) => {
-        const value = event.target.value;
+        const value = event.value;
         this.setState(prevState => ({
             difficulty: value
         }));
@@ -187,7 +229,7 @@ class CreateQuiz extends Component {
                 currentChoicesValues: prevState.questions[this.state.currentQuestionNo-2].choices,
             }));
             this.props.onHideAlert();
-        } else {
+        } else if(this.state.currentQuestionNo !== 0) {
             this.props.onShowAlert('If you want to change the language or no of questions, click on close button on top right', 'warning');
         }
     }
@@ -207,7 +249,6 @@ class CreateQuiz extends Component {
                 });
             } else {
                 // if language and no of questions are selected
-
                 // proceed iff the question, choices and current answer is selected
                 let formComplete = 0;
                 let choicesDuplicacy = 0;
@@ -240,7 +281,7 @@ class CreateQuiz extends Component {
                                 });
                                 this.props.onHideAlert();
                             } else {
-                                this.props.onShowAlert("'Duplicate questions are not allowed, Please recheck your questions before submiting", 'warning');
+                                this.props.onShowAlert("Duplicate questions are not allowed, Please recheck your questions before submiting", 'warning');
                             }
                         } else {
                             // update currentQuestionNo and clear the complete form for new question and choices
@@ -249,9 +290,7 @@ class CreateQuiz extends Component {
                                     currentQuestionNo: prevState.currentQuestionNo + 1,
                                     currentQuestionValue: this.state.questions[this.state.currentQuestionNo].question,
                                     currentChoicesValues: this.state.questions[this.state.currentQuestionNo].choices,
-                                    currentAnswer: 0,
-                                    alert: '',
-                                    alertType: ''
+                                    currentAnswer: 0
                                 }));
                             } else {
                                 this.setState(prevState => ({
@@ -260,8 +299,8 @@ class CreateQuiz extends Component {
                                     currentChoicesValues: [],
                                     currentAnswer: 0,
                                 }));
-                                this.props.onHideAlert();
                             }
+                            this.props.onHideAlert();
                         }
                         this.saveQuestions({
                             questions: this.state.questions,
@@ -297,11 +336,25 @@ class CreateQuiz extends Component {
                     <Aux>
                         <div className={classes.selectCont}>
                             <label>Choose Your Language</label>
-                            <Select 
-                                changed={this.selectChangeHandler}
-                                value={this.state.selectedLanguage}
-                                options={["select", "React", "Redux", "JavaScript", "PHP", "Python"]}
-                            />
+                            <div className={classes.LanguageSelectGroup}>
+                                <Select
+                                    options={[{value: "new", label: "New"}].concat(this.props.languagesOptions)}
+                                    changed={this.languageChangedHandler}
+                                    defaultValue={this.state.selectedLanguage}
+                                    value={this.state.selectedLanguage}
+                                    isSearchable={true}
+                                />
+                                {
+                                    this.state.newLanguage
+                                    ? <input 
+                                        placeholder="Enter the language" 
+                                        type="text" 
+                                        onChange={this.newLanguageInputChangedHandler}
+                                        value={this.state.newLanguageValue} 
+                                      />
+                                    : null
+                                }
+                            </div>
                         </div>
                         <div className={classes.noOfQuestions}>
                             <label htmlFor="">No of Questions</label>
@@ -323,16 +376,29 @@ class CreateQuiz extends Component {
                         </div>
                         <div className={classes.Difficulty}>
                             <label htmlFor="">Difficulty</label>
-                            <Select 
-                                changed={this.difficultySelectChangeHandler}
-                                value={this.state.difficulty}
-                                options={["select", "Beginners", "Intermediate", "Advanced"]}
-                            />
+                            <div>
+                                <Select
+                                    options={
+                                        [ 
+                                            { value: "Beginners", label: "Beginners" }, 
+                                            { value: "Intermediate", label: "Intermediate"},
+                                            { value: "Advanced", label: "Advanced" }
+                                        ]
+                                    }
+                                    changed={this.difficultySelectChangeHandler}
+                                    defaultValue={this.state.difficulty}
+                                    isSearchable={false}
+                                />
+                            </div>
                         </div>
                     </Aux>
                 );
             } else if(this.props.shareLink !== '') {
-                body = <ShareLink shareLink={this.props.shareLink} />
+                body = <ShareLink 
+                            difficulty={this.state.difficulty} 
+                            language={this.state.selectedLanguage} 
+                            shareLink={this.props.shareLink}
+                        />
             } else {
                 body = (
                     <Aux>
@@ -352,18 +418,14 @@ class CreateQuiz extends Component {
             }
         }
 
-        if(this.props.error) {
-            this.props.onShowAlert(this.props.error, 'failed');
-        }
-
         return (
             <Aux>
                 {
-                    this.props.shareLink === '' && this.props.loading === false
+                    this.props.shareLink === '' && this.props.loading === false && this.state.currentQuestionNo > 0
                     ? <img
                         onClick={this.onCloseIconClickHandler} 
                         className={classes.Close} 
-                        src={QuestionMarkIcon} 
+                        src={CloseIcon} 
                         alt="Close"
                     />
                     : null
@@ -373,7 +435,7 @@ class CreateQuiz extends Component {
                     {
                         this.props.shareLink === '' && this.props.loading === false
                         ? <div className={classes.ButtonGroup}>
-                            <Button btnType="cta" clicked={this.previousButtonClickHandler} className="quiz-prev-btn" >Previous</Button>
+                            <Button disabled={this.state.currentQuestionNo > 0 ? false : true} btnType="cta" clicked={this.previousButtonClickHandler} className="quiz-prev-btn" >Previous</Button>
                             <Button btnType="cta" clicked={this.continueButtonClickHandler} className="quiz-continue-btn" >Continue</Button>
                           </div>
                         : null
@@ -403,7 +465,9 @@ const mapStateToProps = state => {
         alertType: state.alert.alertType,
         confirmMsg: state.confirm.confirmMsg,
         okClicked: state.confirm.okClicked,
-        error: state.createQuiz.error
+        error: state.createQuiz.error,
+        languagesOptions: state.createQuiz.languagesOptions,
+        resetVal: state.createQuiz.resetQuestionsRelatedState
     }
 }
 
@@ -414,7 +478,9 @@ const mapDispatchToProps = dispatch => {
         onHideAlert: () => dispatch(actions.hideAlert()),
         onShowConfirm: (confirmMsg) => dispatch(actions.showConfirm(confirmMsg)),
         onHideConfirm: () => dispatch(actions.hideConfirm()),
-        onOkClicked: (okClicked) => dispatch(actions.okClicked(okClicked))
+        onOkClicked: (okClicked) => dispatch(actions.okClicked(okClicked)),
+        onLoadLanguages: () => dispatch(actions.loadLanguages()),
+        onResetQuestionsRelatedState: (resValue) => dispatch(actions.resetQuestionsRelatedState(resValue))
     }
 }
 

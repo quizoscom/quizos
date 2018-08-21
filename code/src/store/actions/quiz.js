@@ -2,6 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 
 import * as actionTypes from './actionTypes';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
 export const quizContinue = (answer, questionId, quizContinueFlag) => {
     return {
@@ -47,7 +49,7 @@ export const quizComp = () => {
 export const quizComplete = (answers, timerValue, quizId, userId) => {
     return dispatch => {
         dispatch(quizComp());
-        axios.post('http://localhost/evaluiz/set/set-quiz-answers.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/set/set-quiz-answers.php`, qs.stringify({
             answers: answers,
             quizId: quizId,
             timerValue: timerValue,
@@ -57,11 +59,11 @@ export const quizComplete = (answers, timerValue, quizId, userId) => {
             if(res.data.status === 'success') {
                 dispatch(quizCompleteSuccess(res.data.score));
             } else {
-                dispatch(quizCompleteFailed('Server Error, Please Try Again'));
+                dispatch(quizCompleteFailed(SERVER_ERROR_MSG));
             }
         })
         .catch(err => {
-            dispatch(quizCompleteFailed('Server Error, Please Try Again'));
+            dispatch(quizCompleteFailed(SERVER_ERROR_MSG));
         });
     };
 };

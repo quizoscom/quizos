@@ -2,6 +2,8 @@ import axios from 'axios';
 import qs from 'qs';
 
 import * as actionTypes from '../actions/actionTypes';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
 export const saveRatingAndReviewAction = () => {
     return {
@@ -13,7 +15,7 @@ export const saveRatingAndReview = (rating, review, usersId, quizId) => {
     return dispatch => {
         dispatch(saveRatingAndReviewAction())
         
-        axios.post('http://localhost/evaluiz/set/set-reviews.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/set/set-reviews.php`, qs.stringify({
             rating: rating,
             review: review,
             usersId: usersId,
@@ -23,7 +25,7 @@ export const saveRatingAndReview = (rating, review, usersId, quizId) => {
             if(res.data.status === 'success') {
                 dispatch(saveRatingAndReviewSuccessAction())
             } else {
-                dispatch(saveRatingAndReviewSuccessFailedAction("Server Error, Please try after some time."));
+                dispatch(saveRatingAndReviewSuccessFailedAction(SERVER_ERROR_MSG));
             }
         });
     }

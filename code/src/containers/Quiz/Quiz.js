@@ -19,6 +19,8 @@ import Timer from '../../components/Timer/Timer';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import * as actions from '../../store/actions';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
 
 class Quiz extends Component {
     state = {
@@ -45,7 +47,7 @@ class Quiz extends Component {
         this.setState(prevState => ({
             language: language
         }));
-        axios.post('http://localhost/evaluiz/get/get-quiz-data.php', qs.stringify({quizId: quizId}))
+        axios.post(`${SERVER_ROOT_URL}/get/get-quiz-data.php`, qs.stringify({quizId: quizId}))
         .then(res => {
             this.setState(prevState => ({
                 timer: parseFloat(res.data.test_time),
@@ -54,7 +56,7 @@ class Quiz extends Component {
             this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10), quizId);
         })
         .catch(err => {
-            this.props.onShowAlert('Server Error, Please Try after some time', 'failed');
+            this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
         });
     }
 

@@ -16,6 +16,7 @@ import Reviews from '../../components/Reviews/Reviews';
 import Loader from '../../components/UI/Loader/Loader';
 import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
 import * as actions from '../../store/actions';
 
 class Score extends Component {
@@ -26,7 +27,7 @@ class Score extends Component {
 
     componentDidMount() {
         this.props.onLoad();
-        axios.post('http://localhost/evaluiz/get/get-recent-scores.php', qs.stringify({
+        axios.post(`${SERVER_ROOT_URL}/get/get-recent-scores.php`, qs.stringify({
             quizId: this.props.quizId
         }))
         .then(res => {
@@ -65,7 +66,8 @@ class Score extends Component {
         if(!this.props.loading) {
             body = <Redirect to="/" />;
             if(this.props.score !== '' && this.props.noOfQuestions !== 0) {
-                const shareDesc = `I got ${this.props.score} in React quiz. Evaluate yourself or others on thousands of language on evaluiz.com`;
+                const scorePercentage = parseFloat(parseInt(this.props.score, 10) / parseInt(this.props.noOfQuestions, 10)).toFixed(2) * 100;
+                const shareDesc = `I got ${scorePercentage}% in React quiz. Evaluate yourself or others on thousands of languages on evaluiz.com`;
                 const url = "evaluiz.com";
                 body = (
                     <div className={classes.Score}>

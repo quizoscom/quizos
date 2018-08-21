@@ -10,7 +10,7 @@ import classes from './ShareLink.css';
 
 const shareLink = (props) => {
     const shareDesc = `Evaluate yourself with this ${props.difficulty} level ${props.language}`;
-    const url = "evaluiz.com";
+    const url = `evaluiz.com/${props.language}/${props.quizId}`;
     return (
         <div className={classes.ShareLink}>
             <p className={classes.Title}>Congratulations, Your Quiz is Successfully Created</p>

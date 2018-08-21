@@ -25,7 +25,9 @@ export {
 } from './quiz';
 
 export { 
-    creatingQuiz
+    creatingQuiz,
+    loadLanguages,
+    resetQuestionsRelatedState
 } from './createQuiz'
 
 export {

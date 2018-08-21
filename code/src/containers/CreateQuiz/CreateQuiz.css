@@ -12,6 +12,16 @@
     margin-bottom: 4em;
 }
 
+.CreateQuiz > div > .LanguageSelectGroup {
+    display: flex;
+}
+
+.selectCont input {
+    font-size: 1.3rem;
+    padding: 0px 10px;
+    font-family: 'Righteous', sans-serif;
+}
+
 .CreateQuiz > div label {
     display: block;
     font-size: 1.6rem;
