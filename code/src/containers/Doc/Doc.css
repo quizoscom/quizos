@@ -1,0 +1,26 @@
+.Doc {
+    text-align: left;
+    padding: 0 1em;
+}
+
+.Title {
+    color: #fff;
+    font-size: 1.9rem;
+    margin: 9px 0;
+}
+
+.DocCont {
+    display: flex;
+}
+
+.DocCont > div {
+
+}
+
+.DocSideBar {
+
+}
+
+.DocBody {
+
+}
