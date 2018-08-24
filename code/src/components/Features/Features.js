@@ -9,6 +9,8 @@ import Button from '../../components/UI/Button/Button';
 import TeacherIcon from '../../assets/teacher-icon.png';
 import StudentIcon from '../../assets/student-icon.png';
 import TickIcon from '../../assets/tick-icon.png';
+import NewUserMessageBackgroundImg from '../../assets/new-user-background.jpg';
+import SmileyImg from '../../assets/smiley.png';
 
 import * as actions from '../../store/actions/';
 
@@ -72,8 +74,18 @@ class NewUser extends Component {
     render() {
         let body = <Redirect to={this.state.redirectPath} />
         if(this.state.redirectPath === '') {
+            let newUserBody = null;
+            if(window.location.pathname === '/dashboard') {
+                newUserBody = (
+                    <div className={classes.NewUserWelcome} style={{backgroundImage: `url(${NewUserMessageBackgroundImg})`}}>
+                        <img src={SmileyImg} alt="Welcome" />
+                        <p>We are too excited to see your first quiz</p>
+                    </div>
+                );
+            }
             body = (
                 <div className={classes.NewUser}>
+                    {newUserBody}
                     <p className={classes.Title}>Features</p>
                     <div className={classes.CardCont}>
                         <div>

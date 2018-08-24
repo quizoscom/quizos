@@ -1,5 +1,27 @@
 @import url('https://fonts.googleapis.com/css?family=Exo+2:400,700');
 
+.NewUserWelcome {
+    margin: 3em auto;
+    width: 90%;
+    height: 400px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-size: contain;
+}
+
+.NewUserWelcome img {
+    width: 200px;
+}
+
+.NewUserWelcome p {
+    font-size: 1.8rem;
+    margin: 10px auto;
+    width: 70%;
+}
+
 .Title {
     font-size: 2rem;
     color: #fff;
