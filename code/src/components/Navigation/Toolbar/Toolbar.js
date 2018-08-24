@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import classes from './Toolbar.css';
-import Logo from '../../../assets/logo.png';
+import Logo from '../../../assets/logo-with-text.png';
 
 import Navigationitems from '../NavigationItems/NavigationItems';
 

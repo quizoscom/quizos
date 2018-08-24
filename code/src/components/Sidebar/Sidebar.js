@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { push as Menu } from 'react-burger-menu'; // https://github.com/negomi/react-burger-menu
 
-import Logo from '../../assets/logo.png';
+import Logo from '../../assets/logo-with-text.png';
 
 import NavigationItem from '../Navigation/NavigationItems/NavigationItem/NavigationItem';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
