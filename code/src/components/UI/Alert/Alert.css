@@ -40,3 +40,17 @@
 .warning {
     background-color: #d84315;
 }
+
+@media (max-width: 900px) {
+    .Alert {
+        width: 80%;
+    }
+
+    .Alert p {
+        margin-bottom: 1em;
+    }
+
+    .Alert button {
+        margin-bottom: 2.5em;
+    }
+}

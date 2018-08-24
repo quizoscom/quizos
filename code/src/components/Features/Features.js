@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import classes from './Features.css';
 
 import Button from '../../components/UI/Button/Button';
+import H2 from '../../components/PageHeading/PageHeading';
 
 import TeacherIcon from '../../assets/teacher-icon.png';
 import StudentIcon from '../../assets/student-icon.png';
@@ -18,7 +19,7 @@ class NewUser extends Component {
     state = {
         creatingQuiz: {
             features: [
-                "Complete Open Source i.e. always FREE<span>*</span> to use",
+                "Complete Open Source i.e. always FREE* to use",
                 "Built by Community on Github.com",
                 "Completely Mobile Friendly",
                 "Create quiz easily for interview, assessment, or just for fun",
@@ -85,6 +86,7 @@ class NewUser extends Component {
             }
             body = (
                 <div className={classes.NewUser}>
+                    { window.location.pathname === '/dashboard' ? <H2>Dashboard</H2> : null }
                     {newUserBody}
                     <p className={classes.Title}>Features</p>
                     <div className={classes.CardCont}>

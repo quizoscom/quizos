@@ -1,8 +1,7 @@
 .CreateQuiz {
     margin: 0 auto;
-    width: 70%;
+    width: 85%;
     position: relative;
-    top: 5em;
 }
 
 .CreateQuiz > div {
@@ -10,6 +9,7 @@
     position: relative;
     text-align: left;
     margin-bottom: 4em;
+    margin-top: 4em;
 }
 
 .CreateQuiz > div > .LanguageSelectGroup {
@@ -17,7 +17,7 @@
 }
 
 .selectCont input {
-    font-size: 1.3rem;
+    font-size: 1rem;
     padding: 0px 10px;
     font-family: 'Righteous', sans-serif;
 }
@@ -31,7 +31,7 @@
 
 .CreateQuiz .questionSNo {
     text-align: left;
-    margin-left: -4em;
+    margin-left: -1em;
     font-size: 1.8rem;
     margin-bottom: 1em;
     color: #fff;
@@ -63,4 +63,31 @@
     outline: none;
     font-family: 'Righteous', cursive;
     padding: 0px 10px;
+}
+
+@media (max-width: 900px) {
+    .LanguageSelectGroup > div {
+        width: 400px;
+    }
+
+    .DifficultySelect > div {
+        width: 400px;
+    }
+
+    .CreateQuiz > div.ButtonGroup {
+        bottom: 20px;
+        right: 11px;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .LanguageSelectGroup > div {
+        width: 100%;
+    }
+
+    .DifficultySelect > div {
+        width: 100%;
+    }
 }

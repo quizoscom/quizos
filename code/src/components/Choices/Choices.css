@@ -56,3 +56,9 @@
     border-bottom: 1px solid #300356;
     color: #300356;
 }
+
+@media (max-width: 900px) {
+    .Choice {
+        font-size: 1.5rem;
+    }
+}

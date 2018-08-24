@@ -12,6 +12,7 @@ import Loader from '../../components/UI/Loader/Loader';
 import InlineLoader from '../../components/UI/InlineLoader/InlineLoader';
 import Button from '../../components/UI/Button/Button';
 import Alert from '../../components/UI/Alert/Alert';
+import H2 from '../../components/PageHeading/PageHeading';
 
 import * as actions from '../../store/actions';
 import { SERVER_ROOT_URL } from '../../shared/serverLinks';
@@ -29,10 +30,9 @@ class QuizLists extends Component {
         currentOrder: {
             'language': '',
             'total_questions': '',
-            'avergage_scores': '',
+            'total_users': '',
             'created_at': 'desc',
-            'avg_rating': '',
-            'active_point': '',
+            'avg_rating': ''
         },
         languages: [],
         loading: true,
@@ -47,6 +47,8 @@ class QuizLists extends Component {
     }
 
     fetchData = (limitStart, orderBy, filterBy) => {
+        console.log(orderBy);
+        console.log(filterBy);
         if(this.state.quizzes.length === 0) {
             this.setState(prevState => ({
                 loading: true
@@ -201,6 +203,7 @@ class QuizLists extends Component {
         if(this.state.loading === false) {
             body = (
                 <Aux>
+                    <H2>Available Quizzes</H2>
                     <div className={classes.selectCont}>
                         <div>
                             <label>Filter By</label>
@@ -225,7 +228,7 @@ class QuizLists extends Component {
                             />
                         </div>
                     </div>
-                    <div className={classes.tableCont}>
+                    <div className={classes.TableCont}>
                         <table className={classes.Table}>
                             <thead>
                                 <tr>

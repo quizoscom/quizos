@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 
 import classes from './Home.css';
 import questionMark from '../../assets/question-mark-icon.png';
@@ -39,7 +40,13 @@ class Home extends Component {
                 <div className={classes.Home}>
                     <img src={questionMark} alt=""/>
                     <p>Easiest Way to Create or Take A Quiz</p>
-                    <p className={classes.Subtitle}>(It's free to use forever)</p>
+                    <p className={classes.Subtitle}>(It's <span data-tip="No Terms and Conditions Applied">FREE</span> to use forever)</p>
+                    <ReactTooltip 
+                        type="dark"
+                        effect="solid"
+                        place="top"
+                        className={classes.ToolTip}
+                    />
                     <div className={classes.ButtonGroup}>
                         <Button clicked={this.onClickTakeQuizHandler} >Take Quiz</Button>
                         <Button clicked={this.onClickCreateQuizHandler} btnType="cta">Create Quiz</Button>

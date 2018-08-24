@@ -19,7 +19,7 @@ const navigationItems = (props) => {
                 </Aux>
             );
         } else {
-            body = <NavigationItem link="/auth">Login</NavigationItem>;
+            body = <NavigationItem className="onlyDesktop" link="/auth">Login</NavigationItem>;
         }
     }
 
@@ -27,7 +27,7 @@ const navigationItems = (props) => {
     if(!props.isQuizActive) {
         dom = (
             <Aux>
-                <NavigationItem exact link="/">Home</NavigationItem>
+                <NavigationItem exact className="onlyDesktop" link="/">Home</NavigationItem>
                 {body}
                 <NavigationItem git link="https://github.com/entrepaman/quiz-creator" className="gitLink"><img className={classes.Img} src={githubIcon} alt="Git Link"/></NavigationItem>
             </Aux>

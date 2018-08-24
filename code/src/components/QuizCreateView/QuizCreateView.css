@@ -15,6 +15,10 @@
     font-size: 1.3rem;
 }
 
+.TableCont {
+    overflow-x: auto;
+}
+
 .qt {
     margin-bottom: 10em;
 }

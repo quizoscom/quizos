@@ -1,7 +1,7 @@
 .Auth, .ForgotPassword {
     margin: 0 auto;
     background-color: #fff;
-    width: 54%;
+    width: 85%;
     padding: 32px 18px;
     font-family: 'Righteous', cursive;
 }
@@ -87,7 +87,7 @@
     text-decoration: none;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 600px) {
     .Auth, .ForgotPassword {
         width: 500px;
     }

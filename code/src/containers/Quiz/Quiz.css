@@ -7,6 +7,19 @@
     text-align: left;
 }
 
+.TimerCont {
+    height: 3em;
+    padding: 0 2em;
+    font-size: 2rem;
+}
+
+.Body {
+    margin: 3em auto;
+    width: 67%;
+    font-size: 1.4rem;
+    margin-bottom: 5em;
+}
+
 .Language {
     font-size: 2rem;
     text-align: center;
@@ -85,9 +98,43 @@
     }
 }
 
+@media (max-width: 900px) {
+    .ButtonGroup {
+        background: #5f2c82;
+        background: -webkit-linear-gradient(to right, #49a09d, #5f2c82);
+        background: linear-gradient(to right, #49a09d, #5f2c82);
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        text-align: center;
+        padding: 1.5em 0;
+    }
+
+    .PreQuizInformations {
+        margin-bottom: 3em;
+    }
+
+    .Body {
+        width: 85%;
+        margin-top: 1em;
+    }
+
+    .TimerCont {
+        flex: 1;
+        text-align: center;
+        margin-bottom: 2em;
+    }
+
+    .questionSNo,
+    .counterCont {
+        float: none;
+        margin: 0;
+    }
+}
+
 @media (min-width: 1500px) {
     .PreQuizInformations {
-        margin-top: 10em;
+        margin-top: 4qem;
     }
 
     .Icon img {

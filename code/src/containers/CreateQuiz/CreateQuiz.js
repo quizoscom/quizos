@@ -16,6 +16,7 @@ import Confirm from '../../components/UI/Confirm/Confirm';
 import Question from '../../components/Question/Question';
 import Choices from '../../components/Choices/Choices';
 import ShareLink from '../../components/ShareLink/ShareLink';
+import H2 from '../../components/PageHeading/PageHeading';
 
 import { duplicacyCheckingForArray } from '../../shared/utility';
 
@@ -334,6 +335,7 @@ class CreateQuiz extends Component {
             if(this.state.creatingQuiz === false) {
                 body = (
                     <Aux>
+                        <H2>Create Quiz</H2>
                         <div className={classes.selectCont}>
                             <label>Choose Your Language</label>
                             <div className={classes.LanguageSelectGroup}>
@@ -376,7 +378,7 @@ class CreateQuiz extends Component {
                         </div>
                         <div className={classes.Difficulty}>
                             <label htmlFor="">Difficulty</label>
-                            <div>
+                            <div className={classes.DifficultySelect}>
                                 <Select
                                     options={
                                         [ 

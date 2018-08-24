@@ -12,3 +12,9 @@
 .questionViewer {
     font-size: 2.5rem;
 }
+
+@media (max-width: 900px) {
+    .questionTitle {
+        font-size: 1.5rem;
+    }
+}

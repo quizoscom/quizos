@@ -18,10 +18,12 @@ const select = (props) => {
             }
         }
     }
+
+    const classNames = [classes.Select, classes[props.className]].join(' ');
     
     return (
         <Select
-            className={classes.Select}
+            className={classNames}
             options={props.options}
             onChange={props.changed}
             defaultValue={props.defaultValue}

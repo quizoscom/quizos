@@ -40,3 +40,17 @@
 .warning {
     background-color: #d84315;
 }
+
+@media (max-width: 900px) {
+    .Confirm {
+        width: 80%;
+    }
+
+    .Confirm p {
+        margin-bottom: 1em;
+    }
+
+    .Confirm button {
+        margin-bottom: 2.5em;
+    }
+}

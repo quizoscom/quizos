@@ -18,6 +18,7 @@ class Alert extends Component {
     }
 
     render() {
+        console.log(this.props.alertType)
         const classNames = [classes.Alert, classes[this.props.alertType]].join(' ');
         return !this.props.alertMsg !== ''
             ? (<Backdrop>

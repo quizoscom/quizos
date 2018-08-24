@@ -47,8 +47,6 @@ class Reviews extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         if(nextProps.error !== null && nextProps.error !== '') {
             nextProps.onShowAlert(nextProps.error, 'failed');
-        } else {
-            nextProps.onHideAlert();
         }
         return true;
     }

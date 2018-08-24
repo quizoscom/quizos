@@ -63,7 +63,6 @@ class QuizCreateView extends Component {
                         loading: false
                     }));
                 } else {
-                    console.log('here here')
                     this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
                 }
             } else {
@@ -71,7 +70,6 @@ class QuizCreateView extends Component {
             }
         })
         .catch(err => {
-            console.log(err)
             this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
         });
     }
@@ -189,10 +187,12 @@ class QuizCreateView extends Component {
             body = (
                 <div className={[classes.QuizCreateView, classes[this.props.className]].join(' ')}>
                     <p className={classes.Title} style={this.props.titleStyle}>{this.props.label}</p>
-                    <Table 
-                        content={this.state.quizzes}
-                        viewType={this.props.viewType}
-                    ></Table>
+                    <div className={classes.TableCont}>
+                        <Table 
+                            content={this.state.quizzes}
+                            viewType={this.props.viewType}
+                        ></Table>
+                    </div>
                     <Pagination 
                         paginationRowCount={this.state.totalRowsToBeShown}
                         selectChanged={this.totalRowsToBeShownChangedHandler}

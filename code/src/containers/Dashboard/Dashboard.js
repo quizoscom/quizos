@@ -5,7 +5,7 @@ import classes from './Dashboard.css';
 
 import Button from '../../components/UI/Button/Button';
 import QuizCreateView from '../../components/QuizCreateView/QuizCreateView';
-
+import H2 from '../../components/PageHeading/PageHeading';
 import Features from '../../components/Features/Features';
 
 class Dashboard extends Component {
@@ -79,6 +79,7 @@ class Dashboard extends Component {
         if(!this.props.newUser) {
             body = (
                 <div className={classes.Dashboard}>
+                    <H2>Dashboard</H2>
                     <QuizCreateView 
                         createSelectOptions={this.createSelectOptions}
                         userId={this.props.userId}

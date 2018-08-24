@@ -64,6 +64,9 @@ class Quiz extends Component {
         if(this.props.okClicked) {
             this.props.onQuizQuit();
         }
+        if(this.props.error !== null && this.props.error !== '') {
+            this.props.onShowAlert(this.props.error, 'failed');
+        }
     }
 
     componentWillUnmount() {
@@ -113,15 +116,6 @@ class Quiz extends Component {
         this.props.onCounterComplete();
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if(nextProps.error !== null && nextProps.error !== '') {
-            nextProps.onShowAlert(nextProps.error, 'failed');
-        } else {
-            nextProps.onHideAlert();
-        }
-        return true;
-    }
-
     render() {
         let body = <Loader />;
         if(!this.props.loading) {
@@ -167,21 +161,13 @@ class Quiz extends Component {
                 <Aux>
                     <p className={classes.Language}>{this.state.language} Quiz</p>
                     <div>
-                        <div style={{
-                            height: '3em',
-                            padding: '0 2em',
-                            fontSize: '2rem'
-                        }}>
-                            <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
+                        <div className={classes.TimerCont}>
                             <div className={classes.counterCont}>
                                 <Timer timer={this.state.timer} />
                             </div>
+                            <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
                         </div>
-                        <div style={{
-                                margin: '3em auto',
-                                width: '67%',
-                                fontSize: '1.4rem'
-                        }}>
+                        <div className={classes.Body}>
                             <Question viewer title={this.state.questions[this.props.currentQuestionsNumber].question} className="questionViewer" />
                             <Choices viewer choices={this.state.questions[this.props.currentQuestionsNumber].choices} className="choicesViewer" clicked={this.onAnswerSelectedHandler} selected={this.state.currentSelectedAnswer} />
                         </div>

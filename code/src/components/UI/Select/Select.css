@@ -10,6 +10,12 @@
 }
 
 .Select > div {
-    height: 2.3em;
+    height: 2.7em;
     border-radius: 0px;
+}
+
+@media (max-width: 800px) {
+    .Select > div {
+        height: 3.3em;
+    }
 }

@@ -19,7 +19,7 @@ class Layout extends Component {
         return (
             <div id="outer-container">
                 <Toolbar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} />
-                { !this.props.isQuizActive ? <Sidebar isAuth={this.props.isAuth} /> : null }
+                { !this.props.isQuizActive ? <Sidebar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} /> : null }
                 
                 <main className={classes.Content} id="page-wrap">
                     {this.props.children}
