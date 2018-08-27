@@ -13,12 +13,33 @@
     display: flex;
 }
 
-.DocCont > div {
-
+.DocSideBar {
+    width: 35%;
+    background-color: #fff;
+    min-height: 700px;
+    padding: 10px 13px;
+    border-radius: 3px;
+    font-size: 1.1rem;
+    font-family: 'Righteous', sans-serif;
 }
 
-.DocSideBar {
+.DocSideBar > div > div > div:focus {
+    outline: none;
+}
 
+.DocSideBar > p {
+    cursor: pointer;
+}
+
+.DocSideBar span {
+    cursor: pointer;
+}
+
+.DocSideBar img {
+    width: 18px;
+    position: relative;
+    top: 1px;
+    left: -4px;
 }
 
 .DocBody {
