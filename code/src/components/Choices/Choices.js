@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip' //https://github.com/wwayne/react-tooltip
+import ReactTooltip from 'react-tooltip'; //https://github.com/wwayne/react-tooltip
 
 import classes from './Choices.css';
 

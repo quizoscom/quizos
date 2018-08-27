@@ -49,6 +49,7 @@
     "react-sortable-tree": "^2.2.0",
     "react-sortable-tree-theme-file-explorer": "^1.1.2",
     "react-sortable-tree-theme-minimal": "0.0.14",
+    "react-syntax-highlighter": "^8.0.1",
     "react-tooltip": "^3.6.1",
     "react-ui-tree": "^4.0.0",
     "redux": "^4.0.0",
