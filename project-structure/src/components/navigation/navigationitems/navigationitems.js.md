@@ -1,7 +1,3 @@
----
-description: Container for NavigationItem
----
-
 # NavigationItems.js
 
 {% hint style="info" %}

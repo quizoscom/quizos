@@ -1,7 +1,3 @@
----
-description: component for pagination functionality on Dashboard (UserQuizzes)
----
-
 # Pagination.js
 
 {% hint style="info" %}

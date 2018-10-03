@@ -1,4 +1,2 @@
 # Project Structure
 
-
-

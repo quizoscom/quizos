@@ -1,9 +1,3 @@
----
-description: >-
-  a stateless component to maintain a consistent header style throughout the
-  project
----
-
 # PageHeading.js
 
 {% hint style="info" %}

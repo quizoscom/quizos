@@ -1,7 +1,3 @@
----
-description: component for showing site features on home page & dashboard (for new users)
----
-
 # Features.js
 
 {% hint style="info" %}

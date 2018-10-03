@@ -1,0 +1,47 @@
+# Button.css
+
+### code
+
+{% code-tabs %}
+{% code-tabs-item title="/src/components/UI/Button/Button.css" %}
+```css
+.Button {
+    border: none;
+    padding: 1em 3em;
+    font-size: 1.2rem;
+    font-family: 'Righteous', cursive;
+    background-color: #fff;
+    cursor: pointer;
+    outline: none;
+    border-radius: 3px;
+}
+
+.Button:disabled {
+    cursor: no-drop;
+}
+
+.Button:not(:disabled):hover {
+    box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.2);
+}
+
+.cta {
+    background-color: #f9a825;
+}
+
+.nimp {
+    background-color: #eeeeee;
+}
+
+.quiz-prev-btn {
+    background-color: #aaa;
+}
+
+.SeeScoreButton {
+    margin: 0 !important;
+    margin-top: 3em !important;
+    font-size: 1.5rem;
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+

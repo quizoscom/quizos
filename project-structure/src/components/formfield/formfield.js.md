@@ -1,7 +1,3 @@
----
-description: stateless component for input with label used in Auth
----
-
 # FormField.js
 
 {% hint style="info" %}

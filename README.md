@@ -1,7 +1,3 @@
----
-description: Project is under alpha version. Any Contributions will be highly appreciated
----
-
 # v0.1
 
 ### Built using [**create-react-app**](https://github.com/facebook/create-react-app)\*\*\*\*

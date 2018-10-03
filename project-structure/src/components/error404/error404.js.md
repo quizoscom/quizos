@@ -1,7 +1,3 @@
----
-description: Stateless component for rendering page not found
----
-
 # Error404.js
 
 {% hint style="info" %}
