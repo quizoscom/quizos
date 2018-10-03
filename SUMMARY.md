@@ -1,9 +1,9 @@
 # Table of contents
 
 * [v0.1](README.md)
-* [Project Structure](project-structure/README.md)
-  * [src](project-structure/src/README.md)
-    * [components](project-structure/src/components/README.md)
+* [Project Structure](project-structure/)
+  * [src](project-structure/src/)
+    * [components](project-structure/src/components/)
       * [Choices](project-structure/src/components/choices/README.md)
         * [Choices.css](project-structure/src/components/choices/choices.css.md)
         * [Choices.js](project-structure/src/components/choices/choices.js.md)
