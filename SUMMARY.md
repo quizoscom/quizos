@@ -1,10 +1,12 @@
-# Project Structure
+# Table of contents
 
-* [Project Structure](docs/tree/)
-    * src
-        * [Choices](docs/tree/src/choices)
-            * [Choices.js](docs/tree/src/choices/choices.md)
-        * [Error404](docs/tree/src/error404)
-            * [Error404.js](docs/tree/src/error404/error404.md)
-        * [Features](docs/tree/src/features)
-            * [Features.js](docs/tree/src/features/features.md)
+* [Introduction \(0.1\)](README.md)
+* [Project Structure](project-structure/README.md)
+  * [src](project-structure/src/README.md)
+    * [Choices](project-structure/src/choices/README.md)
+      * [Choices.js](project-structure/src/choices/choices.md)
+    * [Error404](project-structure/src/error404/README.md)
+      * [Error404.js](project-structure/src/error404/error404.js.md)
+    * [Features](project-structure/src/features/README.md)
+      * [Features.js](project-structure/src/features/features.js.md)
+
