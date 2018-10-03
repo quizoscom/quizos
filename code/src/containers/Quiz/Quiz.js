@@ -168,8 +168,16 @@ class Quiz extends Component {
                             <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
                         </div>
                         <div className={classes.Body}>
-                            <Question viewer title={this.state.questions[this.props.currentQuestionsNumber].question} className="questionViewer" />
-                            <Choices viewer choices={this.state.questions[this.props.currentQuestionsNumber].choices} className="choicesViewer" clicked={this.onAnswerSelectedHandler} selected={this.state.currentSelectedAnswer} />
+                            <Question 
+                                viewer 
+                                title={this.state.questions[this.props.currentQuestionsNumber].question} 
+                                className="questionViewer" />
+                            <Choices 
+                                viewer 
+                                choices={this.state.questions[this.props.currentQuestionsNumber].choices} 
+                                className="choicesViewer" 
+                                clicked={this.onAnswerSelectedHandler} 
+                                selected={this.state.currentSelectedAnswer} />
                         </div>
                     </div>
                     <div className={classes.ButtonGroup}>

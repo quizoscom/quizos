@@ -405,11 +405,11 @@ class CreateQuiz extends Component {
                 body = (
                     <Aux>
                         {this.state.currentQuestionNo !== 0 ? <p className={classes.questionSNo}>Q. <span>{this.state.currentQuestionNo}</span>/<span>{this.state.noOfQuestions}</span></p> : null}
-                        <Question 
+                        <Question
                             changed={this.onQuestionInputChangedHandler} 
                             value={this.state.currentQuestionValue}
                         />
-                        <Choices 
+                        <Choices
                             changed={this.onChoiceInputsChangedHandler} 
                             clicked={this.onAnswerSelectHandler} 
                             answer={this.state.currentAnswer}

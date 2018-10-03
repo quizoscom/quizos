@@ -14,16 +14,10 @@ class LogOut extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        token: state.auth.token
-    }
-}
-
 const mapDispatchToProps = dispatch => {
     return {
         onLogOut: () => dispatch(actions.logOut())
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogOut);
+export default connect(null, mapDispatchToProps)(LogOut);

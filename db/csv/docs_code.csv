@@ -1,0 +1,53 @@
+1,1,import React from 'react';,2018-10-03,NULL
+2,1,import ReactTooltip from 'react-tooltip'; //https://github.com/wwayne/react-tooltip,2018-10-03,NULL
+3,1,,2018-10-03,NULL
+4,1,import classes from './Choices.css';,2018-10-03,NULL
+5,1,,2018-10-03,NULL
+6,1,import Input from '../UI/Input/Input';,2018-10-03,NULL
+7,1,,2018-10-03,NULL
+8,1,const choices = (props) => {,2018-10-03,NULL
+9,1,"    const classNames = [classes.Choices, classes[props.className]].join(' ');",2018-10-03,NULL
+10,1,    let choices = '',2018-10-03,NULL
+11,1,    if(!props.viewer) {,2018-10-03,NULL
+12,1,"        choices = [1, 2, 3, 4].map(i => {",2018-10-03,NULL
+13,1,            return (,2018-10-03,NULL
+14,1,                <div key={i}>,2018-10-03,NULL
+15,1,                    <Input ,2018-10-03,NULL
+16,1,"                        inputType=""text"" ",2018-10-03,NULL
+17,1,"                        changed={(event) => props.changed(event, i)}",2018-10-03,NULL
+18,1,"                        value={props.value.length >= i ? props.value[i-1] : """"}",2018-10-03,NULL
+19,1,                    />,2018-10-03,NULL
+20,1,                    <p ,2018-10-03,NULL
+21,1,                        className={props.answer === i ? classes.answer : ''} ,2018-10-03,NULL
+22,1,                        onClick={() => props.clicked(i)},2018-10-03,NULL
+23,1,"                        data-tip=""Click it for choosing the correct answer""",2018-10-03,NULL
+24,1,                    >,2018-10-03,NULL
+25,1,                    ca</p>,2018-10-03,NULL
+26,1,                    <ReactTooltip ,2018-10-03,NULL
+27,1,"                        type=""light""",2018-10-03,NULL
+28,1,"                        effect=""solid""",2018-10-03,NULL
+29,1,"                        place=""right"" ",2018-10-03,NULL
+30,1,                    />,2018-10-03,NULL
+31,1,                </div>,2018-10-03,NULL
+32,1,            );,2018-10-03,NULL
+33,1,        });,2018-10-03,NULL
+34,1,    } else {,2018-10-03,NULL
+35,1,        let sno = 1;,2018-10-03,NULL
+36,1,        choices = props.choices.map(choice => {,2018-10-03,NULL
+37,1,            const classNames = props.selected === choice,2018-10-03,NULL
+38,1,"                                ? [classes.Choice, classes.selected].join(' ')",2018-10-03,NULL
+39,1,                                : classes.Choice;,2018-10-03,NULL
+40,1,            return (,2018-10-03,NULL
+41,1,                <p key={choice} className={classNames} onClick={() => props.clicked(choice)} >{sno++}) <span>{choice}</span></p>,2018-10-03,NULL
+42,1,            );,2018-10-03,NULL
+43,1,        });,2018-10-03,NULL
+44,1,    },2018-10-03,NULL
+45,1,    return (,2018-10-03,NULL
+46,1,        <div className={classNames}>,2018-10-03,NULL
+47,1,            {!props.viewer ? <label>Choices</label> : null },2018-10-03,NULL
+48,1,            {choices},2018-10-03,NULL
+49,1,        </div>,2018-10-03,NULL
+50,1,    );,2018-10-03,NULL
+51,1,},2018-10-03,NULL
+52,1,,2018-10-03,NULL
+53,1,export default choices;,2018-10-03,NULL

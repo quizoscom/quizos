@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import classes from './Doc.css';
+import axios from 'axios';
+import qs from 'qs';
 
 import SortableTree from 'react-sortable-tree'; // https://github.com/frontend-collective/react-sortable-tree
 import FileExplorerTheme from 'react-sortable-tree-theme-file-explorer'; // https://github.com/frontend-collective/react-sortable-tree-theme-file-explorer
@@ -11,50 +13,24 @@ import ImgIcon from '../../assets/img-icon.png';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
 import * as docsContent from '../../doc/docsContent';
+import { tree } from './tree/tree';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+
+const WINDOW_HEIGHT = document.documentElement.clientHeight - 150;
 
 class Doc extends Component {
     state = {
-        treeData: [
-            { 
-                title: 'src/',
-                type: "dir",
-                expanded: true,
-                children: [ 
-                    { 
-                        title: 'assets',
-                        type: "file", 
-                    },
-                    {
-                        title: 'components',
-                        expanded: true,
-                        type: "dir",
-                        children: [
-                            {
-                                title: 'Choices',
-                                type: "dir",
-                                children: [
-                                    {
-                                        title: 'Choices.js',
-                                        type: "js",
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'Error404',
-                                type: "dir",
-                                children: [
-                                    {
-                                        type: "js",
-                                        title: 'Error404.js'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ] 
-            }
-        ],
-        docsBody: {}
+        docsBody: {},
+        treeData: [],
+        currentFileCodes: []
+    }
+
+    componentDidMount() {
+        this.setState({
+            ...this.state,
+            treeData: tree.treeData
+        });
+        this.nodeClickedHandler("Choices.js");
     }
 
     nodeClickedHandler = fileName => {
@@ -74,14 +50,26 @@ class Doc extends Component {
             docsBody["props"] = docsContentObj["props"];
         }
 
-        if(typeof docsContentObj["body"] !== "undefined") {
-            docsBody["body"] = docsContentObj["body"];
-        }
+        this.getFileCode(fileName.replace('.js', ''));
+        this.setState(prevState => ({ docsBody }));
+    }
 
-        this.setState({
-            ...this.state,
-            docsBody: docsBody
+    getFileCode = fileName => {
+        axios.post(`${SERVER_ROOT_URL}/doc/get-file-code.php`, qs.stringify({fileName}))
+        .then(res => {
+            if(res.data.status === "success") {
+                this.setState(prevState => ({
+                    currentFileCodes: res.data.codes
+                }));
+            } else {
+                this.setState(prevState => ({
+                    currentFileCodes: []
+                }));
+            }
         })
+        .catch(err => {
+            console.log(err.response);
+        });
     }
 
     render() {
@@ -89,8 +77,8 @@ class Doc extends Component {
         if(Object.keys(this.state.docsBody).length !== 0) {
             const docsBodyState = this.state.docsBody;
             let code = ``;
-            if(typeof docsBodyState["body"] !== "undefined") {
-                const content = docsBodyState["body"];
+            if(this.state.currentFileCodes.length) {
+                const content = this.state.currentFileCodes;
                 for(let i = 0; i < content.length; i++) {
                     code += content[i] +'\n';
                 }
@@ -134,9 +122,14 @@ class Doc extends Component {
                     }
 
                     {
-                        typeof docsBodyState["body"] !== "undefined"
+                        this.state.currentFileCodes.length
                         ? (
                             <div className={classes.Code}>
+                                {/* <pre>
+                                    <code>
+                                        {code}
+                                    </code>
+                                </pre> */}
                                 <SyntaxHighlighter language='jsx' style={codeStyle}>
                                     {code}
                                 </SyntaxHighlighter>
@@ -147,10 +140,11 @@ class Doc extends Component {
                 </Aux>
             );
         }
+
         return (
             <div className={classes.Doc}>
                 <div className={classes.DocCont}>
-                    <div className={classes.DocSideBar}>
+                    <div className={classes.DocSideBar} style={{height: WINDOW_HEIGHT}}>
                         <SortableTree
                             treeData={this.state.treeData}
                             onChange={treeData => this.setState({ treeData })}
@@ -166,7 +160,7 @@ class Doc extends Component {
                             })}
                         />
                     </div>
-                    <div className={classes.DocBody}>
+                    <div className={classes.DocBody} style={{height: WINDOW_HEIGHT}}>
                         {docsBody}
                     </div>
                 </div>

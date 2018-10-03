@@ -10,7 +10,7 @@ import Alert from '../UI/Alert/Alert';
 import Pagination from '../Pagination/Pagination';
 import Aux from '../../hoc/Auxiliary/Auxiliary';
 
-import classes from './QuizCreateView.css';
+import classes from './UserQuizzes.css';
 
 import * as actions from '../../store/actions';
 import { SERVER_ROOT_URL } from '../../shared/serverLinks';
@@ -181,7 +181,7 @@ class QuizCreateView extends Component {
     }
 
     render() {
-        const newSelectOptions = this.props.createSelectOptions(this.state.totalRows);
+        const newSelectOptions = this.props.newSelectOptions(this.state.totalRows);
         let body = <Loader loaderStyle={{left: '-40px'}} loader2Style={{left: '40px'}}/>;
         if(!this.state.loading) {
             body = (
@@ -193,7 +193,7 @@ class QuizCreateView extends Component {
                             viewType={this.props.viewType}
                         ></Table>
                     </div>
-                    <Pagination 
+                    <Pagination
                         paginationRowCount={this.state.totalRowsToBeShown}
                         selectChanged={this.totalRowsToBeShownChangedHandler}
                         inputChanged={this.pageNumberInputChangedHandler}

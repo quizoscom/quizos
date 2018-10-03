@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import classes from './Dashboard.css';
 
 import Button from '../../components/UI/Button/Button';
-import QuizCreateView from '../../components/QuizCreateView/QuizCreateView';
+import UserQuizzes from '../../components/UserQuizzes/UserQuizzes';
 import H2 from '../../components/PageHeading/PageHeading';
 import Features from '../../components/Features/Features';
 
@@ -80,7 +80,7 @@ class Dashboard extends Component {
             body = (
                 <div className={classes.Dashboard}>
                     <H2>Dashboard</H2>
-                    <QuizCreateView 
+                    <UserQuizzes 
                         createSelectOptions={this.createSelectOptions}
                         userId={this.props.userId}
                         quizViewType="created"
@@ -89,7 +89,7 @@ class Dashboard extends Component {
                         label="Quiz created by You"
                         viewType="created"
                     />
-                    <QuizCreateView 
+                    <UserQuizzes 
                         createSelectOptions={this.createSelectOptions}
                         userId={this.props.userId}
                         quizViewType="took"

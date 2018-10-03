@@ -44,9 +44,9 @@ class Reviews extends Component {
         });
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if(nextProps.error !== null && nextProps.error !== '') {
-            nextProps.onShowAlert(nextProps.error, 'failed');
+    componentDidUpdate() {
+        if(this.props.error !== null && this.props.error !== '') {
+            this.props.onShowAlert(this.props.error, 'failed');
         }
         return true;
     }

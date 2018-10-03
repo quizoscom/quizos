@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 const navigationItem = (props) => {
     const classNames = [classes.NavigationItem, classes[props.className]].join(' ');
     return (
-        <li onClick={props.clicked} className={classNames} style={props.style}>
+        <li className={classNames} style={props.style}>
             {
                 props.git 
                 ? <a className={classes.git} href={props.link}> {props.children} </a>
@@ -14,6 +14,5 @@ const navigationItem = (props) => {
         </li>
     );
 }
-    
 
 export default navigationItem;
