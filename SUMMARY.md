@@ -36,4 +36,4 @@
         * [SideBar.js](project-structure/src/components/sidebar/sidebar.js.md)
       * [Timer](project-structure/src/components/timer/README.md)
         * [Timer.js](project-structure/src/components/timer/timer.js.md)
-
+* [Libraries Used](libraries/README.md)
