@@ -1,5 +1,7 @@
 # Choices.css
 
+### [code](https://github.com/quizoscom/quizos/blob/master/code/src/components/Choices/Choices.css)
+
 {% code-tabs %}
 {% code-tabs-item title="/src/components/Choices/Choices.css" %}
 ```css

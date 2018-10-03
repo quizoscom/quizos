@@ -1,6 +1,14 @@
+---
+description: Project is under alpha version. Any Contributions will be highly appreciated
+---
+
 # v0.1
 
-An Open Source Quiz Platform
+### Built using [**create-react-app**](https://github.com/facebook/create-react-app)\*\*\*\*
+
+Project is built using create-react-app provided by [**Facebook**](https://github.com/facebook)\*\*\*\*
+
+### An Open Source Quiz Platform
 
 ![features screenshot from https://quizos.com](.gitbook/assets/quizos.PNG)
 

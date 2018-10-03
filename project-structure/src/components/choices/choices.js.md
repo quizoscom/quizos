@@ -1,21 +1,10 @@
----
-description: >-
-  Component for showing choices or choices input while both creating and taking
-  quiz
----
-
 # Choices.js
 
-### imports
+{% hint style="info" %}
+functional component
+{% endhint %}
 
-```javascript
-React from 'react';
-ReactTooltip from 'react-tooltip'; //https://github.com/wwayne/react-tooltip
-
-classes from './Choices.css';
-
-Input from '../UI/Input/Input';
-```
+### 
 
 ### props
 
@@ -30,7 +19,7 @@ Input from '../UI/Input/Input';
 | selected | String | empty String | selected choice value whilte taking quiz |
 | clicked | func |  | answer selection handler while taking quiz |
 
-### Code
+### [code](https://github.com/quizoscom/quizos/blob/master/code/src/components/Choices/Choices.js)
 
 {% code-tabs %}
 {% code-tabs-item title="/src/components/Choices/Choices.js" %}

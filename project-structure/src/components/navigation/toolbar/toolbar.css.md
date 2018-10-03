@@ -1,0 +1,43 @@
+# Toolbar.css
+
+### code
+
+{% code-tabs %}
+{% code-tabs-item title="/src/components/Navigation/Toolbar/Toolbar.css" %}
+```css
+.Toolbar {
+    height: 70px;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    justify-content: center;
+    box-sizing: border-box;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    z-index: 90;
+    text-align: left;
+    display: flex;
+    background: #5f2c82;
+    background: -webkit-linear-gradient(to right, #49a09d, #5f2c82);
+    background: linear-gradient(to right, #49a09d, #5f2c82);
+}
+
+.Logo {
+    flex-grow: 1;
+}
+
+.Logo img {
+    height: 41px;
+    margin: 14px 9px;
+}
+
+@media (max-width: 800px) {
+    .Logo img {
+        height: 41px;
+        margin: 16px 60px;
+    }
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+
