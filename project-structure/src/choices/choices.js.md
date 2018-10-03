@@ -1,9 +1,3 @@
----
-description: >-
-  Component for showing choices or choices input while both creating and taking
-  quiz
----
-
 # Choices.js
 
 ### props

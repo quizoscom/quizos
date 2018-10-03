@@ -1,7 +1,3 @@
----
-description: 'https://quizos.com'
----
-
 # v0.1
 
 An Open Source Quiz Platform
