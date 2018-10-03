@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Introduction \(0.1\)](README.md)
+* [v0.1](README.md)
 
 * [Project Structure](doc/src/README.md)
   * [src](doc/src)
