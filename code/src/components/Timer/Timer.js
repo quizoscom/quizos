@@ -95,7 +95,6 @@ class Timer extends Component {
         }
 
         if(hr === 0 && mins === 0 && secs === 0) {
-            console.log('timer automatically stopped');
             this.props.onCounterComplete();
             clearInterval(this.timerID);
         }
