@@ -1,7 +1,3 @@
----
-description: Question component to show text or input base on quiz status
----
-
 # Question.js
 
 {% hint style="info" %}

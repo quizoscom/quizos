@@ -1,0 +1,36 @@
+# InlineLoader.css
+
+### code
+
+{% code-tabs %}
+{% code-tabs-item title="/src/components/UI/InlineLoader/InlineLoader.css" %}
+```css
+.InlineLoader {
+    color: #fff;
+}
+
+.Loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    animation: typing 1.5s ease-in-out infinite alternate;
+    margin: 10px auto;
+    position: relative;
+    left: -1.2em;
+}
+
+@keyframes typing {
+    0% {
+      box-shadow: 12px 0px 0px 0px rgba(0,0,0,0.2), 
+                  24px 0px 0px 0px rgba(0,0,0,0.2);
+    }
+    
+    25% {
+      box-shadow: 12px 0px 0px 0px rgba(0,0,0,2), 
+                  24px 0px 0px 0px rgba(0,0,0,0.2);
+      }
+  }
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
+

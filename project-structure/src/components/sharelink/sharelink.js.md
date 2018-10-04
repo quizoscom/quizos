@@ -1,7 +1,3 @@
----
-description: component used to share user created quiz's link using react-share
----
-
 # ShareLink.js
 
 {% hint style="info" %}

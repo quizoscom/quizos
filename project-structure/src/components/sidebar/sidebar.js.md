@@ -1,7 +1,3 @@
----
-description: Sidebar menu component for mobile devices
----
-
 # Sidebar.js
 
 {% hint style="info" %}

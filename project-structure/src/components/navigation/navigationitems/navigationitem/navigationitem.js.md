@@ -1,7 +1,3 @@
----
-description: Individual link in Toolbar
----
-
 # NavigationItem.js
 
 {% hint style="info" %}
