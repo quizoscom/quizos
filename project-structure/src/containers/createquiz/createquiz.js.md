@@ -156,7 +156,7 @@ class CreateQuiz extends Component {
         }
     }
 
-    languageChangedHandler = (event) => {
+    languageChangedHandler = event => {
         if(event.value === 'new') {
             this.setState({
                 ...this.state,
@@ -171,7 +171,7 @@ class CreateQuiz extends Component {
         }
     }
 
-    newLanguageInputChangedHandler = (event) => {
+    newLanguageInputChangedHandler = event => {
         const newLanguage = event.target.value;
         let languageExists = 0;
         for(let i = 0; i < this.props.languagesOptions.length; i++) {
@@ -195,7 +195,7 @@ class CreateQuiz extends Component {
         }
     }
 
-    noOfQuestionInputChangedHandler = (event) => {
+    noOfQuestionInputChangedHandler = event => {
         let noOfQuestions = parseInt(event.target.value, 10);
         if(noOfQuestions === "" || noOfQuestions <= 0) {
             noOfQuestions = 0;
@@ -205,7 +205,7 @@ class CreateQuiz extends Component {
         }));
     }
 
-    testTimeInputChangedHandler = (event) => {
+    testTimeInputChangedHandler = event => {
         let testTime = parseInt(event.target.value, 10);
         if(testTime <= 180) {
             if(testTime === "" || testTime <= 0) {
@@ -222,14 +222,14 @@ class CreateQuiz extends Component {
         }));
     }
 
-    difficultySelectChangeHandler = (event) => {
+    difficultySelectChangeHandler = event => {
         const value = event.value;
         this.setState(prevState => ({
             difficulty: value
         }));
     }
 
-    onQuestionInputChangedHandler = (event) => {
+    onQuestionInputChangedHandler = event => {
         let questionValue = event.target.value;
         let newQuestions = this.state.questions.slice();
         if(newQuestions.length === 0) {
@@ -287,7 +287,7 @@ class CreateQuiz extends Component {
         }));
     }
 
-    onAnswerSelectHandler = (ca) => {
+    onAnswerSelectHandler = ca => {
         var currentQuestionNo = this.state.currentQuestionNo;
         var newQuestions = this.state.questions.slice();
         newQuestions[currentQuestionNo-1].answer = ca;
@@ -310,7 +310,7 @@ class CreateQuiz extends Component {
         }
     }
 
-    saveQuestions = (questionsData) => {
+    saveQuestions = questionsData => {
         localStorage.setItem('questionsData', JSON.stringify(questionsData));
     }
 

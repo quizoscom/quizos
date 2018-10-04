@@ -1,4 +1,26 @@
 # Dashboard.css
 
+### code
 
+{% code-tabs %}
+{% code-tabs-item title="/src/containers/Dashboard/Dashboard.css" %}
+```css
+.ButtonGroup {
+    display: inline-block;
+    right: 0em;
+    position: fixed;
+    bottom: 0em;
+    background: linear-gradient(to right, #49a09d, #5f2c82);
+    width: 100%;
+}
+
+.ButtonGroup button {
+    margin-right: 2em;
+    float: right;
+    position: relative;
+    bottom: 1em;
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 

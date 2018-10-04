@@ -8,8 +8,8 @@ description: define routes under the layout component
 
 | name | link |
 | :--- | :--- |
-| isAuth | link to auth reducer |
-|  |  |
+| isAuth, token | link to auth reducer |
+| isQuizActive | link to quiz reducer |
 
 
 
@@ -45,7 +45,6 @@ import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Score from './containers/Score/Score';
 import ResetPassword from './containers/ResetPassword/ResetPassword';
-import Doc from './containers/Doc/Doc';
 
 import * as actions from './store/actions';
 
@@ -83,7 +82,10 @@ class App extends Component {
     }
     return (
       <div className={classes.App}>
-        <Layout>
+        <Layout
+          isAuth={this.props.isAuth}
+          isQuizActive={this.props.isQuizActive}
+        >
           {routes}
         </Layout>
       </div>
@@ -93,7 +95,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.auth.token != null
+    token: state.auth.token,
+    isAuth: state.auth.token !== null,
+    isQuizActive: state.quiz.quizActive
   }
 }
 

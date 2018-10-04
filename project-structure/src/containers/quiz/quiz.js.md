@@ -1,4 +1,314 @@
 # Quiz.js
 
+{% hint style="info" %}
+class based component
+{% endhint %}
 
+### 
+
+### state
+
+| name | type | default | description |
+| :--- | :--- | :--- | :--- |
+| quizId | String |  | quizId got from the url |
+| language | String |  | language got from the url |
+| timer | String |  | timer for the quizId fetched from the database |
+| questions | Array | \[ \] | question for the quizId fetched from the database |
+| currentSelectedAnswer | String |  | answer of current shown question |
+| currentSelectedQuestionId | String |  | id of current shown question |
+| preQuizInfo | Array | \[ \] | pre quiz informations fetched from the database |
+
+
+
+### functions
+
+| name | params | description |
+| :--- | :--- | :--- |
+| componentDidMount |  | get quiz data from database |
+| componentDidUpdate |  | quiz quit on confirm dialog ok clicked or show error in error reducer props update |
+| componentWillUnmount |  | reset quiz related data on quiz quit |
+| onButtonContinueClickedHandler |  | continue button clicked handler while taking quiz |
+| onAnswerSelectedHandler | selected | answer clicked handler |
+| onQuitButtonClickHandler |  | quit button clicked handler |
+| onSeeScoreButtonClick |  | score button clicked handler |
+| onCompleteCounterHandler |  | timer automatically completed handler |
+
+
+
+### store props
+
+| name | link |
+| :--- | :--- |
+| quizId, currentQuestionsNumber, answers, loading, error, score, redirectTo, quizActive, counterComplete, noOfQuestions | link to quiz reducer |
+| userId | link to auth reducer |
+| hr, mins, secs | link to timer reducer |
+| alertMsg, alertType | link to alert reducer |
+| confirmMsg, okClicked | link to confirm reducer |
+
+
+
+### store actions
+
+| name | link |
+| :--- | :--- |
+| onQuizComplete, onQuizContinue, onQuizQuit, onResetRedirectPathFromScore, onSeeScore, onCounterComplete, setNoOfQuestions | link to quiz actions |
+| onShowAlert, onHideAlert | link to alert actions |
+| onShowConfirm, onHideConfirm, onOkClicked | link to confirm actions |
+
+
+
+### code
+
+{% code-tabs %}
+{% code-tabs-item title="/src/containers/Quiz/Quiz.js" %}
+```javascript
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import axios from 'axios';
+import qs from 'qs';
+
+import classes from './Quiz.css';
+import PreQuizIcon from '../../assets/pre-quiz-header-icon.png';
+import CounterCompleteIcon from '../../assets/times-up-icon.png';
+
+import Question from '../../components/Question/Question';
+import Choices from '../../components/Choices/Choices';
+import Button from '../../components/UI/Button/Button';
+import Loader from '../../components/UI/Loader/Loader';
+import Alert from '../../components/UI/Alert/Alert';
+import Confirm from '../../components/UI/Confirm/Confirm';
+
+import Timer from '../../components/Timer/Timer';
+import Aux from '../../hoc/Auxiliary/Auxiliary';
+
+import * as actions from '../../store/actions';
+import { SERVER_ROOT_URL } from '../../shared/serverLinks';
+import { SERVER_ERROR_MSG } from '../../shared/alertMessages';
+
+class Quiz extends Component {
+    state = {
+        quizId: '',
+        language: '',
+        timer: '',
+        questions: [],
+        currentSelectedAnswer: '',
+        currentSelectedQuestionId: '',
+        preQuizInfo: [
+            { id: 1, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
+            { id: 2, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
+            { id: 3, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
+            { id: 4, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." }
+        ]
+    }
+
+    componentDidMount() {
+        const quizId = this.props.match.params.quizId;
+        const language = this.props.match.params.language;
+        this.setState(prevState => ({
+            language: language
+        }));
+        axios.post(`${SERVER_ROOT_URL}/get/get-quiz-data.php`, qs.stringify({quizId: quizId}))
+        .then(res => {
+            this.setState(prevState => ({
+                timer: parseFloat(res.data.test_time),
+                questions: res.data.questions
+            }));
+            this.props.setNoOfQuestions(parseInt(res.data.total_questions, 10), quizId);
+        })
+        .catch(err => {
+            this.props.onShowAlert(SERVER_ERROR_MSG, 'failed');
+        });
+    }
+
+    componentDidUpdate() {
+        if(this.props.okClicked) {
+            this.props.onQuizQuit();
+        }
+        if(this.props.error !== null && this.props.error !== '') {
+            this.props.onShowAlert(this.props.error, 'failed');
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.onOkClicked(0);
+        this.props.onResetRedirectPathFromScore();
+    }
+
+    onButtonContinueClickedHandler = () => {
+        if(this.state.currentSelectedAnswer !== '' || this.props.quizActive === 0) {
+            if(this.props.currentQuestionsNumber+1 === this.props.noOfQuestions) {
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId, 1);
+                setTimeout(() => {
+                    // calculate time spent on quiz
+                    const totalTimeInSecs = this.state.timer * 60;
+                    const timeLeftInSecs = (this.props.hr * 3600) + (this.props.mins * 60) + (this.props.secs);
+                    this.props.onQuizComplete(this.props.answers, (totalTimeInSecs - timeLeftInSecs), this.props.quizId, this.props.userId);
+                }, 1500);
+            } else {
+                this.props.onQuizContinue(this.state.currentSelectedAnswer, this.state.currentSelectedQuestionId, 1);
+            }
+            this.setState(prevState => ({
+                currentSelectedAnswer: '',
+            }));
+            this.props.onHideAlert();
+        } else {
+            this.props.onShowAlert('Please select one of the answer before proceeding', 'warning');
+        }
+    }
+
+    onAnswerSelectedHandler = selected => {
+        this.setState(prevState => ({
+            currentSelectedAnswer: selected,
+            currentSelectedQuestionId: prevState.questions[this.props.currentQuestionsNumber].question_id
+        }));
+        this.props.onQuizContinue(selected, this.state.questions[this.props.currentQuestionsNumber].question_id, 0);
+    }
+
+    onQuitButtonClickHandler = () => {
+        this.props.onShowConfirm('Please Confirm to Quit the Quiz');
+    }
+
+    onSeeScoreButtonClick = () => {
+        this.props.onSeeScore(this.props.answers, this.props.quizId, this.props.userId);
+    }
+
+    onCompleteCounterHandler = (event) => {
+        this.props.onCounterComplete();
+    }
+
+    render() {
+        let body = <Loader />;
+        if(!this.props.loading) {
+            if(this.props.redirectTo !== "") {
+                body = <Redirect to={this.props.redirectTo} />
+            } else if(this.props.quizActive === 0 && this.props.counterComplete === 0) {
+                body = (
+                    <Aux>
+                        <p className={classes.Language}>{this.state.language} Quiz</p>
+                        <div className={classes.PreQuizInformations}>
+                            <div className={classes.Icon}>
+                                <img src={PreQuizIcon} alt="Note" />
+                            </div>
+                            <div className={classes.Info}>
+                                <p className={classes.Title}>READ CAREFULLY BEFORE PROCEEDING</p>
+                                <ol>
+                                    {this.state.preQuizInfo.map(info => {
+                                        return <li key={info.id}>{info.text}</li>
+                                    })}
+                                </ol>
+                            </div>
+                        </div>
+                        <div className={classes.ButtonGroup}>
+                            <Button btnType="nimp" clicked={this.onQuitButtonClickHandler} >Cancel</Button>
+                            <Button btnType="cta" clicked={this.onButtonContinueClickedHandler} >Continue</Button>
+                        </div>
+                    </Aux>
+                );
+            } else if(this.props.counterComplete) {
+                body = (
+                    <div className={classes.CounterComplete}>
+                        <img src={CounterCompleteIcon} alt="Counter Complete Icon"/>
+                        <Button btnType="cta" className="SeeScoreButton" clicked={this.onSeeScoreButtonClick} >See Your Score</Button>
+                    </div>
+                );
+            } else {
+                body = <Loader />;
+            }
+        }
+
+        if(this.state.questions.length !== 0 && this.props.redirectTo !== "/" && this.props.quizActive !== 0 && this.props.counterComplete === 0 && this.props.currentQuestionsNumber < this.props.noOfQuestions && !this.props.loading) {
+            body = (
+                <Aux>
+                    <p className={classes.Language}>{this.state.language} Quiz</p>
+                    <div>
+                        <div className={classes.TimerCont}>
+                            <div className={classes.counterCont}>
+                                <Timer timer={this.state.timer} />
+                            </div>
+                            <p className={classes.questionSNo}>Q. <span>{this.props.currentQuestionsNumber+1}</span>/<span>{this.props.noOfQuestions}</span></p>
+                        </div>
+                        <div className={classes.Body}>
+                            <Question 
+                                viewer 
+                                title={this.state.questions[this.props.currentQuestionsNumber].question} 
+                                className="questionViewer" />
+                            <Choices 
+                                viewer 
+                                choices={this.state.questions[this.props.currentQuestionsNumber].choices} 
+                                className="choicesViewer" 
+                                clicked={this.onAnswerSelectedHandler} 
+                                selected={this.state.currentSelectedAnswer} />
+                        </div>
+                    </div>
+                    <div className={classes.ButtonGroup}>
+                        <Button btnType="nimp" clicked={this.onQuitButtonClickHandler} >Quit</Button>
+                        <Button btnType="cta" clicked={this.onButtonContinueClickedHandler} >Continue</Button>
+                    </div>
+                </Aux>
+            );
+        }
+
+        return (
+            <div className={classes.Quiz}>
+                {body}
+                {
+                    this.props.alertMsg !== ''
+                    ? <Alert alertType={this.props.alertType}>{this.props.alertMsg}</Alert>
+                    : null
+                }
+                {
+                    this.props.confirmMsg !== ''
+                    ? <Confirm>{this.props.confirmMsg}</Confirm>
+                    : null
+                }
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        quizId: state.quiz.quizId,
+        currentQuestionsNumber: state.quiz.currentQuestionsNumber,
+        answers: state.quiz.answers,
+        loading: state.quiz.loading,
+        error: state.quiz.error,
+        score: state.quiz.score,
+        redirectTo: state.quiz.redirectTo,
+        quizActive: state.quiz.quizActive,
+        counterComplete: state.quiz.counterComplete,
+        noOfQuestions: state.quiz.noOfQuestions,
+        userId: state.auth.userId,
+        hr: state.timer.hr,
+        mins: state.timer.mins,
+        secs: state.timer.secs,
+        alertMsg: state.alert.alertMsg,
+        alertType: state.alert.alertType,
+        confirmMsg: state.confirm.confirmMsg,
+        okClicked: state.confirm.okClicked
+    }
+}
+
+const mapDisptachToPros = dispatch => {
+    return {
+        onQuizComplete: (answers, timerValue, quizId, userId) => dispatch(actions.quizComplete(answers, timerValue, quizId, userId)),
+        onQuizContinue: (answer, questionId, quizContinueFlag) => dispatch(actions.quizCont(answer, questionId, quizContinueFlag)),
+        onQuizQuit: () => dispatch(actions.quizQuitHandler()),
+        onResetRedirectPathFromScore: () => dispatch(actions.resetRedirectPathFromScore()),
+        onSeeScore: (answers, quizId, userId) => dispatch(actions.seeScore(answers, 0, quizId, userId)),
+        onCounterComplete: () => dispatch(actions.counterCompleted()),
+        setNoOfQuestions: (noOfQuestions, quizId) => dispatch(actions.setNoOfQuestions(noOfQuestions, quizId)),
+        onShowAlert: (alertMsg, alertType) => dispatch(actions.showAlert(alertMsg, alertType)),
+        onHideAlert: () => dispatch(actions.hideAlert()),
+        onShowConfirm: (confirmMsg) => dispatch(actions.showConfirm(confirmMsg)),
+        onHideConfirm: () => dispatch(actions.hideConfirm()),
+        onOkClicked: (okClicked) => dispatch(actions.okClicked(okClicked))
+    }
+}
+
+export default connect(mapStateToProps, mapDisptachToPros)(Quiz);
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
