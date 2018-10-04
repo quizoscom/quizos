@@ -1,8 +1,12 @@
 # Table of contents
 
 * [v0.1](README.md)
+* [Libraries Used](libraries-used.md)
 * [Project Structure](project-structure/README.md)
   * [src](project-structure/src/README.md)
+    * [index.js](project-structure/src/index.js.md)
+    * [App.js](project-structure/src/app.js.md)
+    * [App.css](project-structure/src/app.css.md)
     * [components](project-structure/src/components/README.md)
       * [Choices](project-structure/src/components/choices/README.md)
         * [Choices.css](project-structure/src/components/choices/choices.css.md)
@@ -134,8 +138,4 @@
         * [quiz.js](project-structure/src/store/reducers/quiz.js.md)
         * [ratings.js](project-structure/src/store/reducers/ratings.js.md)
         * [timer.js](project-structure/src/store/reducers/timer.js.md)
-    * [App.css](project-structure/src/app.css.md)
-    * [App.js](project-structure/src/app.js.md)
-    * [index.js](project-structure/src/index.js.md)
-* [Libraries Used](libraries-used.md)
 
