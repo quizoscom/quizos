@@ -1,4 +1,103 @@
 # Auth.css
 
+{% code-tabs %}
+{% code-tabs-item title="/src/containers/Auth/Auth.css" %}
+```css
+.Auth, .ForgotPassword {
+    margin: 0 auto;
+    background-color: #fff;
+    width: 85%;
+    padding: 32px 18px;
+    font-family: 'Righteous', cursive;
+}
 
+.title {
+    font-size: 2rem;
+    color: #fff;
+    margin: 1em 0 2em 0;
+}
+
+.bottomLinks {
+    margin-bottom: 3em;
+    margin-top: 2em;
+}
+
+.bottomLinks > p {
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.registerLoginToggleLink,
+.forgotPasswordLink {
+    color: #d30b55;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.registerLoginToggleLink {
+    float: right;
+}
+
+.forgotPasswordLink {
+    float: left;
+}
+
+.registerLoginToggleLink:hover,
+.forgotPasswordLink:hover {
+    text-decoration: none;
+}
+
+.OR {
+    margin: 2em 0em;
+}
+
+.googleLogin {
+    background-size: cover;
+    border: none;
+    background-color: transparent;
+    height: 5em;
+    width: 320px;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.errorMessage {
+    font-size: 1.5rem;
+    color: crimson;
+    font-weight: 700;
+}
+
+.LinkSentMessage {
+    background-color: #43a047;
+    margin: 0 auto;
+    width: 90%;
+    padding: 1px 16px;
+    color: #fff;
+    margin-bottom: 3em;
+    border-left: 4px solid #1b5e20;
+}
+
+.BackToLoginLink {
+    margin: 0 auto;
+    margin-top: 2em;
+    margin-bottom: -20px;
+    color: #d30b55;
+    font-size: 1.3rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.BackToLoginLink:hover {
+    text-decoration: none;
+}
+
+@media (min-width: 600px) {
+    .Auth, .ForgotPassword {
+        width: 500px;
+    }
+}
+```
+{% endcode-tabs-item %}
+{% endcode-tabs %}
 
