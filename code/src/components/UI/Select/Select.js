@@ -10,8 +10,8 @@ const select = (props) => {
             return {
                 ...styles,
                 color: isSelected
-                    ? "#fff"
-                    : isFocused ? "#fff" : "#000",
+                    ? "#000"
+                    : isFocused ? "#000" : "#000",
                 backgroundColor: isSelected
                     ? "#300356"
                     : isFocused ? "#7a5a94" : "#fff"

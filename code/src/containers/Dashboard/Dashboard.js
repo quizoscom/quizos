@@ -24,7 +24,6 @@ class Dashboard extends Component {
         this.setState(prevState => ({
             totalRowsToBeShownQuizTook: value
         }));
-        // this.fetchDataHandler(0, value.replace(' rows', ''));
     }
 
     createSelectOptions = (totalRows) => {

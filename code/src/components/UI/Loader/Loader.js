@@ -2,7 +2,7 @@ import React from 'react';
 
 import classes from './Loader.css';
 
-const loader = (props) => (
+const loader = props => (
     <div className={classes.LoaderCont}>
         <p className={classes.LoadingP}>Loading</p>
         <div className={classes.Parent}>

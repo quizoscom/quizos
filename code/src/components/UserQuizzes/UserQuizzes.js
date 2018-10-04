@@ -46,13 +46,19 @@ class QuizCreateView extends Component {
             limit: limit
         }))
         .then(res => {
-            if(typeof res.data.length !== "undefined") {
+            if(typeof res.data.quizzes.length !== "undefined") {
                 if(res.data.status === 'success') {
                     let prevButtonDisabled = this.state.prevButtonDisabled;
                     let nextButtonDisabled = this.state.nextButtonDisabled;
-                    if(this.state.curPageNumber === res.data.total_pages) {
+                    if(res.data.total_pages === 1) {
                         prevButtonDisabled = true;
                         nextButtonDisabled = true;
+                    } else if(this.state.curPageNumber === res.data.total_pages) {
+                        prevButtonDisabled = false;
+                        nextButtonDisabled = true;
+                    } else {
+                        prevButtonDisabled = true;
+                        nextButtonDisabled = false;
                     }
                     this.setState(prevState => ({
                         quizzes: res.data.quizzes,
@@ -74,7 +80,7 @@ class QuizCreateView extends Component {
         });
     }
 
-    totalRowsToBeShownChangedHandler = (event) => {
+    totalRowsToBeShownChangedHandler = event => {
         const value = event.target.value
         this.setState(prevState => ({
             totalRowsToBeShown: value,
@@ -181,11 +187,11 @@ class QuizCreateView extends Component {
     }
 
     render() {
-        const newSelectOptions = this.props.newSelectOptions(this.state.totalRows);
+        const newSelectOptions = this.props.createSelectOptions(this.state.totalRows);
         let body = <Loader loaderStyle={{left: '-40px'}} loader2Style={{left: '40px'}}/>;
         if(!this.state.loading) {
             body = (
-                <div className={[classes.QuizCreateView, classes[this.props.className]].join(' ')}>
+                <div className={[classes.UserQuizzes, classes[this.props.className]].join(' ')}>
                     <p className={classes.Title} style={this.props.titleStyle}>{this.props.label}</p>
                     <div className={classes.TableCont}>
                         <Table 
@@ -194,6 +200,7 @@ class QuizCreateView extends Component {
                         ></Table>
                     </div>
                     <Pagination
+                        totalRows={this.state.totalRows}
                         paginationRowCount={this.state.totalRowsToBeShown}
                         selectChanged={this.totalRowsToBeShownChangedHandler}
                         inputChanged={this.pageNumberInputChangedHandler}

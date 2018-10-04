@@ -1,13 +1,11 @@
-.QuizCreateView {
+.UserQuizzes {
     margin: 0 auto;
     width: auto;
-    position: relative;
-    top: 5em;
     margin-bottom: 5em;
     margin-left: 3em;
 }
 
-.QuizCreateView p.Title{
+.UserQuizzes p.Title{
     background-color: #fff;
     margin-bottom: 2px;
     width: fit-content;
