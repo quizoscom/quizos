@@ -8,9 +8,9 @@ const initialState = {
     loading: false,
     error: null,
     score: '',
-    quizActive: 0,
+    quizActive: false,
     redirectTo: "",
-    counterComplete: 0,
+    counterComplete: false,
     noOfQuestions: 0,
 }
 
@@ -23,7 +23,7 @@ const reducer = (state = initialState, action) => {
                 loading: false,
                 error: null,
                 score: 0,
-                quizActive: 0,
+                quizActive: false,
                 redirectTo: "/"
             });
         case actionTypes.QUIZ_CONTINUE:
@@ -41,15 +41,15 @@ const reducer = (state = initialState, action) => {
             } else {
                 newCurrentQuestionsNumber = state.currentQuestionsNumber;
             }
-            return updateObject(state, { answers: newAnswers, currentQuestionsNumber: newCurrentQuestionsNumber, quizActive: 1 });
+            return updateObject(state, { answers: newAnswers, currentQuestionsNumber: newCurrentQuestionsNumber, quizActive: true });
         case actionTypes.QUIZ_COMPLETE_SUCCESS:
-            return updateObject(state, { loading: false, error: null, quizActive: 0, score: action.score, redirectTo: "/score"});
+            return updateObject(state, { loading: false, error: null, quizActive: false, score: action.score, redirectTo: "/score"});
         case actionTypes.QUIZ_COMPLETE_FAILED:
-            return updateObject(state, { loading: false, error: action.error, quizActive: 0 });
+            return updateObject(state, { loading: false, error: action.error, quizActive: false });
         case actionTypes.QUIZ_COMPLETE:
             return updateObject(state, { loading: true });
         case actionTypes.COUNTER_COMPLETE:
-            return updateObject(state, { counterComplete: 1 });
+            return updateObject(state, { counterComplete: true });
         case actionTypes.SET_NO_QF_QUESTIONS:
             return updateObject(state, { noOfQuestions: action.noOfQuestions, quizId: action.quizId});
         case actionTypes.RESET_ALL_QUIZ_STATES:
@@ -58,9 +58,9 @@ const reducer = (state = initialState, action) => {
                 currentQuestionsNumber: -1,
                 loading: false,
                 error: null,
-                quizActive: 0,
+                quizActive: false,
                 redirectTo: "",
-                counterComplete: 0,
+                counterComplete: false,
             });
         default:
             return state;

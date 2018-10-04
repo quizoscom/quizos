@@ -28,7 +28,7 @@ class Auth extends Component {
         : this.setState(prevState => ({password: value}))
     }
 
-    onFormSubmitHandler = (event) => {
+    onFormSubmitHandler = event => {
         event.preventDefault();
         if(this.state.email !== '' && this.state.password !== '') {
             this.props.onAuth(this.state.email, this.state.password, this.state.register, 'firebase');
@@ -43,11 +43,11 @@ class Auth extends Component {
         }))
     }
 
-    responseGoogleSuccess = (res) => {
+    responseGoogleSuccess = res => {
         this.props.onGoogleLogin(res.profileObj.email, res.googleId, res.tokenId, res.tokenObj.expires_in);
     }
 
-    responseGoogleFailed = (err) => {
+    responseGoogleFailed = err => {
         this.props.onShowAlert(err, 'warning');
     }
 
@@ -55,7 +55,7 @@ class Auth extends Component {
         this.props.onForgotPasswordLinkClick();
     }
 
-    forgotPasswordSubmitHandler = (event) => {
+    forgotPasswordSubmitHandler = event => {
         event.preventDefault();
         if(this.state.email !== '') {
             this.props.onSendLink(this.state.email);

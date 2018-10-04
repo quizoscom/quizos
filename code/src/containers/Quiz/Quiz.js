@@ -27,7 +27,6 @@ class Quiz extends Component {
         quizId: '',
         language: '',
         timer: '',
-        noOfQuestions: 0,
         questions: [],
         currentSelectedAnswer: '',
         currentSelectedQuestionId: '',
@@ -36,9 +35,7 @@ class Quiz extends Component {
             { id: 2, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
             { id: 3, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." },
             { id: 4, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas libero ipsum, maximus at venenatis ac, iaculis tincidunt odio." }
-        ],
-        alert: '',
-        alertType: ''
+        ]
     }
 
     componentDidMount() {
@@ -96,7 +93,7 @@ class Quiz extends Component {
         }
     }
 
-    onAnswerSelectedHandler = (selected) => {
+    onAnswerSelectedHandler = selected => {
         this.setState(prevState => ({
             currentSelectedAnswer: selected,
             currentSelectedQuestionId: prevState.questions[this.props.currentQuestionsNumber].question_id

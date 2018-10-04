@@ -39,7 +39,7 @@ class QuizLists extends Component {
         loadingMore: false,
         totalRowsToBeLoaded: 10,
         limitStart: 0,
-        removeLoadMore: 0
+        removeLoadMore: false
     }
 
     componentDidMount() {
@@ -47,8 +47,6 @@ class QuizLists extends Component {
     }
 
     fetchData = (limitStart, orderBy, filterBy) => {
-        console.log(orderBy);
-        console.log(filterBy);
         if(this.state.quizzes.length === 0) {
             this.setState(prevState => ({
                 loading: true
@@ -99,7 +97,7 @@ class QuizLists extends Component {
         });
     }
 
-    filterSelectChangeHandler = (event) => {
+    filterSelectChangeHandler = event => {
         const value = event.value;
         this.setState(prevState => ({
             filterBy: value,
@@ -110,7 +108,7 @@ class QuizLists extends Component {
         this.fetchData(0, this.state.completeSortyBy, value);
     }
 
-    sortSelectChangeHandler = (event) => {
+    sortSelectChangeHandler = event => {
         const value = event.value;
         this.setState(prevState => ({
             completeSortyBy: value,
@@ -121,7 +119,7 @@ class QuizLists extends Component {
         this.fetchData(0, value, this.state.filterBy);
     }
 
-    onTableHeaderClickHandler = (sortby) => {
+    onTableHeaderClickHandler = sortby => {
         let newCurrentOrder = Object.assign({}, this.state.currentOrder);
         const newQuizArr = this.state.quizzes.slice();
         let sortableObject = {};
@@ -192,7 +190,6 @@ class QuizLists extends Component {
     }
 
     render() {
-
         let sortByOptions = [];
         let currentOrderKeys = Object.keys(this.state.currentOrder);
         for(let i = 0; i < currentOrderKeys.length; i++) {

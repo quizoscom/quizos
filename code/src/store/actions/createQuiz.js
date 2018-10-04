@@ -20,14 +20,14 @@ export const createQuizSuccess = (shareLink, quizId) => {
     }
 }
 
-export const createQuizFailed = (error) => {
+export const createQuizFailed = error => {
     return {
         type: actionTypes.CREATE_QUIZ_FAILED,
         error: error
     }
 }
 
-export const creatingQuiz = (params) => {
+export const creatingQuiz = params => {
     return dispatch => {
         dispatch(createQuiz());
         axios.post(`${SERVER_ROOT_URL}/set/set-quiz-data.php`, qs.stringify(params))
@@ -49,14 +49,14 @@ export const loadLanguagesAction = () => {
     }
 }
 
-export const loadLanguagesSuccessAction = (languagesOptions) => {
+export const loadLanguagesSuccessAction = languagesOptions => {
     return {
         type: actionTypes.LOAD_LANGUAGES_SUCCESS,
         languagesOptions: languagesOptions
     }
 }
 
-export const loadLanguagesFailedAction = (error) => {
+export const loadLanguagesFailedAction = error => {
     return {
         type: actionTypes.LOAD_LANGUAGES_FAILED,
         error: error
@@ -87,14 +87,14 @@ export const loadLanguages = () => {
     }
 }
 
-export const resetQuestionsRelatedStateAction = (resetVal) => {
+export const resetQuestionsRelatedStateAction = resetVal => {
     return {
         type: actionTypes.RESET_QUESTIONS_RELATED_STATE,
         resetVal: resetVal
     }
 }
 
-export const resetQuestionsRelatedState = (resetVal) => {
+export const resetQuestionsRelatedState = resetVal => {
     return dispatch => {
         dispatch(resetQuestionsRelatedStateAction(resetVal));
     }

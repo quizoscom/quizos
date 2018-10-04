@@ -9,24 +9,7 @@ import H2 from '../../components/PageHeading/PageHeading';
 import Features from '../../components/Features/Features';
 
 class Dashboard extends Component {
-    state = {
-        loadingQuizTook: false,
-        totalRowsToBeShownQuizTook: "10 rows",
-        totalPagesQuizTook: 0,
-        totalRowsQuizTook: 0,
-        curPageNumberQuizTook: 1,
-        prevButtonDisabledQuizTook: true,
-        nextButtonDisabledQuizTook: false
-    }
-
-    totalRowsToBeShownQuizTookChangedHandler = (event) => {
-        const value = event.target.value
-        this.setState(prevState => ({
-            totalRowsToBeShownQuizTook: value
-        }));
-    }
-
-    createSelectOptions = (totalRows) => {
+    createSelectOptions = totalRows => {
         const selectOptions = ["5 rows", "10 rows", "20 rows", "25 rows", "50 rows", "100 rows"];
         let newSelectOptions = [];
         for(let i = 0; i < selectOptions.length; i++) {
@@ -38,31 +21,6 @@ class Dashboard extends Component {
             }
         }
         return newSelectOptions;
-    }
-
-    pageNumberQuizTookChangedHandler = (event) => {
-        let value = event.target.value
-        let prevDisabled = this.state.prevButtonDisabledQuizTook;
-        let nextDisabled = this.state.nextButtonDisabledQuizTook;
-        let totalPages = this.state.totalPagesQuizTook
-
-        if(value >= totalPages ) {
-            value = totalPages
-            nextDisabled = true;
-            prevDisabled = false;
-        } else if(value < 1) {
-            value = 1
-            prevDisabled = true;
-            nextDisabled = false;
-        } else {
-            prevDisabled = true;
-            nextDisabled = true;
-        }
-        this.setState(prevState => ({
-            curPageNumberQuizTook: value,
-            prevButtonDisabledQuizTook: prevDisabled,
-            nextButtonDisabledQuizTook: nextDisabled
-        }));
     }
 
     onClickTakeQuizHandler = () => {

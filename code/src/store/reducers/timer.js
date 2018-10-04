@@ -5,15 +5,15 @@ const initialState = {
     hr: 0,
     mins: 0,
     secs: 0,
-    stopTimer: 0
+    stopTimer: false
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
         case actionTypes.TIMER_RUNNING:
-            return updateObject(state, { hr: action.hr, mins: action.mins, secs: action.secs, stopTimer: 0 });
+            return updateObject(state, { hr: action.hr, mins: action.mins, secs: action.secs, stopTimer: false });
         case actionTypes.TIMER_STOPPED:
-            return updateObject(state, { hr: action.hr, mins: action.mins, secs: action.secs, stopTimer: 1 });
+            return updateObject(state, { hr: action.hr, mins: action.mins, secs: action.secs, stopTimer: true });
         default:
             return state;
     }

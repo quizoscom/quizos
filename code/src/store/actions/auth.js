@@ -21,14 +21,14 @@ export const authSuccess = (token, userId) => {
     };
 };
 
-export const authFailed = (error) => {
+export const authFailed = error => {
     return {
         type: actionTypes.AUTH_FAILED,
         error: error
     };
 };
 
-export const authFailedAction = (error) => {
+export const authFailedAction = error => {
     return dispatch => {
         dispatch(authFailed(error));
     }
@@ -158,7 +158,7 @@ export const authCheckState = () => {
     }
 }
 
-export const setRedirectPath = (path) => {
+export const setRedirectPath = path => {
     return {
         type: actionTypes.SET_REDIRECT_PATH,
         redirectPath: path
@@ -223,14 +223,14 @@ export const backToLoginClick = () => {
     }
 }
 
-export const sendLinkAction = (email) => {
+export const sendLinkAction = email => {
     return {
         type: actionTypes.PASSWORD_RESET_LINK_SENT,
         email: email
     }
 }
 
-export const sendLink = (email) => {
+export const sendLink = email => {
     return dispatch => {
         axios.post(`${SERVER_ROOT_URL}/get/email-exists-check.php`, qs.stringify({email: email}))
         .then(res => {
@@ -261,7 +261,7 @@ export const sendLink = (email) => {
     }
 }
 
-export const sendLinkFailedAction = (error) => {
+export const sendLinkFailedAction = error => {
     return {
         type: actionTypes.PASSWORD_RESET_LINK_SENT_FAILED,
         error: error
@@ -311,7 +311,7 @@ export const changedPasswordSuccess = () => {
     }
 }
 
-export const changedPasswordFailedAction = (error) => {
+export const changedPasswordFailedAction = error => {
     return {
         type: actionTypes.CHANGE_PASSWORD_FAILED,
         error: error

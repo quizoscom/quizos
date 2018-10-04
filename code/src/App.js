@@ -17,7 +17,6 @@ import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Score from './containers/Score/Score';
 import ResetPassword from './containers/ResetPassword/ResetPassword';
-import Doc from './containers/Doc/Doc';
 
 import * as actions from './store/actions';
 
@@ -39,7 +38,6 @@ class App extends Component {
             <Route path="/score" component={Score}/>
             <Route path="/auth" component={Auth} />
             <Route path="/logout" component={LogOut}/>
-            <Route path="/doc" component={Doc} />
             <Route path="/" exact component={Home} />
             <Route component={Error404} />
           </Switch>
@@ -49,7 +47,6 @@ class App extends Component {
         <Switch>
           <Route path="/auth" component={Auth} />
           <Route path="/reset-password" component={ResetPassword} />
-          <Route path="/doc" component={Doc} />
           <Route path="/" exact component={Home} />
           <Route component={Error404} />
         </Switch>
@@ -57,7 +54,10 @@ class App extends Component {
     }
     return (
       <div className={classes.App}>
-        <Layout>
+        <Layout
+          isAuth={this.props.isAuth}
+          isQuizActive={this.props.isQuizActive}
+        >
           {routes}
         </Layout>
       </div>
@@ -67,7 +67,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.auth.token != null
+    token: state.auth.token,
+    isAuth: state.auth.token !== null,
+    isQuizActive: state.quiz.quizActive
   }
 }
 

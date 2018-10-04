@@ -37,7 +37,7 @@ export const saveRatingAndReviewSuccessAction = () => {
     }
 }
 
-export const saveRatingAndReviewSuccessFailedAction = (error) => {
+export const saveRatingAndReviewSuccessFailedAction = error => {
     return {
         type: actionTypes.SAVE_RATINGS_AND_REVIEW_FAILED,
         error: error

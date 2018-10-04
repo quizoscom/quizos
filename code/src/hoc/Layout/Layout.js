@@ -1,40 +1,18 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
 
 import classes from './Layout.css';
 
-class Layout extends Component {
-    state = {
-        sidebarOpen: true
-    }
+const layout = props => (
+    <div id="outer-container">
+        <Toolbar isAuth={props.isAuth} isQuizActive={props.isQuizActive} />
+        { !props.isQuizActive ? <Sidebar isAuth={props.isAuth} isQuizActive={props.isQuizActive} /> : null }
+        <main className={classes.Content} id="page-wrap">
+            {props.children}
+        </main>
+    </div>
+);
 
-    showSettings = (event) => {
-        event.preventDefault();
-    }
-
-    render() {
-        return (
-            <div id="outer-container">
-                <Toolbar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} />
-                { !this.props.isQuizActive ? <Sidebar isAuth={this.props.isAuth} isQuizActive={this.props.isQuizActive} /> : null }
-                
-                <main className={classes.Content} id="page-wrap">
-                    {this.props.children}
-                </main>
-            </div>
-        );
-    }
-}
-
-const mapStateToProps = state => {
-    return {
-        token: state.auth.token,
-        isAuth: state.auth.token !== null,
-        isQuizActive: state.quiz.quizActive
-    }
-}
-
-export default connect(mapStateToProps)(Layout);
+export default layout

@@ -14,15 +14,14 @@ import * as actions from '../../store/actions';
 class ResetPassword extends Component {
     state = {
         medium: '',
-        password: '',
-        tokenId: ''
+        password: ''
     }
 
     componentWillUnmount() {
         this.props.onChangedPassswordResetStates();
     }
 
-    resetPasswordSubmitHandler = (event) => {
+    resetPasswordSubmitHandler = event => {
         event.preventDefault();
         if(this.state.password !== '') {
             this.props.onChangePassword(this.state.password, this.state.medium, queryString.parse(this.props.location.search).oobCode)
@@ -31,7 +30,7 @@ class ResetPassword extends Component {
         }
     }
 
-    onInputChangedHandler = (event) => {
+    onInputChangedHandler = event => {
         const value = event.target.value;
         this.setState(prevState => ({password: value}))
     }

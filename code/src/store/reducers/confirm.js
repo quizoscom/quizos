@@ -3,7 +3,7 @@ import { updateObject } from '../../shared/utility';
 
 const initialState = {
     confirmMsg: '',
-    okClicked: 0
+    okClicked: false
 }
 
 const reducer = (state = initialState, action) => {

@@ -47,7 +47,6 @@ class Score extends Component {
     }
 
     render() {
-
         let recentScores = <InlineLoader />;
         if(this.state.recentScores.length !== 0 && !this.state.removeInlineLoader) {
             recentScores = (

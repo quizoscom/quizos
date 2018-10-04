@@ -4,16 +4,9 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
     shareLink: '',
     loading: false,
-    languagesOptions: [
-        { value: "select", label: "Select"},
-        { value: "react", label: "React"},
-        { value: "redux", label: "Redux"},
-        { value: "javaScript", label: "JavaScript"},
-        { value: "php", label: "PHP"},
-        { value: "python", label: "Python"},
-    ],
+    languagesOptions: [],
     error: null,
-    resetQuestionsRelatedState: 0
+    resetQuestionsRelatedState: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -21,7 +14,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CREATE_QUIZ:
             return updateObject(state, { loading: true });
         case actionTypes.CREATE_QUIZ_SUCCESS:
-            return updateObject(state, { loading: false, shareLink: action.shareLink, quizId: action.quizId, resetQuestionsRelatedState: 1});
+            return updateObject(state, { loading: false, shareLink: action.shareLink, quizId: action.quizId, resetQuestionsRelatedState: true});
         case actionTypes.CREATE_QUIZ_FAILED:
             return updateObject(state, { loading: false, error: action.error});
         case actionTypes.LOAD_LANGUAGES:

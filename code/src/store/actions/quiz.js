@@ -14,14 +14,14 @@ export const quizContinue = (answer, questionId, quizContinueFlag) => {
     };
 };
 
-export const quizCompleteSuccess = (score) => {
+export const quizCompleteSuccess = score => {
     return {
         type: actionTypes.QUIZ_COMPLETE_SUCCESS,
         score: score
     };
 };
 
-export const quizCompleteFailed = (error) => {
+export const quizCompleteFailed = error => {
     return {
         type: actionTypes.QUIZ_COMPLETE_FAILED,
         error: error

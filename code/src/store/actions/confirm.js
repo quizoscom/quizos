@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-export const showConfirmAction = (confirmMsg) => {
+export const showConfirmAction = confirmMsg => {
     return {
         type: actionTypes.SHOW_CONFIRM,
         confirmMsg: confirmMsg
@@ -13,14 +13,14 @@ export const hideConfirmAction = () => {
     }
 }
 
-export const okClickedAction = (okClicked) => {
+export const okClickedAction = okClicked => {
     return {
         type: actionTypes.OK_CLICKED,
         okClicked: okClicked
     }
 }
 
-export const showConfirm = (confirmMsg) => {
+export const showConfirm = confirmMsg => {
     return dispatch => {
         dispatch(showConfirmAction(confirmMsg));
     }
@@ -32,7 +32,7 @@ export const hideConfirm = () => {
     }
 }
 
-export const okClicked = (okClicked) => {
+export const okClicked = okClicked => {
     return dispatch => {
         dispatch(okClickedAction(okClicked));
     }
