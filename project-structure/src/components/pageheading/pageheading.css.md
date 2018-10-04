@@ -9,7 +9,7 @@
     font-size: 2rem;
     color: #fff;
     font-weight: 100;
-    margin-bottom: 1em;
+    margin: 0;
 }
 ```
 {% endcode-tabs-item %}

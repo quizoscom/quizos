@@ -9,6 +9,7 @@
     width: 95%;
     background-color: #fff;
     margin-top: 2px;
+    padding-bottom: 10px;
 }
 
 .Pagination button {
@@ -21,6 +22,7 @@
 }
 
 .Pagination > div {
+    padding-top: 11px;
     display: inline-block;
     width: 50%;
 }

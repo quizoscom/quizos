@@ -1,0 +1,2 @@
+# actionTypes.js
+
