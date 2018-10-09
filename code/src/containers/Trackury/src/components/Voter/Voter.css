@@ -1,0 +1,43 @@
+.Voter {
+    cursor: pointer;
+    background-color: #fff;
+    padding: 8px 2px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    min-width: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Voter:hover {
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+.VoterDisabled {
+    cursor: no-drop;
+    background-color: #DEDEDE;
+    padding: 7px 10px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.VoterDisabled:hover {
+    box-shadow: 0 0 0;
+}
+
+.Voter img,
+.VoterDisabled img {
+    width: 17px;
+    margin-bottom: 5px;
+}
+
+.Voter p,
+.VoterDisabled p {
+    font-size: 15px;
+}
+
+.Voter span {
+    font-size: 13px;
+}

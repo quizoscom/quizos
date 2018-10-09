@@ -17,6 +17,7 @@ import Quiz from './containers/Quiz/Quiz';
 import Auth from './containers/Auth/Auth'
 import Score from './containers/Score/Score';
 import ResetPassword from './containers/ResetPassword/ResetPassword';
+import Trackury from './containers/Trackury/src/Trackury';
 
 import * as actions from './store/actions';
 
@@ -38,6 +39,7 @@ class App extends Component {
             <Route path="/score" component={Score}/>
             <Route path="/auth" component={Auth} />
             <Route path="/logout" component={LogOut}/>
+            <Route path="/feedback" component={Trackury}/>
             <Route path="/" exact component={Home} />
             <Route component={Error404} />
           </Switch>
@@ -46,6 +48,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/auth" component={Auth} />
+          <Route path="/feedback" component={Trackury}/>
           <Route path="/reset-password" component={ResetPassword} />
           <Route path="/" exact component={Home} />
           <Route component={Error404} />

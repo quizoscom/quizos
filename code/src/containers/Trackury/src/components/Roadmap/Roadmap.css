@@ -1,0 +1,43 @@
+.Roadmap {
+    flex-grow: 1;
+}
+
+.ColTitle {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+}
+
+.completedCounters {
+    float: right;
+    font-size: 13px;
+    position: relative;
+    left: 3em;
+}
+
+.completedCounters > span {
+    margin-left: 7px;
+    color: #c62828;
+}
+
+.completedCounters > span.completedLabels {
+    text-decoration: line-through;
+    color: #558b2f;
+}
+
+.TaskComplete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.TaskComplete img {
+    width: 50px;
+}
+
+.TaskComplete p {
+    width: 70%;
+    margin-top: 7px;
+}

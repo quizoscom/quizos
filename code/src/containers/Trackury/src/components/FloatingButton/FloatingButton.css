@@ -1,0 +1,22 @@
+.toggleCompletedLink {
+    position: fixed;
+    bottom: 1em;
+    right: 0;
+    z-index: 10000;
+    width: 100% !important;
+}
+
+.toggleCompletedLink p {
+    width: fit-content;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    padding: 12px 3em;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+}
+
+.toggleCompletedLink p:hover {
+    box-shadow: 0 0 0;
+}

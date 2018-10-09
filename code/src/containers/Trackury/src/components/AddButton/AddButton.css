@@ -1,0 +1,35 @@
+.AddButton,
+.AddButtonDisabled {
+    width: 100%;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 10px 0px;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 0px;
+    -ms-flex-pack: center;
+    justify-content: center;
+    background: linear-gradient(to right, #49a09d, #5f2c82);
+    box-shadow: rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 3px 1px -2px, rgba(0, 0, 0, 0.2) 0px 1px 5px 0px;
+    align-items: center;
+    margin-bottom: 1em;
+    color: #FFFFFF;
+}
+
+.AddButton:hover {
+    box-shadow: 0 0 0;
+}
+
+.AddButton img,
+.AddButtonDisabled img {
+    width: 36px;
+    height: 36px;
+}
+
+.AddButton p {
+    margin-left: 8px;
+}
+
+.AddButtonDisabled {
+    cursor: no-drop;
+}
