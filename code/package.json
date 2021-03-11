@@ -39,7 +39,7 @@
     "react": "^16.4.1",
     "react-burger-menu": "^2.5.2",
     "react-countup": "^4.0.0-alpha.6",
-    "react-dev-utils": "^6.0.4",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.4.1",
     "react-google-login": "^3.2.1",
     "react-number-easing": "0.0.4",
